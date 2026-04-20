@@ -1,6 +1,22 @@
 import os
 import time
 import asyncio
+import sys
+import logging
+
+# Basic logging for cloud startup visibility
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+print(f"--- STARTUP DIAGNOSTICS ---")
+print(f"Python Version: {sys.version}")
+print(f"Current Directory: {os.getcwd()}")
+try:
+    print(f"Listing Directory: {os.listdir('.')}")
+except:
+    pass
+print(f"---------------------------")
+
 from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -120,20 +136,33 @@ app.add_middleware(
 # Use SQLite by default for simple local setup. Change to PostgreSQL in production.
 # Absolute path to root database to avoid directory confusion
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///c:/Users/aryam/career_guidance/career_guidance.db")
-# Handle PostgreSQL protocol for modern SQLAlchemy (postgresql:// -> postgresql+psycopg2://)
-if DATABASE_URL.startswith("postgresql://"):
+
+# Handle PostgreSQL protocol variants for modern SQLAlchemy
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
-print(f"DEBUG: Using DATABASE_URL={DATABASE_URL}")
+
+print(f"DEBUG: Initializing database engine...")
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
-    engine = create_engine(DATABASE_URL)
+    # Use pool_pre_ping for more resilient cloud connections (Neon/Render)
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # ENSURE TABLES EXIST IN SELECTED DATABASE
 print("DEBUG: Synchronizing database schema...")
-Base.metadata.create_all(bind=engine)
+try:
+    # We wrapped this to see if it's the cause of the startup crash
+    Base.metadata.create_all(bind=engine)
+    print("DEBUG: Database schema synchronization complete.")
+except Exception as e:
+    print(f"CRITICAL: Failed to synchronize database: {str(e)}")
+    # If we are in production, we might want to fail hard, 
+    # but for debugging we want to see this message in the logs.
 
 class UserCreate(BaseModel):
     user_id: str
