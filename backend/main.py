@@ -135,7 +135,7 @@ app.add_middleware(
 # Database Setup
 # Use SQLite by default for simple local setup. Change to PostgreSQL in production.
 # Absolute path to root database to avoid directory confusion
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///c:/Users/aryam/career_guidance/career_guidance.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./career_guidance.db")
 
 # Handle PostgreSQL protocol variants for modern SQLAlchemy
 if DATABASE_URL.startswith("postgres://"):
