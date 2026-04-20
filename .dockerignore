@@ -1,0 +1,24 @@
+# Docker Ignore File
+.git
+.github
+node_modules
+__pycache__
+*.db
+*.log
+.env
+.venv
+dist
+build
+tests
+*.pyc
+*.pyo
+.pytest_cache
+.vscode
+.idea
+.gemini
+frontend/node_modules
+frontend/dist
+backend/__pycache__
+backend/.env
+backend/*.db
+backend/*.log

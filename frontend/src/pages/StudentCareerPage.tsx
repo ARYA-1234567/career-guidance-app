@@ -1,0 +1,589 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+    Target, ShieldCheck, XCircle, Brain, GraduationCap, Zap, 
+    MapPin, Award, FlaskConical, Building2, CheckCircle2, Calendar,
+    ChevronRight, LineChart
+} from 'lucide-react';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
+const StudentCareerPage: React.FC = () => {
+    const { language } = useLanguage();
+    const { token } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    // States
+    const [loading, setLoading] = useState(true);
+    const [statusText, setStatusText] = useState("Establishing Secure Access...");
+    const [data, setData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState<'roadmap' | 'schools' | 'exams' | 'grants' | 'myths' | 'market'>('roadmap');
+
+    const isTrajectoryView = location.hash === '#trajectory';
+    const isSimulationView = location.hash === '#simulation';
+
+    // Status Rotation Logic
+    useEffect(() => {
+        if (!loading) return;
+        
+        const statuses = [
+            language === 'ml' ? 'ന്യൂറൽ നെറ്റ്‌വർക്കുമായി ബന്ധിപ്പിക്കുന്നു...' : "Establishing Secure Access...",
+            language === 'ml' ? 'നിങ്ങളുടെ കരിയർ റോഡ്മാപ്പ് തയ്യാറാക്കുന്നു...' : "Synthesizing Deep Career Roadmap...",
+            language === 'ml' ? 'സ്കോളർഷിപ്പുകൾ വിശകലനം ചെയ്യുന്നു...' : "Compiling Strategic Scholarship Database...",
+            language === 'ml' ? 'മാർക്കറ്റ് വിവരങ്ങൾ ശേഖരിക്കുന്നു...' : "Syncing with Global Market Intelligence...",
+            language === 'ml' ? 'വിവരങ്ങൾ ക്രമീകരിക്കുന്നു...' : "Finalizing Trajectory Alignment..."
+        ];
+        
+        let i = 0;
+        const interval = setInterval(() => {
+            i = (i + 1) % statuses.length;
+            setStatusText(statuses[i]);
+        }, 3000);
+        
+        return () => clearInterval(interval);
+    }, [loading, language]);
+
+    // Initial Fetch
+    const fetchCareerData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const url = `${API_BASE}/api/student/career_details?lang=${language}`;
+            const res = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
+            
+            if (res.data.status === 'ready') {
+                setData(res.data);
+            }
+        } catch (err: any) {
+            console.error("Student career fetch failed:", err);
+            setError(err.response?.data?.detail || "Failed to establish a stable neural link. Please ensure you have selected a career path.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (token) fetchCareerData();
+    }, [token]);
+
+
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-core flex flex-col items-center justify-center space-y-8 px-6 text-center">
+                <div className="mesh-canvas" />
+                <div className="w-16 h-16 border-4 border-white/5 border-t-primary-neon rounded-full animate-spin" />
+                <h2 className="text-xl font-black hero-title animate-pulse">{statusText}</h2>
+            </div>
+        );
+    }
+
+    if (error || !data) {
+        return (
+            <div className="min-h-screen bg-core flex flex-col items-center justify-center p-6 text-center">
+                <div className="mesh-canvas" />
+                <div className="glass-card p-12 lg:p-20 border-accent-rose/20 max-w-xl w-full">
+                    <XCircle size={64} className="text-accent-rose mx-auto mb-10 shadow-2xl" />
+                    <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">Access Denied</h2>
+                    <p className="text-zinc-500 mb-12 font-bold leading-relaxed">{error || "No active profile matches this ID."}</p>
+                    <button 
+                      onClick={() => navigate('/')} 
+                      className="glow-btn w-full py-5 uppercase text-xs tracking-widest font-black"
+                    >
+                      Return to Gateway
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const { 
+        student_summary, 
+        recommendations, 
+        logic_explanation, 
+        selected_career,
+        roadmap,
+        scholarships,
+        myths,
+        market,
+        personality
+    } = data || {};
+
+    return (
+        <div className="min-h-screen bg-core text-white font-sans relative overflow-x-hidden pt-32 pb-20 px-6">
+            {/* Background Elements */}
+            <div className="mesh-canvas" />
+            <div className="mesh-blob bg-primary-neon/10 top-0 left-0 w-[800px] h-[800px]" />
+            <div className="mesh-blob bg-secondary-neon/5 bottom-0 right-0 w-[600px] h-[600px]" />
+
+            <div className="max-w-7xl mx-auto relative z-10">
+                {isSimulationView ? (
+                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center p-20 glass-card border border-primary-neon/20 mt-10 space-y-8 rounded-[3rem] relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-neon/10 blur-[150px] rounded-full mix-blend-screen opacity-50 pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary-neon/10 blur-[120px] rounded-full mix-blend-screen opacity-50 pointer-events-none" />
+                        
+                        <div className="w-24 h-24 rounded-full bg-primary-neon/10 flex items-center justify-center border border-primary-neon/30 relative z-10 shadow-[0_0_40px_rgba(99,102,241,0.3)]">
+                           <Zap size={40} className="text-primary-neon animate-pulse" />
+                        </div>
+                        <div className="text-center relative z-10">
+                            <h2 className="text-4xl font-black text-white mb-4 drop-shadow-lg">Launch Simulation Viewer</h2>
+                            <p className="text-zinc-400 font-bold max-w-lg mx-auto leading-relaxed">
+                                You are about to initiate the heavy-duty immersive 3D Career Simulation protocol for <span className="text-primary-neon uppercase font-black tracking-widest">{selected_career || "the strategic pathway"}</span>. Because this module requires exclusive rendering priority, it will open in a secured theater tab.
+                            </p>
+                        </div>
+                        <button 
+                            onClick={() => window.open(`/simulation/${selected_career || 'General'}`, '_blank')} 
+                            className="relative z-10 mt-8 px-12 py-5 rounded-2xl bg-gradient-to-r from-primary-neon to-indigo-500 text-white font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-[0_0_40px_rgba(99,102,241,0.6)] border border-white/20"
+                        >
+                            INITIATE IMMERSION
+                        </button>
+                     </motion.div>
+                ) : !isTrajectoryView ? (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    {/* LEFT COLUMN: Student Summary & Logic */}
+                    <div className="lg:col-span-8 space-y-8">
+                        {/* Section 1: Student Summary */}
+                        <div className="glass-card p-12 border-white/5 h-fit relative group overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-neon to-transparent opacity-50 transition-all duration-500 group-hover:h-2" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-primary-neon/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            
+                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
+                                <GraduationCap size={16} className="text-primary-neon" /> 01. Cognitive Profile
+                            </h3>
+                            
+                            <div className="space-y-8 relative z-10">
+                                {/* Top Row Grid: Education & Stream */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20 transition-all relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-16 h-16 bg-secondary-neon/5 blur-[20px]" />
+                                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-2 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-neon rounded-full" /> Level</p>
+                                        <p className="text-lg font-black text-white leading-none">{student_summary.education_level}</p>
+                                    </div>
+                                    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20 transition-all relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/5 blur-[20px]" />
+                                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-2 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-rose-500 rounded-full" /> Stream</p>
+                                        <p className="text-lg font-black text-white leading-none">{student_summary.stream}</p>
+                                    </div>
+                                </div>
+                                
+                                {/* Inner Badges */}
+                                {personality && (personality.mbti_type || personality.holland_code) && (
+                                    <div className="flex gap-4">
+                                        {personality.mbti_type && (
+                                           <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 flex flex-col justify-center items-center">
+                                                <span className="text-[8px] font-black uppercase text-indigo-400/70 tracking-widest mb-1">MBTI Profile</span>
+                                                <span className="text-xl font-black text-indigo-400">{personality.mbti_type}</span>
+                                           </div>
+                                        )}
+                                        {personality.holland_code && (
+                                           <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-teal-500/10 to-transparent border border-teal-500/20 flex flex-col justify-center items-center">
+                                                <span className="text-[8px] font-black uppercase text-teal-400/70 tracking-widest mb-1">Holland Code</span>
+                                                <span className="text-xl font-black text-teal-400">{personality.holland_code}</span>
+                                           </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div>
+                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2"><Target size={12} className="text-zinc-500" /> Core Interests</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Array.isArray(student_summary?.interests) && student_summary.interests.map((int: any, i: number) => (
+                                            <span key={i} className="px-3 py-1.5 rounded-lg bg-zinc-900 shadow-inner shadow-white/5 text-[9px] uppercase font-black tracking-wider text-zinc-400 border border-white/5 hover:border-primary-neon/30 hover:text-white transition-colors cursor-default">{int}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-4 flex items-center gap-2"><ShieldCheck size={12} className="text-zinc-500" /> Assessed Strengths</p>
+                                    <div className="flex flex-col gap-2">
+                                        {Array.isArray(student_summary?.skills) && student_summary.skills.map((str: any, i: number) => (
+                                            <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-white/[0.03] to-transparent border border-white/5 hover:border-primary-neon/20 transition-all">
+                                                <div className="w-6 h-6 rounded-lg bg-primary-neon/10 border border-primary-neon/20 flex items-center justify-center shrink-0 mt-0.5">
+                                                    <span className="text-[10px] font-black text-primary-neon">{i + 1}</span>
+                                                </div>
+                                                <span className="text-xs font-bold text-zinc-300 leading-snug">{str}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                {/* Inner Badges for Traits & Values */}
+                                {personality && (Array.isArray(personality.traits) || Array.isArray(personality.values)) && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5 mt-4">
+                                        {Array.isArray(personality.traits) && personality.traits.length > 0 && (
+                                            <div>
+                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">Key Traits</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {personality.traits.slice(0,4).map((trt: string, idx: number) => (
+                                                        <span key={idx} className="px-3 py-1 rounded-md bg-indigo-500/10 text-indigo-300 text-[8px] font-black uppercase border border-indigo-500/20">{trt}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {Array.isArray(personality.values) && personality.values.length > 0 && (
+                                            <div>
+                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">Core Values</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {personality.values.slice(0,4).map((val: string, idx: number) => (
+                                                        <span key={idx} className="px-3 py-1 rounded-md bg-teal-500/10 text-teal-300 text-[8px] font-black uppercase border border-teal-500/20">{val}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Section 3: Logic Section */}
+                        <div className="glass-card p-12 border-white/5 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] group-hover:bg-amber-500/20 transition-all duration-700" />
+                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
+                                <Brain size={16} className="text-amber-400" /> 03. Deductive Decision Logic
+                            </h3>
+                            <div className="relative z-10">
+                                <div className="absolute -top-4 -left-2 text-6xl text-amber-500/20 font-serif leading-none">"</div>
+                                <p className="text-sm md:text-base font-bold leading-relaxed text-zinc-300 italic pl-6 pr-4">
+                                    {logic_explanation}
+                                </p>
+                                <div className="mt-8 flex items-center gap-3 pl-6">
+                                    <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
+                                        <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">AI Logic Engine</p>
+                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">Analysis Complete</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Recommendations */}
+                    <div className="lg:col-span-4 space-y-8">
+                        {/* Section 2: Career Recommendations */}
+                        <div className="glass-card p-12 border-secondary-neon/20 relative overflow-hidden group shadow-[0_0_50px_rgba(6,182,212,0.03)] bg-gradient-to-br from-secondary-neon/[0.02] to-transparent">
+                            <div className="absolute top-0 right-0 w-96 h-96 bg-secondary-neon/10 blur-[120px] rounded-full mix-blend-screen opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
+                            
+                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-secondary-neon/10 pb-8 relative z-10">
+                                <Target size={20} className="text-secondary-neon" /> 02. Precision Recommendations
+                            </h3>
+
+                            <div className="space-y-8 relative z-10">
+                                {recommendations && recommendations.length > 0 ? (
+                                    recommendations.map((rec: any, i: number) => (
+                                        <motion.div 
+                                            key={i}
+                                            whileHover={{ x: 10 }}
+                                            className="p-10 rounded-[2.5rem] bg-black/40 backdrop-blur-md border border-white/5 hover:border-secondary-neon/50 shadow-2xl transition-all group/item overflow-hidden relative"
+                                        >
+                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary-neon/0 group-hover/item:bg-secondary-neon transition-colors duration-500" />
+                                            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
+                                                <div className="space-y-6 flex-1">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary-neon to-cyan-600 text-white flex items-center justify-center text-sm font-black shadow-[0_0_20px_rgba(6,182,212,0.4)] border border-white/10">{i+1}</div>
+                                                        <h4 className="text-3xl font-black text-white leading-tight drop-shadow-md">{rec.career}</h4>
+                                                    </div>
+                                                    
+                                                    <div className="bg-white/[0.02] p-8 rounded-3xl border border-white/5 shadow-inner">
+                                                      <p className="text-[10px] font-black uppercase text-secondary-neon/70 block mb-3 tracking-widest flex items-center gap-2"><Target size={12} /> Strategic Alignment Logic</p>
+                                                      <p className="text-base text-zinc-300 font-bold leading-relaxed">{rec.why_suits}</p>
+                                                    </div>
+                                                    
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-6 px-4">
+                                                        <div className="space-y-5">
+                                                            <p className="text-[9px] uppercase font-black text-zinc-500 tracking-widest px-1">Required Competencies</p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {rec.skills_required.map((skill: string, idx: number) => (
+                                                                    <span key={idx} className="px-4 py-1.5 rounded-xl bg-secondary-neon/10 text-secondary-neon text-[10px] font-black uppercase border border-secondary-neon/20 shadow-sm">{skill}</span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-4">
+                                                            <p className="text-[9px] uppercase font-black text-zinc-500 tracking-widest px-1">Future Outlook (2030)</p>
+                                                            <p className="text-xs font-bold text-zinc-400 leading-relaxed bg-white/[0.02] border border-white/5 p-5 rounded-2xl border-l-2 border-l-secondary-neon shadow-inner">{rec.future_scope}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))
+                                ) : (
+                                    <div className="p-12 rounded-[2.5rem] bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 flex flex-col items-center justify-center text-center space-y-6 shadow-2xl border-t-cyan-500/30">
+                                        <div className="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex flex-col items-center justify-center text-cyan-400 mb-4 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                                            <Target size={30} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-2xl font-black text-white mb-2">Focused Trajectory Locked</h4>
+                                            <p className="text-sm font-bold text-zinc-500 max-w-sm mx-auto leading-relaxed">
+                                                Recommendations have been bypassed in favor of a directly selected strategic pathway for <span className="text-cyan-400 font-black">{selected_career || 'the student'}</span>. 
+                                            </p>
+                                        </div>
+                                        <button 
+                                            onClick={() => {
+                                                window.location.hash = 'trajectory'; 
+                                                const event = new HashChangeEvent("hashchange");
+                                                window.dispatchEvent(event);
+                                            }}
+                                            className="mt-4 px-8 py-4 rounded-xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                                        >
+                                            View Trajectory
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        </div>
+                    </motion.div>
+                ) : (
+                    <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="lg:col-span-12 w-full space-y-8">
+                        {/* NEW SECTION: Selected Career Strategy */}
+                        {selected_career && (
+                            <div className="glass-card p-12 border-primary-neon/20 relative overflow-hidden bg-primary-neon/[0.02]">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-primary-neon/5 blur-[100px] -mr-32 -mt-32" />
+                                
+                                <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-white/5 pb-8">
+                                    <MapPin size={20} className="text-primary-neon" /> 04. Selected Strategy: <span className="text-white ml-2">{selected_career}</span>
+                                </h3>
+
+                                {/* Strategy Tabs */}
+                                <div className="flex flex-wrap gap-4 mb-12 pb-6 border-b border-white/5">
+                                    {[
+                                        { id: 'roadmap', label: 'Roadmap', icon: Calendar },
+                                        { id: 'schools', label: 'Schools', icon: GraduationCap },
+                                        { id: 'exams', label: 'Exams', icon: Target },
+                                        { id: 'grants', label: 'Scholarships', icon: Award },
+                                        { id: 'myths', label: 'Fact Check', icon: FlaskConical },
+                                        { id: 'market', label: 'Market', icon: LineChart }
+                                    ].map(tab => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveTab(tab.id as any)}
+                                            className={`flex items-center gap-4 px-8 py-5 rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest transition-all border shadow-lg ${
+                                                activeTab === tab.id 
+                                                ? 'bg-zinc-100 text-zinc-900 border-white shadow-[0_0_30px_rgba(255,255,255,0.3)] scale-105' 
+                                                : 'bg-white/10 text-zinc-300 border-white/20 hover:bg-white/20 hover:text-white hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:border-white/40'
+                                            }`}
+                                        >
+                                            <div className={`${activeTab === tab.id ? 'animate-bounce' : ''}`}>
+                                                <tab.icon size={22} className={activeTab === tab.id ? 'text-zinc-900 opacity-90' : 'text-primary-neon opacity-80'} />
+                                            </div>
+                                            {tab.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Tab Content Rendering */}
+                                <div className="min-h-[400px]">
+                                    {activeTab === 'roadmap' && (
+                                        <div className="space-y-8">
+                                            {(roadmap.phases || []).map((phase: any, i: number) => (
+                                                <div key={i} className="flex gap-6">
+                                                    <div className="flex flex-col items-center">
+                                                        <div className="w-8 h-8 rounded-full bg-primary-neon/20 border border-primary-neon/30 flex items-center justify-center text-[10px] font-black text-primary-neon shrink-0">
+                                                            {i + 1}
+                                                        </div>
+                                                        {i < roadmap.phases.length - 1 && <div className="w-px flex-1 bg-white/5 my-2" />}
+                                                    </div>
+                                                    <div className="flex-1 pb-8">
+                                                        <div className="flex items-center justify-between mb-3">
+                                                            <h5 className="font-black text-white text-lg tracking-tight">{phase.name}</h5>
+                                                            <span className="text-[10px] font-bold text-zinc-500 uppercase">{phase.timeline}</span>
+                                                        </div>
+                                                        <ul className="space-y-2">
+                                                            {phase.tasks.map((t: string, ti: number) => (
+                                                                <li key={ti} className="text-xs text-zinc-400 flex items-start gap-2 italic">
+                                                                    <ChevronRight size={12} className="text-primary-neon mt-0.5 shrink-0" /> {t}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!roadmap.phases || roadmap.phases.length === 0) && (
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Strategy loading or unavailable...</div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'schools' && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {(roadmap.colleges || []).map((col: any, i: number) => (
+                                                <div key={i} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-primary-neon/20 transition-all group/card">
+                                                    <Building2 size={24} className="text-zinc-700 mb-4 group-hover/card:text-primary-neon transition-colors" />
+                                                    <h5 className="font-black text-white text-base mb-1">{col.name}</h5>
+                                                    <p className="text-[10px] font-bold text-zinc-500 mb-4 uppercase">{col.program}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="px-2 py-0.5 rounded-lg bg-primary-neon/10 text-primary-neon text-[8px] font-black uppercase border border-primary-neon/20">{col.type}</span>
+                                                        <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter italic whitespace-nowrap overflow-hidden text-ellipsis">{col.location}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!roadmap.colleges || roadmap.colleges.length === 0) && (
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No specific schools mapped yet.</div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'exams' && (
+                                        <div className="space-y-4">
+                                            {(roadmap.entrance_exams || []).map((exam: any, i: number) => (
+                                                <div key={i} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-primary-neon/30 transition-all">
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <h5 className="font-black text-white text-lg tracking-tight">{exam.exam_name}</h5>
+                                                        <span className="px-3 py-1 rounded-lg bg-zinc-800 text-[10px] font-black uppercase text-zinc-400">{exam.fees}</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-4 text-[10px] items-center">
+                                                        <div className="space-y-1">
+                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">Conducted By</p>
+                                                            <p className="text-zinc-400 font-bold uppercase">{exam.conducting_body}</p>
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">Window</p>
+                                                            <p className="text-zinc-400 font-bold uppercase">{exam.application_window}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!roadmap.entrance_exams || roadmap.entrance_exams.length === 0) && (
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No exams currently prioritized.</div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'grants' && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {scholarships.length > 0 ? scholarships.map((sch: any, i: number) => (
+                                                <div key={i} className="p-6 rounded-2xl bg-primary-neon/5 border border-primary-neon/10 hover:border-primary-neon/30 transition-all group/sch">
+                                                    <Award size={24} className="text-primary-neon mb-4 group-hover/sch:scale-110 transition-transform" />
+                                                    <h5 className="font-black text-white text-base mb-2 tracking-tight leading-tight">{sch.name}</h5>
+                                                    <p className="text-[10px] font-bold text-zinc-500 mb-4 uppercase border-b border-white/5 pb-2 line-clamp-2">{sch.description}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="px-2 py-0.5 rounded-lg bg-primary-neon text-black text-[9px] font-black uppercase">{sch.provider}</span>
+                                                        <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter">Deadline: {sch.deadline || 'Varies'}</span>
+                                                    </div>
+                                                </div>
+                                            )) : (
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">
+                                                    Searching for eligible grants...
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                    
+                                    {activeTab === 'market' && (
+                                        <div className="space-y-6">
+                                            {market ? (
+                                                <div className="p-8 rounded-[2rem] bg-zinc-900 border border-white/5 space-y-6">
+                                                   <h5 className="font-black text-white text-lg tracking-tight border-b border-white/5 pb-4">Market Outlook</h5>
+                                                   <p className="text-sm font-bold text-zinc-400 italic mb-6">{market.market_summary || market.future_outlook || "Analyzing current job market trends..."}</p>
+                                                   
+                                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Top Employers (2025)</h6>
+                                                          <ul className="space-y-3">
+                                                              {((market.top_employers || []).slice(0, 4)).map((emp: any, i: number) => (
+                                                                  <li key={i} className="flex flex-col gap-1 border-b border-white/5 pb-2 last:border-0 last:pb-0">
+                                                                      <span className="text-sm font-black text-white">{emp.name || emp.employer || emp}</span>
+                                                                      {emp.type && <span className="text-[10px] text-zinc-500 font-bold uppercase">{emp.type}</span>}
+                                                                  </li>
+                                                              ))}
+                                                              {(!market.top_employers || market.top_employers.length === 0) && (
+                                                                  <span className="text-xs text-zinc-500 italic">No exact employer data available</span>
+                                                              )}
+                                                          </ul>
+                                                      </div>
+                                                      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Salary Estimates</h6>
+                                                          <div className="space-y-4">
+                                                              {market.salaries ? Object.keys(market.salaries).map((key, i) => (
+                                                                  <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
+                                                                      <span className="text-[9px] uppercase font-black text-zinc-400">{key.replace('_', ' ')}</span>
+                                                                      <span className="text-[10px] font-black text-primary-neon tracking-wider">{market.salaries[key]}</span>
+                                                                  </div>
+                                                              )) : (
+                                                                 <div className="text-zinc-500 uppercase font-black text-[10px]">Data loading...</div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                            ) : (
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading market intelligence...</div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'myths' && (
+                                        <div className="space-y-6">
+                                            {myths.length > 0 ? myths.map((m: any, i: number) => (
+                                                <div key={i} className="p-8 rounded-[2rem] bg-zinc-900 border border-white/5 space-y-4">
+                                                    <div className="flex gap-4">
+                                                        <div className="w-10 h-10 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 shrink-0">
+                                                            <XCircle size={18} />
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">The Myth</span>
+                                                            <p className="text-base text-zinc-400 font-bold italic">"{m.myth}"</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex gap-4">
+                                                        <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+                                                            <CheckCircle2 size={18} />
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">The Reality</span>
+                                                            <p className="text-base text-emerald-400 font-black">{m.reality}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )) : (
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading fact-check data...</div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                    </motion.div>
+                )}
+
+                {/* Student Strategy Footer */}
+                <div className="mt-32 pt-20 border-t border-white/5 text-center relative z-10">
+                    <div className="max-w-4xl mx-auto space-y-12">
+                        <div className="w-20 h-20 rounded-3xl bg-primary-neon/10 border border-primary-neon/20 flex items-center justify-center mx-auto text-primary-neon shadow-2xl shadow-primary-neon/20 mb-8">
+                            <Target size={40} />
+                        </div>
+                        <p className="text-2xl md:text-3xl text-white font-black leading-tight tracking-tight">
+                            “This strategy is your blueprint for the next decade. <br className="hidden lg:block"/> 
+                            Every module is designed to give you an <span className="neon-text">unfair advantage</span> <br className="hidden lg:block" />
+                            in the global talent market.”
+                        </p>
+                        <div className="flex justify-center pt-4">
+                            <button 
+                                onClick={() => navigate('/dashboard')}
+                                className="px-12 py-5 rounded-[2rem] bg-white/5 border border-white/10 text-zinc-400 font-black uppercase tracking-[0.3em] text-[10px] hover:bg-white/10 hover:text-white transition-all shadow-xl hover:shadow-primary-neon/10"
+                            >
+                                Return to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+};
+
+export default StudentCareerPage;
+
+

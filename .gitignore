@@ -1,0 +1,36 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+.DS_Store
+
+# Backend
+backend/__pycache__/
+backend/.pytest_cache/
+backend/venv/
+backend/env/
+backend/.env
+backend/.env.local
+*.db
+*.db.old
+*.sqlite3
+*.backup
+*.db-journal
+
+# Python Log Files
+backend/*.log
+backend/err.txt
+backend/career_sim_err.txt
+backend/startup_err.txt
+backend/test*_out.txt
+
+# Editor / System
+.vscode/
+.idea/
+*.swp
+*.swo
