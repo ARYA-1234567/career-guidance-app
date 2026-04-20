@@ -16,6 +16,7 @@ try:
 except:
     pass
 print(f"---------------------------")
+sys.stdout.flush() # Force Render to show these diagnostic logs immediately
 
 from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, HTTPException, Request, Depends
@@ -143,7 +144,10 @@ if DATABASE_URL.startswith("postgres://"):
 elif DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
-print(f"DEBUG: Initializing database engine...")
+# Parse database URL details for logging (securely)
+db_info = DATABASE_URL.split("@")[-1] if "@" in DATABASE_URL else DATABASE_URL.split("/")[-1]
+print(f"DEBUG: Initializing database engine -> {db_info}")
+sys.stdout.flush()
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
@@ -153,16 +157,19 @@ else:
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# ENSURE TABLES EXIST IN SELECTED DATABASE
-print("DEBUG: Synchronizing database schema...")
-try:
-    # We wrapped this to see if it's the cause of the startup crash
-    Base.metadata.create_all(bind=engine)
-    print("DEBUG: Database schema synchronization complete.")
-except Exception as e:
-    print(f"CRITICAL: Failed to synchronize database: {str(e)}")
-    # If we are in production, we might want to fail hard, 
-    # but for debugging we want to see this message in the logs.
+# Moved to startup handler below to prevent port-binding timeout
+@app.on_event("startup")
+async def startup_db_client():
+    print("DEBUG: [STARTUP] Synchronizing database schema...")
+    sys.stdout.flush()
+    try:
+        # Run in threadpool as create_all is blocking
+        from starlette.concurrency import run_in_threadpool
+        await run_in_threadpool(Base.metadata.create_all, bind=engine)
+        print("DEBUG: [STARTUP] Database schema synchronization complete.")
+    except Exception as e:
+        print(f"CRITICAL: [STARTUP] Failed to synchronize database: {str(e)}")
+    sys.stdout.flush()
 
 class UserCreate(BaseModel):
     user_id: str
