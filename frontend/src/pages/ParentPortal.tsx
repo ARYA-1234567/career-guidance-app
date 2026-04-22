@@ -953,12 +953,12 @@ const ParentPortal: React.FC = () => {
             </div>
 
             {/* AI Career Advisor Chatbot */}
-            {data?.selected_career && (
+            {selected_career && (
                 <CareerChatbot 
-                    careerTitle={data.selected_career}
+                    careerTitle={selected_career}
                     activeSection={activeTab}
-                    userProfile={data.personality}
-                    matchScore={data.student_match_score || 85}
+                    userProfile={personality}
+                    matchScore={data?.student_match_score || 85}
                     isOpen={isChatOpen}
                     onOpen={() => setIsChatOpen(true)}
                     onClose={() => setIsChatOpen(false)}
