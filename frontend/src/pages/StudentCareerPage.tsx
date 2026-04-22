@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import CareerChatbot from '../components/CareerChatbot';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -24,6 +25,7 @@ const StudentCareerPage: React.FC = () => {
     const [data, setData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'roadmap' | 'schools' | 'exams' | 'grants' | 'myths' | 'market'>('roadmap');
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const isTrajectoryView = location.hash === '#trajectory';
     const isSimulationView = location.hash === '#simulation';
@@ -541,7 +543,7 @@ const StudentCareerPage: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">The Reality</span>
-                                                            <p className="text-base text-emerald-400 font-black">{m.reality}</p>
+                                                            <p className="text-base text-emerald-400 font-black">{m.reality || m.fact}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -580,6 +582,19 @@ const StudentCareerPage: React.FC = () => {
                 </div>
 
             </div>
+
+            {/* AI Career Advisor Chatbot */}
+            {selected_career && (
+                <CareerChatbot 
+                    careerTitle={selected_career}
+                    activeSection={activeTab}
+                    userProfile={personality}
+                    matchScore={85} // Baseline score
+                    isOpen={isChatOpen}
+                    onOpen={() => setIsChatOpen(true)}
+                    onClose={() => setIsChatOpen(false)}
+                />
+            )}
         </div>
     );
 };

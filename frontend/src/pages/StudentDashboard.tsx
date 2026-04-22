@@ -10,6 +10,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 import { motion } from 'framer-motion';
 import ActivityTimeline from '../components/ActivityTimeline';
+import CareerChatbot from '../components/CareerChatbot';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -23,6 +24,7 @@ const StudentDashboard: React.FC = () => {
   const [activities, setActivities] = useState<any[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingActivity, setLoadingActivity] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -288,6 +290,19 @@ const StudentDashboard: React.FC = () => {
 
         </div>
       </div>
+
+      {/* AI Career Advisor Chatbot */}
+      {user?.selected_career && (
+        <CareerChatbot 
+          careerTitle={user.selected_career}
+          activeSection="Dashboard"
+          userProfile={profile}
+          matchScore={neuralProgress}
+          isOpen={isChatOpen}
+          onOpen={() => setIsChatOpen(true)}
+          onClose={() => setIsChatOpen(false)}
+        />
+      )}
     </div>
   );
 };
