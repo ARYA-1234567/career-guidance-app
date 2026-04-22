@@ -953,9 +953,9 @@ const ParentPortal: React.FC = () => {
             </div>
 
             {/* AI Career Advisor Chatbot */}
-            {data?.career_name && (
+            {data?.selected_career && (
                 <CareerChatbot 
-                    careerTitle={data.career_name}
+                    careerTitle={data.selected_career}
                     activeSection={activeTab}
                     userProfile={data.personality}
                     matchScore={data.student_match_score || 85}
