@@ -119,10 +119,11 @@ async def forensic_log_requests(request: Request, call_next):
         )
 
 # CORS Setup - Stable production-ready configuration
-ALLOWED_ORIGINS = os.getenv(
-    "CORS_ORIGINS", 
-    "http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173"
-).split(",")
+CORS_RAW = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173")
+if CORS_RAW == "*":
+    ALLOWED_ORIGINS = ["*"]
+else:
+    ALLOWED_ORIGINS = [origin.strip() for origin in CORS_RAW.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
