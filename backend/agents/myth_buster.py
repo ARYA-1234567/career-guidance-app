@@ -26,8 +26,8 @@ Your goal is to challenge common career misconceptions for a specific career pat
     "myths": [
         {
             "myth": "The common misconception (Global or Regional)",
-            "fact": "The actual reality based on current 2025 data",
-            "data_points": ["Specific evidence 1", "Specific evidence 2"],
+            "reality": "The actual reality based on current 2025 data",
+            "data_proof": "Specific evidence or statistical proof",
             "kerala_context": "How this applies to students in Kerala/India",
             "global_reality": "The international perspective"
         }
@@ -62,7 +62,7 @@ def get_myth_buster_data(career: str, language: Optional[str] = "en") -> str:
     )
     
     if language == 'ml':
-        user_prompt += "\n\nCRITICAL: Respond NATIVELY in MALAYALAM script for ALL fields including 'career', 'myth', 'fact', 'data_points', 'kerala_context', and 'global_reality'. Strictly NO ENGLISH should be present in the output. Every field must be in Malayalam."
+        user_prompt += "\n\nCRITICAL: Respond NATIVELY in MALAYALAM script for ALL fields including 'career', 'myth', 'reality', 'data_proof', 'kerala_context', and 'global_reality'. Strictly NO ENGLISH should be present in the output. Every field must be in Malayalam."
 
     from utils.groq_client import get_groq_response
     try:
@@ -78,8 +78,8 @@ def get_myth_buster_data(career: str, language: Optional[str] = "en") -> str:
         "myths": [
             {
                 "myth": f"You need a Ph.D. to start in {career}." if language != 'ml' else f"{career} തുടങ്ങാൻ പിഎച്ച്ഡി ആവശ്യമാണ്.",
-                "fact": "Most entry-level roles only require a Bachelor's and relevant skills." if language != 'ml' else "മിക്ക എൻട്രി ലെവൽ റോളുകൾക്കും ബാച്ചിലർ ബിരുദവും പ്രസക്തമായ കഴിവുകളും മാത്രം മതിയാകും.",
-                "data_points": ["85% of junior roles don't list advanced degrees as mandatory."] if language != 'ml' else ["85% ജൂനിയർ റോളുകളിലും അഡ്വാൻസ്ഡ് ഡിഗ്രികൾ നിർബന്ധമല്ല."],
+                "reality": "Most entry-level roles only require a Bachelor's and relevant skills." if language != 'ml' else "മിക്ക എൻട്രി ലെവൽ റോളുകൾക്കും ബാച്ചിലർ ബിരുദവും പ്രസക്തമായ കഴിവുകളും മാത്രം മതിയാകും.",
+                "data_proof": "85% of junior roles don't list advanced degrees as mandatory." if language != 'ml' else "85% ജൂനിയർ റോളുകളിലും അഡ്വാൻസ്ഡ് ഡിഗ്രികൾ നിർബന്ധമല്ല.",
                 "kerala_context": "Professional certificates are often more valued than long degrees in Kerala tech hubs." if language != 'ml' else "കേരളത്തിലെ ടെക് ഹബുകളിൽ നീണ്ട ബിരുദങ്ങളെക്കാൾ പ്രൊഫഷണൽ സർട്ടിഫിക്കറ്റുകൾക്കാണ് പലപ്പോഴും മൂല്യം കൂടുതൽ.",
                 "global_reality": "Global companies prioritize portfolio over credentials." if language != 'ml' else "ആഗോള കമ്പനികൾ സർട്ടിഫിക്കറ്റുകളേക്കാൾ പോർട്ട്‌ഫോളിയോയ്ക്കാണ് മുൻഗണന നൽകുന്നത്."
             }

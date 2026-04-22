@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
+import CareerChatbot from '../components/CareerChatbot';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -31,6 +32,7 @@ const ParentPortal: React.FC = () => {
     const [pin, setPin] = useState('');
     const [isPinRequired, setIsPinRequired] = useState(false);
     const [activeTab, setActiveTab] = useState<'roadmap' | 'schools' | 'exams' | 'grants' | 'myths' | 'market'>('roadmap');
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     // Sandbox State
     const [isSandboxMode, setIsSandboxMode] = useState(false);
@@ -912,7 +914,7 @@ const ParentPortal: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">The Reality</span>
-                                                            <p className="text-base text-emerald-400 font-black">{m.reality}</p>
+                                                            <p className="text-base text-emerald-400 font-black">{m.reality || m.fact}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -949,6 +951,20 @@ const ParentPortal: React.FC = () => {
                 </div>
 
             </div>
+
+            {/* AI Career Advisor Chatbot */}
+            {data?.career_name && (
+                <CareerChatbot 
+                    careerTitle={data.career_name}
+                    activeSection={activeTab}
+                    userProfile={data.personality}
+                    matchScore={data.student_match_score || 85}
+                    isOpen={isChatOpen}
+                    onOpen={() => setIsChatOpen(true)}
+                    onClose={() => setIsChatOpen(false)}
+                    accessId={id}
+                />
+            )}
         </div>
     );
 };

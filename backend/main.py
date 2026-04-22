@@ -95,6 +95,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 # 24 hours
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="api/auth/login", auto_error=False)
 
 # App initialization
 app = FastAPI(title="ACGS - Career Guidance API", version="1.0")
@@ -185,6 +186,7 @@ class ChatRequest(BaseModel):
     match_score: int
     user_category: str
     language: Optional[str] = "en"
+    access_id: Optional[str] = None
 
 class UserLoginSchema(BaseModel):
     user_id: str
@@ -362,6 +364,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         print(f"DEBUG: [AUTH FAIL] No user found with ID: {user_id}")
         raise credentials_exception
     return user
+
+async def get_current_user_optional(token: Optional[str] = Depends(oauth2_scheme_optional), db: Session = Depends(get_db)):
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            return None
+        return db.query(User).filter(User.user_id == user_id).first()
+    except:
+        return None
 
 # Routes
 @app.get("/")
@@ -1316,12 +1330,28 @@ async def run_whatif(request: Request):
 @app.post("/api/career-chatbot")
 async def career_chatbot(
     payload: ChatRequest, 
-    current_user: User = Depends(get_current_user), 
+    current_user: Optional[User] = Depends(get_current_user_optional), 
     db: Session = Depends(get_db)
 ):
     try:
+        # Determine target user (Student or through Parent Access)
+        target_user_id = None
+        user_category = payload.user_category
+
+        if current_user:
+            target_user_id = current_user.id
+        elif payload.access_id:
+            # Parent access via ID
+            parent_user = db.query(User).filter(User.parent_access_id == payload.access_id).first()
+            if parent_user:
+                target_user_id = parent_user.id
+                user_category = "Parent"
+
+        if not target_user_id:
+             raise HTTPException(status_code=401, detail="Authentication required or invalid Access ID")
+
         # Fetch Student Profile to get agent_memory
-        profile = db.query(StudentProfile).filter(StudentProfile.user_id == current_user.id).first()
+        profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first()
         agent_mem = profile.agent_memory if profile else None
 
         response = get_career_bot_response(
@@ -1330,7 +1360,7 @@ async def career_chatbot(
             active_section=payload.active_section,
             user_profile=payload.user_profile,
             match_score=payload.match_score,
-            user_category=payload.user_category,
+            user_category=user_category,
             language=payload.language,
             agent_memory=agent_mem
         )

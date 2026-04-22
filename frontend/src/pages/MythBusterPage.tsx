@@ -88,7 +88,7 @@ const MythBusterPage: React.FC = () => {
                                  <span className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase flex items-center gap-2">
                                       <CheckCircle2 size={16} className="text-emerald-500" /> {language === 'ml' ? 'യാഥാർത്ഥ്യം' : 'The Reality'}
                                  </span>
-                                 <h3 className="text-2xl font-black text-emerald-400 leading-tight underline decoration-emerald-500/30 decoration-4 underline-offset-8">{myth.reality}</h3>
+                                 <h3 className="text-2xl font-black text-emerald-400 leading-tight underline decoration-emerald-500/30 decoration-4 underline-offset-8">{myth.reality || myth.fact}</h3>
                                 </div>
                             </div>
 

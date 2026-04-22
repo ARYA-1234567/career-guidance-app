@@ -17,6 +17,7 @@ interface CareerChatbotProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  accessId?: string;
 }
 
 const WELCOME_MESSAGES: Record<string, Record<string, string>> = {
@@ -64,7 +65,8 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
   matchScore,
   isOpen,
   onOpen,
-  onClose
+  onClose,
+  accessId
 }) => {
   const { language } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -123,8 +125,9 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
         active_section: activeSection || "General",
         user_profile: userProfile || {},
         match_score: matchScore,
-        user_category: userProfile?.category || "Student",
-        language: language
+        user_category: accessId ? "Parent" : (userProfile?.category || "Student"),
+        language: language,
+        access_id: accessId
       });
 
       setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
