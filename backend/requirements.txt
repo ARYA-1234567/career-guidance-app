@@ -13,3 +13,8 @@ celery
 python-dotenv
 psycopg2-binary
 langchain
+groq
+langchain-groq
+bcrypt
+langgraph
+aiohttp
