@@ -94,7 +94,7 @@ const ResultsPage: React.FC = () => {
 
   const fetchParentChildProfile = async () => {
     setLoading(true);
-    setStatusText('Downloading student career trajectory...');
+    setStatusText(t('results.statusDownloading'));
     try {
       const { parentId, pin, career } = state;
       const res = await axios.get(`${API_BASE}/api/parent/lookup/${parentId}?pin=${pin}`);
@@ -120,7 +120,7 @@ const ResultsPage: React.FC = () => {
 
   const fetchSavedProfile = async () => {
     setLoading(true);
-    setStatusText('Retrieving your saved career profile...');
+    setStatusText(t('results.statusRetrieving'));
     try {
       const res = await axios.get(`${API_BASE}/api/profiles/latest`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -137,7 +137,7 @@ const ResultsPage: React.FC = () => {
 
   const runPipeline = async () => {
     try {
-      setStatusText('Extracting personality traits using neural vectors...');
+      setStatusText(t('results.statusExtracting'));
       const chatMessages = history.map((m: any) => ({
         role: m.role === 'ai' ? 'assistant' : 'user',
         content: m.content,
@@ -161,7 +161,7 @@ const ResultsPage: React.FC = () => {
   const matchCareersForProfile = async (profileData: ProfileData) => {
     try {
       setLoading(true);
-      setStatusText('Cross-referencing global job markets and top institutions...');
+      setStatusText(t('results.statusCrossReferencing'));
       const matchRes = await axios.post(`${API_BASE}/api/careers/match`, {
         profile: profileData,
         language: language
@@ -691,22 +691,20 @@ const ResultsPage: React.FC = () => {
             <div className="w-20 h-20 rounded-2xl bg-violet-500/10 flex items-center justify-center mx-auto border border-violet-500/20">
               <Zap size={40} className="text-violet-400" />
             </div>
-            <h4 className="text-2xl font-black text-white">{language === 'ml' ? 'കരിയർ പാത സിമുലേഷൻ' : 'Career Trajectory Simulation'}</h4>
+            <h4 className="text-2xl font-black text-white">{t('parent.sandboxTitle')}</h4>
             <p className="text-zinc-500 text-sm max-w-md mx-auto italic">
-              {language === 'ml' 
-                ? 'അടുത്ത 10 വർഷത്തെ കരിയർ വളർച്ച മുൻകൂട്ടി കാണുക.' 
-                : 'Projecting 10-year growth, salary benchmarks, and lifestyle shifts for this path.'}
+              {t('parent.sandboxDesc')}
             </p>
             {selectedCareer === (matches[analyzingMatch!.index].career || (matches[analyzingMatch!.index] as any).title) ? (
               <button 
                 onClick={() => navigate(`/simulation/${encodeURIComponent(selectedCareer || '')}`)}
                 className="px-8 py-4 rounded-2xl bg-violet-500 text-white font-black uppercase tracking-widest text-[10px] hover:bg-violet-400 transition-all shadow-[0_10px_30px_rgba(139,92,246,0.2)]"
               >
-                {language === 'ml' ? 'സിമുലേഷൻ തുടങ്ങുക' : 'Launch Growth Simulation'}
+                {t('parent.runSim')}
               </button>
             ) : (
                 <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest bg-white/5 py-3 rounded-xl border border-white/5">
-                    {language === 'ml' ? 'ഈ കരിയർ സജീവമാക്കുക' : 'Choose this path to activate Simulation'}
+                    {t('parent.trajectoryLockedDesc')}
                 </p>
             )}
           </div>
@@ -740,7 +738,7 @@ const ResultsPage: React.FC = () => {
           </div>
           <div className="space-y-4">
              <h2 className="text-3xl font-black hero-title animate-pulse uppercase tracking-wider">{statusText}</h2>
-             <p className="text-zinc-500 font-bold uppercase tracking-[6px] text-xs">Neural Network Processing...</p>
+             <p className="text-zinc-500 font-bold uppercase tracking-[6px] text-xs">{t('results.processing')}</p>
           </div>
         </motion.div>
       </div>
@@ -754,7 +752,7 @@ const ResultsPage: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center mb-16 relative z-10 pt-10">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
           <Sparkles size={14} className="text-primary-neon animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-[4px] text-zinc-400">Advanced Agentic Guidance System</span>
+          <span className="text-[10px] font-black uppercase tracking-[4px] text-zinc-400">{t('results.advancedSystem')}</span>
         </motion.div>
         <h1 className="text-5xl md:text-7xl font-black hero-title mb-6 tracking-tighter">
           {t('results.title')}
@@ -814,11 +812,11 @@ const ResultsPage: React.FC = () => {
                     {match.career || (match as any).title || "Specialist Path"}
                 </h2>
                 <div className="flex flex-wrap gap-3 mb-10">
-                  <span className="px-5 py-2.5 rounded-2xl bg-white/5 text-emerald-400 border border-white/5 text-[11px] font-black uppercase tracking-wider flex items-center gap-2">
-                    <TrendingUp size={14} /> ₹{match.salary_range || (language === 'ml' ? 'മികച്ച ശമ്പളം' : "Competitive")}
+                  <span className="text-[11px] font-black uppercase tracking-wider flex items-center gap-2">
+                    <TrendingUp size={14} /> ₹{match.salary_range || t('results.salary')}
                   </span>
                   <span className={`px-5 py-2.5 rounded-2xl bg-white/5 border border-white/5 text-[11px] font-black uppercase tracking-wider ${getDemandColor(match.local_demand || (match as any).demand || "High")}`}>
-                    {match.local_demand || (match as any).demand || (language === 'ml' ? 'മാർക്കറ്റ് ഡിമാൻഡ്' : "Stability Index")}
+                    {match.local_demand || (match as any).demand || t('results.demand')}
                   </span>
                 </div>
                 {(match.reason || (match as any).why_matches) && (
@@ -860,7 +858,7 @@ const ResultsPage: React.FC = () => {
 
               <div className="flex-1 flex flex-col justify-center">
                 <h3 className="text-[10px] font-black uppercase tracking-[3px] text-zinc-600 mb-8 flex items-center gap-3 justify-center md:justify-start">
-                   <div className="h-px w-8 bg-white/5"></div> {focusMode ? (language === 'ml' ? 'കരിയർ അനലിറ്റിക്സ്' : 'Trajectory Analytics') : t('results.moduleTitle')} <div className="h-px flex-1 bg-white/5"></div>
+                   <div className="h-px w-8 bg-white/5"></div> {focusMode ? t('results.trajectoryAnalytics') : t('results.moduleTitle')} <div className="h-px flex-1 bg-white/5"></div>
                 </h3>
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                   {intelligenceModules.map((btn) => (
@@ -910,7 +908,7 @@ const ResultsPage: React.FC = () => {
                            <h3 className="text-lg font-black text-white uppercase tracking-tight">
                               {t('results.moduleTitle')}: {analyzingMatch.type.charAt(0).toUpperCase() + analyzingMatch.type.slice(1)}
                            </h3>
-                           <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{language === 'ml' ? 'തത്സമയ വിശകലനം // സജീവം' : 'Real-time Synthesis // Active'}</p>
+                           <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{t('results.realtimeSynthesis')}</p>
                         </div>
                      </div>
                      <button 
@@ -958,7 +956,7 @@ const ResultsPage: React.FC = () => {
             <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center">
               <CheckCircle2 size={14} />
             </div>
-            {language === 'ml' ? 'കരിയർ പാത്ത് സജീവമാക്കി!' : 'Career Path Activated!'}
+            {t('results.pathActivated')}
           </motion.div>
         )}
       </AnimatePresence>

@@ -35,13 +35,11 @@ const ModeSelection: React.FC = () => {
                 </motion.div>
                 
                 <h1 className="text-5xl md:text-7xl font-black mb-6 hero-title tracking-tight leading-tight">
-                    {language === 'ml' ? 'ഗഹനമായ അന്വേഷണം ആരംഭിക്കുക' : 'Initiate Deep Discovery'}
+                    {t('discovery.initiate')}
                 </h1>
                 
                 <p className="max-w-2xl mx-auto text-zinc-500 text-lg md:text-xl font-bold mb-16 tracking-tight">
-                    {language === 'ml' ? 
-                        'നിങ്ങളുടെ ഭാവി രൂപപ്പെടുത്തുന്നതിനുള്ള ആദ്യ ചുവടുവെപ്പ്. മികച്ച കരിയർ കണ്ടെത്താൻ AI അസിസ്റ്റന്റിനോട് സംസാരിക്കുക.' : 
-                        'The first step toward architecting your future. Engage with our high-fidelity AI to uncover the trajectories that fit your unique profile.'}
+                    {t('discovery.subtitle')}
                 </p>
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6">
@@ -53,7 +51,7 @@ const ModeSelection: React.FC = () => {
                     >
                         <div className="absolute inset-0 bg-secondary-neon blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
                         <div className="relative px-12 py-8 rounded-[2rem] bg-secondary-neon text-white font-black text-xl uppercase tracking-[0.2em] shadow-2xl flex items-center gap-6 hover:bg-emerald-600 transition-all border border-white/20">
-                            {language === 'ml' ? 'ആരംഭിക്കുക' : 'Begin Exploration'}
+                            {t('discovery.beginBtn')}
                             <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />
                         </div>
                     </motion.button>
@@ -70,7 +68,7 @@ const ModeSelection: React.FC = () => {
                             <div className="absolute inset-0 bg-primary-neon blur-2xl opacity-10 group-hover:opacity-30 transition-opacity" />
                             <div className="relative px-12 py-8 rounded-[2rem] bg-indigo-500/10 text-primary-neon font-black text-xl uppercase tracking-[0.2em] shadow-2xl flex flex-col items-center gap-2 hover:bg-indigo-500/20 transition-all border border-primary-neon/30 backdrop-blur-xl">
                                 <div className="flex items-center gap-4">
-                                    {language === 'ml' ? 'എന്റെ കരിയറിലേക്ക് പോകുക' : 'Go to My Career'}
+                                    {t('discovery.goToCareer')}
                                     <ShieldCheck size={28} className="group-hover:rotate-12 transition-transform color-primary-neon" />
                                 </div>
                                 <span className="text-[10px] text-zinc-500 font-bold opacity-60 tracking-[0.3em]">{selectedCareer}</span>
@@ -81,9 +79,9 @@ const ModeSelection: React.FC = () => {
                 
                 <div className="mt-20 flex items-center justify-center gap-8 border-t border-white/5 pt-12">
                    {[
-                     { icon: ShieldCheck, label: "Private & Secure" },
-                     { icon: Sparkles, label: "AI Powered" },
-                     { icon: ArrowRight, label: "Zero Friction" }
+                     { icon: ShieldCheck, label: t('discovery.privateSecure') },
+                     { icon: Sparkles, label: t('discovery.aiPowered') },
+                     { icon: ArrowRight, label: t('discovery.zeroFriction') }
                    ].map((item, i) => (
                      <div key={i} className="flex items-center gap-2 opacity-50">
                        <item.icon size={14} className="text-secondary-neon" />

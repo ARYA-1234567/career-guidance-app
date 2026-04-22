@@ -29,7 +29,7 @@ const SimulationPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'Comparing' | 'Analysis' | 'Strategy'>('Comparing');
     
     // Sliders & Controls
-    const [scenario, setScenario] = useState(language === 'ml' ? "സാധാരണ പാത — മാറ്റങ്ങളില്ല" : "Standard path — no changes");
+    const [scenario, setScenario] = useState(t('simulation.scenarios.standard'));
     const [yearsBeforeSwitch, setYearsBeforeSwitch] = useState(3);
     const [location, setLocation] = useState("Kerala");
     const [education] = useState("None");
@@ -104,7 +104,7 @@ const SimulationPage: React.FC = () => {
         }));
     }, [data]);
 
-    if (!careerId) return <div>{language === 'ml' ? 'കരിയർ തിരഞ്ഞെടുത്തിട്ടില്ല.' : 'No career selected.'}</div>;
+    if (!careerId) return <div>{t('common.noCareerSelected')}</div>;
 
     return (
         <div className="min-h-screen bg-core text-white font-sans relative overflow-x-hidden selection:bg-blue-500/30 pt-20 pb-20">
@@ -129,8 +129,8 @@ const SimulationPage: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <div className="hidden md:flex bg-white/5 p-1 rounded-xl border border-white/10">
                             {[
-                                { id: 'Comparing', label: language === 'ml' ? 'താരതമ്യം' : 'Comparing' },
-                                { id: 'Analysis', label: language === 'ml' ? 'വിശകലനം' : 'Analysis' }
+                                { id: 'Comparing', label: t('simulation.comparing') },
+                                { id: 'Analysis', label: t('simulation.analysis') }
                             ].map(tab => (
                                 <button 
                                     key={tab.id} 
@@ -147,7 +147,7 @@ const SimulationPage: React.FC = () => {
                         {readOnly && (
                             <div className="px-4 py-2 border border-secondary-neon/30 bg-secondary-neon/10 rounded-xl flex items-center gap-2">
                                 <ShieldCheck size={14} className="text-secondary-neon" />
-                                <span className="text-[10px] font-black uppercase text-secondary-neon tracking-widest">{language === 'ml' ? 'ഗാർഡിയൻ മോഡ് — റീഡ് ഒൺലി' : 'Guardian Mode — Read Only'}</span>
+                                <span className="text-[10px] font-black uppercase text-secondary-neon tracking-widest">{t('simulation.guardianMode')}</span>
                             </div>
                         )}
 
@@ -163,7 +163,7 @@ const SimulationPage: React.FC = () => {
                         <div className="flex items-center gap-6">
                             <div className="px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[9px] font-black text-blue-400 flex items-center gap-2">
                                 <Activity size={12} className="animate-pulse" />
-                                {language === 'ml' ? 'ലൈവ് ന്യൂറൽ സിങ്ക്: 2025' : 'LIVE NEURAL SYNC: 2025 CORE'}
+                                {t('simulation.liveSync')}
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
@@ -181,7 +181,7 @@ const SimulationPage: React.FC = () => {
                                 <div className="relative">
                                     <input 
                                         type="text" 
-                                        placeholder={language === 'ml' ? "മറ്റൊരു കരിയർ..." : "Secondary path..."}
+                                        placeholder={t('simulation.compare') + "..."}
                                         className={`w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 px-4 text-sm focus:border-blue-500/50 focus:bg-white/[0.05] outline-none transition-all font-medium text-white placeholder:text-zinc-600 ${readOnly ? 'opacity-50 pointer-events-none' : ''}`}
                                         value={careerB}
                                         onChange={(e) => setCareerB(e.target.value)}
@@ -198,19 +198,19 @@ const SimulationPage: React.FC = () => {
                                     onChange={(e) => setScenario(e.target.value)}
                                     disabled={readOnly}
                                 >
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "സാധാരണ പാത — മാറ്റങ്ങളില്ല" : "Standard path — no changes"}</option>
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "വർഷത്തിൽ 10% വർദ്ധനവ്" : "Aggressive — 10% year-on-year skill growth"}</option>
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "ആഗോള തലത്തിൽ — ഗൾഫ് / വിദേശ ജോലി" : "Global — move to Gulf / Overseas"}</option>
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "സ്വന്തം സംരംഭം തുടങ്ങുന്നു" : "Entrepreneurial — start own bridge/firm at Year 5"}</option>
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "മറ്റൊരു കരിയറിലേക്ക് മാറുന്നു" : "Career Pivot — switch to Path B at Year 3"}</option>
-                                    <option className="bg-[#0a0a0a]">{language === 'ml' ? "നിങ്ങൾ ടൈപ്പ് ചെയ്ത സാഹചര്യം" : "Custom — type your own scenario"}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.standard')}>{t('simulation.scenarios.standard')}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.aggressive')}>{t('simulation.scenarios.aggressive')}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.global')}>{t('simulation.scenarios.global')}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.entrepreneurial')}>{t('simulation.scenarios.entrepreneurial')}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.pivot')}>{t('simulation.scenarios.pivot')}</option>
+                                    <option className="bg-[#0a0a0a]" value={t('simulation.scenarios.custom')}>{t('simulation.scenarios.custom')}</option>
                                 </select>
                             </div>
 
                             {(scenario === (language === 'ml' ? "നിങ്ങൾ ടൈപ്പ് ചെയ്ത സാഹചര്യം" : "Custom — type your own scenario")) && (
                                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-2">
                                     <textarea 
-                                        placeholder={language === 'ml' ? "നിങ്ങളുടെ സാഹചര്യം ഇവിടെ ടൈപ്പ് ചെയ്യുക..." : "Type your scenario here..."}
+                                        placeholder={t('assessment.placeholder')}
                                         className={`w-full bg-[#0a0a0a] border border-blue-500/30 rounded-2xl p-4 text-sm focus:border-blue-500 focus:bg-blue-500/5 outline-none transition-all min-h-[100px] font-medium text-white shadow-inner ${readOnly ? 'opacity-50 pointer-events-none' : ''}`}
                                         value={customScenario}
                                         onChange={(e) => setCustomScenario(e.target.value)}
@@ -222,8 +222,8 @@ const SimulationPage: React.FC = () => {
                             <div className="space-y-6 pt-2">
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
-                                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{language === 'ml' ? 'മാറ്റത്തിനുള്ള സമയം' : 'Timing of Switch'}</label>
-                                        <span className="text-xs font-black text-blue-400 bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">{language === 'ml' ? 'വർഷം' : 'Year'} {yearsBeforeSwitch}</span>
+                                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{t('simulation.timing')}</label>
+                                        <span className="text-xs font-black text-blue-400 bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">{t('dashboard.timeEst') || 'Year'} {yearsBeforeSwitch}</span>
                                     </div>
                                     <input 
                                         type="range" min="1" max="10" step="1" 
@@ -238,10 +238,10 @@ const SimulationPage: React.FC = () => {
                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{language === 'ml' ? 'സ്ഥലം' : 'Location Focus'}</label>
                                     <div className="grid grid-cols-2 gap-2">
                                         {[
-                                            { id: 'Kerala', label: language === 'ml' ? 'കേരളം' : 'Kerala' },
-                                            { id: 'Metro City', label: language === 'ml' ? 'മെട്രോ സിറ്റി' : 'Metro' },
-                                            { id: 'Gulf', label: language === 'ml' ? 'ഗൾഫ്' : 'Gulf' },
-                                            { id: 'USA/EU', label: language === 'ml' ? 'യു.എസ്/യു.ഇ' : 'Overseas' }
+                                            { id: 'Kerala', label: t('simulation.locations.kerala') },
+                                            { id: 'Metro City', label: t('simulation.locations.metro') },
+                                            { id: 'Gulf', label: t('simulation.locations.gulf') },
+                                            { id: 'USA/EU', label: t('simulation.locations.overseas') }
                                         ].map(loc => (
                                             <button 
                                                 key={loc.id} 
@@ -259,10 +259,10 @@ const SimulationPage: React.FC = () => {
                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{language === 'ml' ? 'ജോലി രീതി' : 'Work Modality'}</label>
                                     <div className="grid grid-cols-2 gap-2">
                                         {[
-                                            { id: 'Job', label: language === 'ml' ? 'ജോലി' : 'Career' },
-                                            { id: 'Freelance', label: language === 'ml' ? 'ഫ്രീലാൻസ്' : 'Free' },
-                                            { id: 'Startup', label: language === 'ml' ? 'സ്റ്റാർട്ടപ്പ്' : 'Startup' },
-                                            { id: 'Founder', label: language === 'ml' ? 'സ്ഥാപകൻ' : 'Founder' }
+                                            { id: 'Job', label: t('simulation.workTypes.career') },
+                                            { id: 'Freelance', label: t('simulation.workTypes.free') },
+                                            { id: 'Startup', label: t('simulation.workTypes.startup') },
+                                            { id: 'Founder', label: t('simulation.workTypes.founder') }
                                         ].map(wt => (
                                             <button 
                                                 key={wt.id} 
@@ -287,7 +287,7 @@ const SimulationPage: React.FC = () => {
                             <h3 style={{ color: '#93c5fd', letterSpacing: '0.15em' }} className="text-sm font-black uppercase">{t('simulation.verdict')}</h3>
                          </div>
                          <p style={{ color: 'white', lineHeight: '1.7' }} className="text-base font-semibold">
-                            {data?.scenario_impact || (language === 'ml' ? 'Adjust sliders to see your 10-year growth impact.' : 'Adjust sliders to see real-time impact on your 10-year growth trajectory.')}
+                            {data?.scenario_impact || t('simulation.defaultVerdict')}
                          </p>
                     </section>
                 </div>
@@ -304,8 +304,8 @@ const SimulationPage: React.FC = () => {
                             
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                                 <div className="space-y-1">
-                                    <h2 className="text-2xl font-black tracking-tight">{language === 'ml' ? 'സമാന്തര യാഥാർത്ഥ്യ വളർച്ച' : 'Parallel Reality Growth'}</h2>
-                                    <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">{language === 'ml' ? 'ശമ്പള താരതമ്യം (പ്രതിവർഷം ലക്ഷത്തിൽ)' : 'Salary Comparison (In Lakhs Per Annum)'}</p>
+                                    <h2 className="text-2xl font-black tracking-tight">{t('simulation.parallelGrowth')}</h2>
+                                    <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">{t('simulation.salaryComparison')}</p>
                                 </div>
                                 <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
                                     <div className="flex items-center gap-2 text-emerald-500">
@@ -321,7 +321,7 @@ const SimulationPage: React.FC = () => {
                                 {loading && (
                                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
                                         <Loader2 className="animate-spin text-blue-500 mb-4" size={40} />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">{language === 'ml' ? 'സമയ-രേഖ കണക്കാക്കുന്നു...' : 'Calculating Time-Stream...'}</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">{t('simulation.calculating')}</span>
                                     </div>
                                 )}
                                 <ResponsiveContainer width="100%" height="100%">
@@ -427,8 +427,8 @@ const SimulationPage: React.FC = () => {
                                     </div>
                                     <div className="pt-2 space-y-2">
                                         <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-zinc-300">
-                                            <span>{language === 'ml' ? 'യാന്ത്രികവൽക്കരണ സാധ്യത' : 'Automation Risk'}</span>
-                                            <span className="text-emerald-400">{data?.career_a_data?.risk_level || (language === 'ml' ? 'കുറഞ്ഞത്' : "Low")}</span>
+                                            <span>{t('simulation.automationRisk')}</span>
+                                            <span className="text-emerald-400">{data?.career_a_data?.risk_level || t('simulation.lowRisk')}</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                                             <div className="h-full bg-emerald-500 w-[20%]" />
@@ -462,7 +462,7 @@ const SimulationPage: React.FC = () => {
                                     </div>
                                     <div className="pt-2 space-y-2">
                                         <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-zinc-300">
-                                            <span>{language === 'ml' ? 'വിപണി ചാഞ്ചാട്ടം' : 'Market Volatility'}</span>
+                                            <span>{t('simulation.marketVolatility')}</span>
                                             <span className="text-blue-400">{data?.career_b_data?.risk_level || "TBD"}</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">

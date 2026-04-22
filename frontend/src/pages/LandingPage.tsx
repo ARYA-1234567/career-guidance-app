@@ -9,7 +9,7 @@ import AuthModal from '../components/AuthModal';
 import ParentAccessModal from '../components/ParentAccessModal';
 
 const LandingPage: React.FC = () => {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [parentModalOpen, setParentModalOpen] = useState(false);
@@ -43,7 +43,7 @@ const LandingPage: React.FC = () => {
             style={{ background: 'rgba(255,255,255,0.02)' }}
         >
             <div className="w-2 h-2 rounded-full bg-primary-neon animate-pulse shadow-[0_0_10px_#6366f1]"></div>
-            <span className="text-xs font-black uppercase tracking-widest text-zinc-400">Career Guidance AI System</span>
+            <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{t('landing.badge')}</span>
         </motion.div>
 
         {/* Hero Title Section */}
@@ -54,11 +54,11 @@ const LandingPage: React.FC = () => {
           className="mb-20"
         >
           <h1 className="hero-title mb-8" style={{ fontSize: 'clamp(3.5rem, 10vw, 7.5rem)' }}>
-            Agentic Career <br />
-            <span className="neon-text">Guidance AI System</span>
+            {t('landing.title1')} <br />
+            <span className="neon-text">{t('landing.title2')}</span>
           </h1>
           <p className="max-w-2xl mx-auto text-xl md:text-2xl text-text-dim leading-relaxed font-bold tracking-tight">
-            Experience the future of career planning with our Student-First AI Discovery tool. Select your path to begin.
+            {t('landing.subtitle')}
           </p>
         </motion.div>
 
@@ -77,11 +77,11 @@ const LandingPage: React.FC = () => {
               <GraduationCap size={40} className="text-primary-neon" />
             </div>
             
-            <h2 className="text-3xl font-black text-white mb-4">Student Mode</h2>
-            <p className="text-zinc-500 font-medium mb-8">Initiate discovery, explore careers, and map your roadmap.</p>
+            <h2 className="text-3xl font-black text-white mb-4">{t('landing.studentMode')}</h2>
+            <p className="text-zinc-500 font-medium mb-8">{t('landing.studentDesc')}</p>
             
             <div className="flex items-center gap-3 text-primary-neon font-black uppercase tracking-widest text-[11px] group-hover:translate-x-1 transition-transform">
-              Access Chatbot <ArrowRight size={16} />
+              {t('landing.studentBtn')} <ArrowRight size={16} />
             </div>
           </motion.button>
 
@@ -98,11 +98,11 @@ const LandingPage: React.FC = () => {
               <Users size={40} className="text-secondary-neon" />
             </div>
 
-            <h2 className="text-3xl font-black text-white mb-4">Parent Mode</h2>
-            <p className="text-zinc-500 font-medium mb-8">Monitor progress and review career recommendations.</p>
+            <h2 className="text-3xl font-black text-white mb-4">{t('landing.parentMode')}</h2>
+            <p className="text-zinc-500 font-medium mb-8">{t('landing.parentDesc')}</p>
 
             <div className="flex items-center gap-3 text-secondary-neon font-black uppercase tracking-widest text-[11px] group-hover:translate-x-1 transition-transform">
-              Review Insights <ArrowRight size={16} />
+              {t('landing.parentBtn')} <ArrowRight size={16} />
             </div>
           </motion.button>
         </div>
@@ -110,10 +110,10 @@ const LandingPage: React.FC = () => {
         {/* Minimalist Intelligence Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-12 border-t border-white/5">
            {[
-             { icon: Compass, label: "Discovery", color: "text-primary-neon" },
-             { icon: Target, label: "Precision", color: "text-secondary-neon" },
-             { icon: Map, label: "Roadmaps", color: "text-accent-rose" },
-             { icon: Sparkles, label: "AI Experts", color: "text-purple-400" }
+             { icon: Compass, label: t('landing.featureDiscovery'), color: "text-primary-neon" },
+             { icon: Target, label: t('landing.featurePrecision'), color: "text-secondary-neon" },
+             { icon: Map, label: t('landing.featureRoadmaps'), color: "text-accent-rose" },
+             { icon: Sparkles, label: t('landing.featureAIExperts'), color: "text-purple-400" }
            ].map((feat, i) => (
              <div key={i} className="flex flex-col items-center gap-3">
                <feat.icon size={20} className={`${feat.color} opacity-60`} />

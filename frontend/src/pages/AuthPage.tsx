@@ -54,13 +54,12 @@ const AuthPage: React.FC = () => {
         } else if (Array.isArray(detail)) {
           setError(detail[0]?.msg || "Validation error occurred.");
         } else {
-          setError("Server error: " + (err.response.statusText || "Something went wrong."));
-        }
+        setError(t('auth.authFailed'));
       } else if (err.request) {
         // Request was made but no response received (Networking issue)
-        setError("Network error: Backend server (8000) not reachable.");
+        setError(t('auth.networkError'));
       } else {
-        setError("Application error: " + err.message);
+        setError(err.message);
       }
     } finally {
       setAuthLoading(false);
@@ -142,8 +141,8 @@ const AuthPage: React.FC = () => {
                     {enableParentAccess && <div className="w-2 h-2 bg-black rounded-full" />}
                   </div>
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-secondary-neon block">Generate Parent Credentials</span>
-                    <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-tighter">Instant secure ID & PIN for your guardian</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-secondary-neon block">{t('auth.generateParent')}</span>
+                    <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-tighter">{t('auth.parentAccessDesc')}</span>
                   </div>
                 </div>
             )}

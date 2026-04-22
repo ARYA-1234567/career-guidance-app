@@ -4,6 +4,7 @@ import { ShieldCheck, ArrowRight, Loader2, Hash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const ParentLogin: React.FC = () => {
   const [parentId, setParentId] = useState('');
@@ -12,6 +13,7 @@ const ParentLogin: React.FC = () => {
   
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,14 +21,15 @@ const ParentLogin: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/auth/parent/login', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const res = await axios.post(`${API_BASE}/api/auth/parent/login`, {
         parent_id: parentId.trim()
       });
       // Store token and user (which will have role: 'parent')
       login(res.data.access_token, res.data.user);
       navigate('/parent-dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Invalid Parent Credentials");
+      setError(err.response?.data?.detail || t('parentLogin.invalidCreds'));
     } finally {
       setLoading(false);
     }
@@ -45,19 +48,19 @@ const ParentLogin: React.FC = () => {
           <div className="inline-flex p-4 rounded-3xl bg-white/[0.03] border border-white/5 mb-6 shadow-2xl">
             <ShieldCheck size={40} className="text-secondary-neon" />
           </div>
-          <h1 className="text-4xl font-black text-white tracking-tight mb-2">Guardian Portal</h1>
-          <p className="text-zinc-500 font-bold tracking-tight">Secure Read-Only Access</p>
+          <h1 className="text-4xl font-black text-white tracking-tight mb-2">{t('parentLogin.guardianPortal')}</h1>
+          <p className="text-zinc-500 font-bold tracking-tight">{t('parentLogin.secureAccess')}</p>
         </div>
 
         <div className="glass-card p-10 border border-white/5">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 ml-1">Student User ID</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 ml-1">{t('parentLogin.studentId')}</label>
               <div className="relative group">
                 <Hash size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-700 group-focus-within:text-secondary-neon transition-colors" />
                 <input 
                   type="text" 
-                  placeholder="e.g. Beena"
+                  placeholder={t('parentLogin.placeholder')}
                   value={parentId}
                   onChange={e => setParentId(e.target.value)}
                   required
@@ -79,7 +82,7 @@ const ParentLogin: React.FC = () => {
             >
               {loading ? <Loader2 className="animate-spin" size={20} /> : (
                 <>
-                  Enter Dashboard
+                  {t('parentLogin.enterBtn')}
                   <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -91,7 +94,7 @@ const ParentLogin: React.FC = () => {
               onClick={() => navigate('/auth')}
               className="text-zinc-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
             >
-              Back to Student Login
+              {t('parentLogin.backBtn')}
             </button>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search, ShieldCheck, Loader2, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -17,11 +18,12 @@ const ParentAccessModal: React.FC<ParentAccessModalProps> = ({ isOpen, onClose }
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!parentId.trim()) {
-      setError("Please enter your Parent ID.");
+      setError(t('parentAccess.enterIdError'));
       return;
     }
     setLoading(true);
@@ -33,10 +35,10 @@ const ParentAccessModal: React.FC<ParentAccessModalProps> = ({ isOpen, onClose }
         onClose();
         navigate(`/parent/${parentId.trim()}`);
       } else if (res.data.status === 'pin_required') {
-        setError("Invalid PIN. Please check your notification.");
+        setError(t('parentAccess.invalidPin'));
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Invalid Parent ID. Please check the student's dashboard.");
+      setError(err.response?.data?.detail || t('parentAccess.invalidId'));
     } finally {
       setLoading(false);
     }
@@ -72,18 +74,18 @@ const ParentAccessModal: React.FC<ParentAccessModalProps> = ({ isOpen, onClose }
                 <div className="w-16 h-16 rounded-2xl bg-secondary-neon/10 flex items-center justify-center mx-auto mb-6 text-secondary-neon border border-secondary-neon/20 shadow-2xl shadow-secondary-neon/20">
                   <ShieldCheck size={32} />
                 </div>
-                <h3 className="text-2xl font-black text-white uppercase tracking-tight">Parent Access</h3>
-                <p className="text-zinc-500 text-sm mt-2">Enter your Unique Access ID</p>
+                <h3 className="text-2xl font-black text-white uppercase tracking-tight">{t('parentAccess.title')}</h3>
+                <p className="text-zinc-500 text-sm mt-2">{t('parentAccess.subtitle')}</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">Parent ID</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-600 ml-1">{t('parentAccess.idLabel')}</label>
                   <div className="relative group">
                     <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-700 group-focus-within:text-secondary-neon transition-colors" />
                     <input 
                       type="text" 
-                      placeholder="PARENT_XXXX"
+                      placeholder={t('parentAccess.idPlaceholder')}
                       value={parentId}
                       onChange={(e) => setParentId(e.target.value)}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white focus:outline-none focus:border-secondary-neon focus:bg-white/[0.08] transition-all font-bold uppercase tracking-widest"
@@ -104,7 +106,7 @@ const ParentAccessModal: React.FC<ParentAccessModalProps> = ({ isOpen, onClose }
                 >
                   {loading ? <Loader2 className="animate-spin" size={20} /> : (
                     <>
-                      Verify Access
+                      {t('parentAccess.verifyBtn')}
                       <ArrowRight size={18} />
                     </>
                   )}

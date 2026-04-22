@@ -24,21 +24,21 @@ const Navbar: React.FC = () => {
     { id: 'home',       label: t('nav.home'),       icon: Home,     path: '/dashboard',  color: '#6366f1' }, // Indigo
     { id: 'discovery',  label: t('nav.discovery'),  icon: Sparkles, path: '/results',    color: '#06b6d4' }, // Cyan
     { id: 'profile',    label: t('nav.profile'),    icon: User,     path: '/dashboard',  color: '#f43f5e' }, // Rose
-    { id: 'career',     label: language === 'ml' ? 'കരിയർ' : 'Career Node', icon: Target, path: '/career', color: '#10b981', locked: !selectedCareer },
+    { id: 'career',     label: t('nav.careerNode'), icon: Target, path: '/career', color: '#10b981', locked: !selectedCareer },
     { id: 'roadmap',    label: t('nav.roadmap'),    icon: Map,      path: '/roadmap',    color: '#10b981' },
-    { id: 'parent-access', label: language === 'ml' ? 'രക്ഷാകർതൃ ആക്സസ്' : 'Parent Access', icon: ShieldCheck, path: '#parent', color: '#06b6d4', isModal: true },
+    { id: 'parent-access', label: t('nav.parentAccess'), icon: ShieldCheck, path: '#parent', color: '#06b6d4', isModal: true },
   ];
 
   if (isParentRoute) {
     navItems = [
-      { id: 'assessment', label: language === 'ml' ? 'വിലയിരുത്തൽ' : 'Assessment Analysis', icon: Brain, path: `${location.pathname}#assessment`, color: '#f59e0b' },
-      { id: 'trajectory', label: language === 'ml' ? 'കരിയർ പാത' : 'Career Trajectory', icon: Target, path: `${location.pathname}#trajectory`, color: '#10b981' },
+      { id: 'assessment', label: t('nav.assessmentAnalysis'), icon: Brain, path: `${location.pathname}#assessment`, color: '#f59e0b' },
+      { id: 'trajectory', label: t('nav.careerTrajectory'), icon: Target, path: `${location.pathname}#trajectory`, color: '#10b981' },
     ];
   }
 
   const simItem = { 
     id: 'simulation', 
-    label: language === 'ml' ? 'സിമുലേഷൻ' : 'Career Simulation', 
+    label: t('nav.simulation'), 
     icon: Zap, 
     path: isParentRoute ? `${location.pathname}#simulation` : (selectedCareer ? `/simulation/${encodeURIComponent(selectedCareer)}` : '/results'), 
     color: '#a78bfa', 

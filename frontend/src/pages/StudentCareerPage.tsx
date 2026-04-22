@@ -21,7 +21,7 @@ const StudentCareerPage: React.FC = () => {
     
     // States
     const [loading, setLoading] = useState(true);
-    const [statusText, setStatusText] = useState("Establishing Secure Access...");
+    const [statusText, setStatusText] = useState(t('results.moduleLoading'));
     const [data, setData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'roadmap' | 'schools' | 'exams' | 'grants' | 'myths' | 'market'>('roadmap');
@@ -64,7 +64,7 @@ const StudentCareerPage: React.FC = () => {
             }
         } catch (err: any) {
             console.error("Student career fetch failed:", err);
-            setError(err.response?.data?.detail || "Failed to establish a stable neural link. Please ensure you have selected a career path.");
+            setError(err.response?.data?.detail || t('studentCareer.establishLink'));
         } finally {
             setLoading(false);
         }
@@ -92,13 +92,13 @@ const StudentCareerPage: React.FC = () => {
                 <div className="mesh-canvas" />
                 <div className="glass-card p-12 lg:p-20 border-accent-rose/20 max-w-xl w-full">
                     <XCircle size={64} className="text-accent-rose mx-auto mb-10 shadow-2xl" />
-                    <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">Access Denied</h2>
-                    <p className="text-zinc-500 mb-12 font-bold leading-relaxed">{error || "No active profile matches this ID."}</p>
+                    <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">{t('studentCareer.accessDenied')}</h2>
+                    <p className="text-zinc-500 mb-12 font-bold leading-relaxed">{error || t('studentCareer.noProfileMatch')}</p>
                     <button 
                       onClick={() => navigate('/')} 
                       className="glow-btn w-full py-5 uppercase text-xs tracking-widest font-black"
                     >
-                      Return to Gateway
+                      {t('studentCareer.returnHome')}
                     </button>
                 </div>
             </div>
@@ -134,7 +134,7 @@ const StudentCareerPage: React.FC = () => {
                            <Zap size={40} className="text-primary-neon animate-pulse" />
                         </div>
                         <div className="text-center relative z-10">
-                            <h2 className="text-4xl font-black text-white mb-4 drop-shadow-lg">Launch Simulation Viewer</h2>
+                            <h2 className="text-4xl font-black text-white mb-4 drop-shadow-lg">{t('studentCareer.projectionBtn')}</h2>
                             <p className="text-zinc-400 font-bold max-w-lg mx-auto leading-relaxed">
                                 You are about to initiate the heavy-duty immersive 3D Career Simulation protocol for <span className="text-primary-neon uppercase font-black tracking-widest">{selected_career || "the strategic pathway"}</span>. Because this module requires exclusive rendering priority, it will open in a secured theater tab.
                             </p>
@@ -143,7 +143,7 @@ const StudentCareerPage: React.FC = () => {
                             onClick={() => window.open(`/simulation/${selected_career || 'General'}`, '_blank')} 
                             className="relative z-10 mt-8 px-12 py-5 rounded-2xl bg-gradient-to-r from-primary-neon to-indigo-500 text-white font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-[0_0_40px_rgba(99,102,241,0.6)] border border-white/20"
                         >
-                            INITIATE IMMERSION
+                            {t('studentCareer.projectionBtn')}
                         </button>
                      </motion.div>
                 ) : !isTrajectoryView ? (
@@ -157,7 +157,7 @@ const StudentCareerPage: React.FC = () => {
                             <div className="absolute inset-0 bg-gradient-to-b from-primary-neon/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                             
                             <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
-                                <GraduationCap size={16} className="text-primary-neon" /> 01. Cognitive Profile
+                                <GraduationCap size={16} className="text-primary-neon" /> {t('parent.cognitiveProfile')}
                             </h3>
                             
                             <div className="space-y-8 relative z-10">
@@ -180,13 +180,13 @@ const StudentCareerPage: React.FC = () => {
                                     <div className="flex gap-4">
                                         {personality.mbti_type && (
                                            <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 flex flex-col justify-center items-center">
-                                                <span className="text-[8px] font-black uppercase text-indigo-400/70 tracking-widest mb-1">MBTI Profile</span>
+                                                <span className="text-[8px] font-black uppercase text-indigo-400/70 tracking-widest mb-1">{t('studentCareer.mbtiProfile')}</span>
                                                 <span className="text-xl font-black text-indigo-400">{personality.mbti_type}</span>
                                            </div>
                                         )}
                                         {personality.holland_code && (
                                            <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-teal-500/10 to-transparent border border-teal-500/20 flex flex-col justify-center items-center">
-                                                <span className="text-[8px] font-black uppercase text-teal-400/70 tracking-widest mb-1">Holland Code</span>
+                                                <span className="text-[8px] font-black uppercase text-teal-400/70 tracking-widest mb-1">{t('studentCareer.hollandCode')}</span>
                                                 <span className="text-xl font-black text-teal-400">{personality.holland_code}</span>
                                            </div>
                                         )}
@@ -194,7 +194,7 @@ const StudentCareerPage: React.FC = () => {
                                 )}
 
                                 <div>
-                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2"><Target size={12} className="text-zinc-500" /> Core Interests</p>
+                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2"><Target size={12} className="text-zinc-500" /> {t('dashboard.coreTraits')}</p>
                                     <div className="flex flex-wrap gap-2">
                                         {Array.isArray(student_summary?.interests) && student_summary.interests.map((int: any, i: number) => (
                                             <span key={i} className="px-3 py-1.5 rounded-lg bg-zinc-900 shadow-inner shadow-white/5 text-[9px] uppercase font-black tracking-wider text-zinc-400 border border-white/5 hover:border-primary-neon/30 hover:text-white transition-colors cursor-default">{int}</span>
@@ -203,7 +203,7 @@ const StudentCareerPage: React.FC = () => {
                                 </div>
                                 
                                 <div>
-                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-4 flex items-center gap-2"><ShieldCheck size={12} className="text-zinc-500" /> Assessed Strengths</p>
+                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-4 flex items-center gap-2"><ShieldCheck size={12} className="text-zinc-500" /> {t('dashboard.keySkills')}</p>
                                     <div className="flex flex-col gap-2">
                                         {Array.isArray(student_summary?.skills) && student_summary.skills.map((str: any, i: number) => (
                                             <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-white/[0.03] to-transparent border border-white/5 hover:border-primary-neon/20 transition-all">
@@ -221,7 +221,7 @@ const StudentCareerPage: React.FC = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5 mt-4">
                                         {Array.isArray(personality.traits) && personality.traits.length > 0 && (
                                             <div>
-                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">Key Traits</p>
+                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">{t('studentCareer.keyTraits')}</p>
                                                 <div className="flex flex-wrap gap-2">
                                                     {personality.traits.slice(0,4).map((trt: string, idx: number) => (
                                                         <span key={idx} className="px-3 py-1 rounded-md bg-indigo-500/10 text-indigo-300 text-[8px] font-black uppercase border border-indigo-500/20">{trt}</span>
@@ -231,7 +231,7 @@ const StudentCareerPage: React.FC = () => {
                                         )}
                                         {Array.isArray(personality.values) && personality.values.length > 0 && (
                                             <div>
-                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">Core Values</p>
+                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">{t('studentCareer.coreValues')}</p>
                                                 <div className="flex flex-wrap gap-2">
                                                     {personality.values.slice(0,4).map((val: string, idx: number) => (
                                                         <span key={idx} className="px-3 py-1 rounded-md bg-teal-500/10 text-teal-300 text-[8px] font-black uppercase border border-teal-500/20">{val}</span>
@@ -248,7 +248,7 @@ const StudentCareerPage: React.FC = () => {
                         <div className="glass-card p-12 border-white/5 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] group-hover:bg-amber-500/20 transition-all duration-700" />
                             <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
-                                <Brain size={16} className="text-amber-400" /> 03. Deductive Decision Logic
+                                <Brain size={16} className="text-amber-400" /> {t('parent.deductiveLogic')}
                             </h3>
                             <div className="relative z-10">
                                 <div className="absolute -top-4 -left-2 text-6xl text-amber-500/20 font-serif leading-none">"</div>
@@ -260,8 +260,8 @@ const StudentCareerPage: React.FC = () => {
                                         <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                                     </div>
                                     <div>
-                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">AI Logic Engine</p>
-                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">Analysis Complete</p>
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">{t('parent.logicEngine')}</p>
+                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">{t('parent.analysisComplete')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@ const StudentCareerPage: React.FC = () => {
                             <div className="absolute top-0 right-0 w-96 h-96 bg-secondary-neon/10 blur-[120px] rounded-full mix-blend-screen opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
                             
                             <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-secondary-neon/10 pb-8 relative z-10">
-                                <Target size={20} className="text-secondary-neon" /> 02. Precision Recommendations
+                                <Target size={20} className="text-secondary-neon" /> {t('parent.precisionRec')}
                             </h3>
 
                             <div className="space-y-8 relative z-10">
@@ -295,7 +295,7 @@ const StudentCareerPage: React.FC = () => {
                                                     </div>
                                                     
                                                     <div className="bg-white/[0.02] p-8 rounded-3xl border border-white/5 shadow-inner">
-                                                      <p className="text-[10px] font-black uppercase text-secondary-neon/70 block mb-3 tracking-widest flex items-center gap-2"><Target size={12} /> Strategic Alignment Logic</p>
+                                                      <p className="text-[10px] font-black uppercase text-secondary-neon/70 block mb-3 tracking-widest flex items-center gap-2"><Target size={12} /> {t('parent.logicEngine')}</p>
                                                       <p className="text-base text-zinc-300 font-bold leading-relaxed">{rec.why_suits}</p>
                                                     </div>
                                                     
@@ -323,9 +323,9 @@ const StudentCareerPage: React.FC = () => {
                                             <Target size={30} />
                                         </div>
                                         <div>
-                                            <h4 className="text-2xl font-black text-white mb-2">Focused Trajectory Locked</h4>
+                                            <h4 className="text-2xl font-black text-white mb-2">{t('parent.trajectoryLocked')}</h4>
                                             <p className="text-sm font-bold text-zinc-500 max-w-sm mx-auto leading-relaxed">
-                                                Recommendations have been bypassed in favor of a directly selected strategic pathway for <span className="text-cyan-400 font-black">{selected_career || 'the student'}</span>. 
+                                                {t('parent.trajectoryLockedDesc')}
                                             </p>
                                         </div>
                                         <button 
@@ -336,7 +336,7 @@ const StudentCareerPage: React.FC = () => {
                                             }}
                                             className="mt-4 px-8 py-4 rounded-xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]"
                                         >
-                                            View Trajectory
+                                            {t('parent.viewTrajectory')}
                                         </button>
                                     </div>
                                 )}
@@ -353,18 +353,18 @@ const StudentCareerPage: React.FC = () => {
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary-neon/5 blur-[100px] -mr-32 -mt-32" />
                                 
                                 <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-white/5 pb-8">
-                                    <MapPin size={20} className="text-primary-neon" /> 04. Selected Strategy: <span className="text-white ml-2">{selected_career}</span>
+                                    <MapPin size={20} className="text-primary-neon" /> {t('studentCareer.selectedPath')}: <span className="text-white ml-2">{selected_career}</span>
                                 </h3>
 
                                 {/* Strategy Tabs */}
                                 <div className="flex flex-wrap gap-4 mb-12 pb-6 border-b border-white/5">
                                     {[
-                                        { id: 'roadmap', label: 'Roadmap', icon: Calendar },
-                                        { id: 'schools', label: 'Schools', icon: GraduationCap },
-                                        { id: 'exams', label: 'Exams', icon: Target },
-                                        { id: 'grants', label: 'Scholarships', icon: Award },
-                                        { id: 'myths', label: 'Fact Check', icon: FlaskConical },
-                                        { id: 'market', label: 'Market', icon: LineChart }
+                                        { id: 'roadmap', label: t('roadmap.title'), icon: Calendar },
+                                        { id: 'schools', label: t('roadmap.colleges'), icon: GraduationCap },
+                                        { id: 'exams', label: t('roadmap.exams'), icon: Target },
+                                        { id: 'grants', label: t('studentCareer.grants'), icon: Award },
+                                        { id: 'myths', label: t('studentCareer.myths'), icon: FlaskConical },
+                                        { id: 'market', label: t('studentCareer.market'), icon: LineChart }
                                     ].map(tab => (
                                         <button
                                             key={tab.id}
@@ -411,7 +411,7 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.phases || roadmap.phases.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Strategy loading or unavailable...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.strategyLoading')}</div>
                                             )}
                                         </div>
                                     )}
@@ -430,7 +430,7 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.colleges || roadmap.colleges.length === 0) && (
-                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No specific schools mapped yet.</div>
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noSchools')}</div>
                                             )}
                                         </div>
                                     )}
@@ -445,7 +445,7 @@ const StudentCareerPage: React.FC = () => {
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 text-[10px] items-center">
                                                         <div className="space-y-1">
-                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">Conducted By</p>
+                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">{t('roadmap.conductedBy')}</p>
                                                             <p className="text-zinc-400 font-bold uppercase">{exam.conducting_body}</p>
                                                         </div>
                                                         <div className="space-y-1">
@@ -456,7 +456,7 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.entrance_exams || roadmap.entrance_exams.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No exams currently prioritized.</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noExams')}</div>
                                             )}
                                         </div>
                                     )}
@@ -475,7 +475,7 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             )) : (
                                                 <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">
-                                                    Searching for eligible grants...
+                                                    {t('parent.searchingGrants')}
                                                 </div>
                                             )}
                                         </div>
@@ -485,12 +485,12 @@ const StudentCareerPage: React.FC = () => {
                                         <div className="space-y-6">
                                             {market ? (
                                                 <div className="p-8 rounded-[2rem] bg-zinc-900 border border-white/5 space-y-6">
-                                                   <h5 className="font-black text-white text-lg tracking-tight border-b border-white/5 pb-4">Market Outlook</h5>
+                                                   <h5 className="font-black text-white text-lg tracking-tight border-b border-white/5 pb-4">{t('parent.marketOutlook')}</h5>
                                                    <p className="text-sm font-bold text-zinc-400 italic mb-6">{market.market_summary || market.future_outlook || "Analyzing current job market trends..."}</p>
                                                    
                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
-                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Top Employers (2025)</h6>
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">{t('parent.topEmployers')}</h6>
                                                           <ul className="space-y-3">
                                                               {((market.top_employers || []).slice(0, 4)).map((emp: any, i: number) => (
                                                                   <li key={i} className="flex flex-col gap-1 border-b border-white/5 pb-2 last:border-0 last:pb-0">
@@ -499,12 +499,12 @@ const StudentCareerPage: React.FC = () => {
                                                                   </li>
                                                               ))}
                                                               {(!market.top_employers || market.top_employers.length === 0) && (
-                                                                  <span className="text-xs text-zinc-500 italic">No exact employer data available</span>
+                                                                  <span className="text-xs text-zinc-500 italic">{t('parent.noEmployers')}</span>
                                                               )}
                                                           </ul>
                                                       </div>
                                                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
-                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Salary Estimates</h6>
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">{t('parent.salaryEstimates')}</h6>
                                                           <div className="space-y-4">
                                                               {market.salaries ? Object.keys(market.salaries).map((key, i) => (
                                                                   <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
@@ -519,7 +519,7 @@ const StudentCareerPage: React.FC = () => {
                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading market intelligence...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMarket')}</div>
                                             )}
                                         </div>
                                     )}
@@ -533,7 +533,7 @@ const StudentCareerPage: React.FC = () => {
                                                             <XCircle size={18} />
                                                         </div>
                                                         <div>
-                                                            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">The Myth</span>
+                                                            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{t('mythBuster.myth')}</span>
                                                             <p className="text-base text-zinc-400 font-bold italic">"{m.myth}"</p>
                                                         </div>
                                                     </div>
@@ -542,13 +542,13 @@ const StudentCareerPage: React.FC = () => {
                                                             <CheckCircle2 size={18} />
                                                         </div>
                                                         <div>
-                                                            <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">The Reality</span>
+                                                            <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">{t('mythBuster.reality')}</span>
                                                             <p className="text-base text-emerald-400 font-black">{m.reality || m.fact}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             )) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading fact-check data...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMyths')}</div>
                                             )}
                                         </div>
                                     )}
@@ -575,7 +575,7 @@ const StudentCareerPage: React.FC = () => {
                                 onClick={() => navigate('/dashboard')}
                                 className="px-12 py-5 rounded-[2rem] bg-white/5 border border-white/10 text-zinc-400 font-black uppercase tracking-[0.3em] text-[10px] hover:bg-white/10 hover:text-white transition-all shadow-xl hover:shadow-primary-neon/10"
                             >
-                                Return to Dashboard
+                                {t('common.dashboard')}
                             </button>
                         </div>
                     </div>

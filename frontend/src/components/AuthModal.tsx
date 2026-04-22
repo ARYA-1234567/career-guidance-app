@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import GenderSelectionModal from './GenderSelectionModal';
+import { useLanguage } from '../context/LanguageContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -25,12 +26,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
   const [authData, setAuthData] = useState<any>(null);
   
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId.trim() || !password.trim()) {
-      setError("Please fill in all fields.");
+      setError(t('auth.fillFields'));
       return;
     }
     setLoading(true);
@@ -58,9 +60,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
       }
     } catch (err: any) {
       if (!err.response) {
-        setError("Network error: The guidance engine is currently restarting or offline. Please wait 10 seconds and try again.");
+        setError(t('auth.networkError'));
       } else {
-        setError(err.response?.data?.detail || err.response?.data?.error || err.response?.data?.message || "Authentication failed. Please check your credentials.");
+        setError(err.response?.data?.detail || err.response?.data?.error || err.response?.data?.message || t('auth.authFailed'));
       }
       console.error(err);
     } finally {
@@ -114,13 +116,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
                   onClick={() => setTab('login')}
                   className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all ${tab === 'login' ? 'text-primary-neon bg-white/[0.02]' : 'text-zinc-500 bg-transparent'}`}
                 >
-                  Login
+                  {t('auth.loginTab')}
                 </button>
                 <button 
                   onClick={() => setTab('signup')}
                   className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all ${tab === 'signup' ? 'text-primary-neon bg-white/[0.02]' : 'text-zinc-500 bg-transparent'}`}
                 >
-                  Signup
+                  {t('auth.signupTab')}
                 </button>
                 <button 
                   onClick={onClose}
@@ -136,18 +138,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
                     <User size={24} />
                   </div>
                   <h3 className="text-lg font-black text-white uppercase tracking-tight">
-                    {tab === 'login' ? 'Welcome Back' : 'Join Discovery'}
+                    {tab === 'login' ? t('auth.welcomeBack') : t('auth.joinDiscovery')}
                   </h3>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-1">User ID</label>
+                    <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-1">{t('auth.userIdLabel')}</label>
                     <div className="relative group">
                       <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-700 group-focus-within:text-primary-neon transition-colors" />
                       <input 
                         type="text" 
-                        placeholder="Enter ID"
+                        placeholder={t('auth.userIdPlaceholder')}
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-primary-neon focus:bg-white/[0.08] transition-all font-bold"
@@ -156,12 +158,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-1">Password</label>
+                    <label className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-1">{t('auth.passwordLabel')}</label>
                     <div className="relative group">
                       <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-700 group-focus-within:text-primary-neon transition-colors" />
                       <input 
                         type="password" 
-                        placeholder="••••••••"
+                        placeholder={t('auth.passwordPlaceholder')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-primary-neon focus:bg-white/[0.08] transition-all font-bold"
@@ -186,9 +188,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
                       </div>
                       <div className="flex flex-col">
                         <span className={`text-[9px] font-black uppercase tracking-wider transition-colors ${enableParentAccess ? 'text-white' : 'text-zinc-500'}`}>
-                          Generate Parent Access
+                          {t('auth.generateParent')}
                         </span>
-                        <span className="text-[7px] font-bold text-zinc-600 uppercase tracking-tighter">Creates Unique ID & PIN for Guardians</span>
+                        <span className="text-[7px] font-bold text-zinc-600 uppercase tracking-tighter">{t('auth.parentAccessDesc')}</span>
                       </div>
                     </button>
                   )}
@@ -206,7 +208,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab = 'lo
                   >
                     {loading ? <Loader2 className="animate-spin" size={16} /> : (
                       <>
-                        {tab === 'login' ? 'Login' : 'Signup'}
+                        {tab === 'login' ? t('auth.loginBtn') : t('auth.signupBtn')}
                         <ArrowRight size={16} />
                       </>
                     )}

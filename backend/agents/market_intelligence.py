@@ -53,7 +53,7 @@ Your job is to provide a DATA-DRIVEN analysis of current vacancies, trends, and 
 CRITICAL: If you cannot find specific live vacancies, you MUST provide at least 3 'Expected 2025 Openings' at top firms in Kerala (like UST, IBS Software, or Technopark startups) and Bangalore based on current trends. NEVER omit the 'recent_vacancies' key. You MUST prioritize data from late 2024 and 2025.
 """
 
-def get_market_intelligence(career: str) -> str:
+def get_market_intelligence(career: str, language: str = 'en') -> str:
     """
     Search global job market data using Tavily and summarize using Groq with Gemini fallback.
     """
@@ -78,6 +78,10 @@ def get_market_intelligence(career: str) -> str:
         "Generate a detailed worldwide market intelligence report with specific, LIVE vacancies currently open in late 2024 and 2025. "
         "Prioritize Kerala hubs (Technopark, Infopark, Cyberpark) and Indian Tech cities. Return ONLY valid JSON."
     )
+
+    if language == 'ml':
+        user_prompt += "\n\nCRITICAL: Respond NATIVELY in MALAYALAM script for ALL fields including 'career', 'market_summary', 'title', 'company', 'location', 'description', 'post_name', 'department', 'salary_scale', 'demand', 'reason', 'details', and 'future_outlook'. Strictly NO ENGLISH should be present in the output. Translate all technical terms or write them in Malayalam script."
+
 
     from utils.groq_client import get_groq_response
     try:

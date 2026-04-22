@@ -97,7 +97,7 @@ const RoadmapPage: React.FC = () => {
       setRoadmap(parsed);
     } catch (err: any) {
       console.error("Roadmap generation failed:", err);
-      setError(language === 'ml' ? "റോഡ്മാപ്പ് നിർമ്മിക്കുന്നതിൽ പരാജയപ്പെട്ടു. ദയവായി വീണ്ടും ശ്രമിക്കുക." : "Failed to generate roadmap. Please try again.");
+      setError(t('results.linkError'));
     } finally {
       setLoading(false);
     }
@@ -229,7 +229,7 @@ const RoadmapPage: React.FC = () => {
               <h2 className="text-2xl font-black text-emerald-400">{roadmap.career}</h2>
               {roadmap.estimated_cost && (
                 <p className="text-sm text-zinc-500 mt-1 flex items-center gap-2">
-                  <DollarSign size={14} /> {language === 'ml' ? 'കണക്കാക്കിയ ചിലവ്' : 'Estimated Investment'}: {roadmap.estimated_cost}
+                  <DollarSign size={14} /> {t('roadmap.estimatedInvestment')}: {roadmap.estimated_cost}
                 </p>
               )}
             </div>
@@ -313,7 +313,7 @@ const RoadmapPage: React.FC = () => {
                         <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
                         <div>
                           <span className="text-[10px] text-zinc-600 block uppercase tracking-widest font-bold">
-                            {language === 'ml' ? 'ലക്ഷ്യം' : 'Milestone'}
+                            {t('roadmap.milestone')}
                           </span>
                           <span className="text-sm text-white font-bold">{phase.milestone}</span>
                         </div>
@@ -335,7 +335,7 @@ const RoadmapPage: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-xs font-bold text-zinc-500 uppercase flex items-center gap-2">
-                        <Calendar size={14} className="text-emerald-500" /> {language === 'ml' ? 'ആഴ്ച' : 'Week'} {w.week}
+                        <Calendar size={14} className="text-emerald-500" /> {t('roadmap.week')} {w.week}
                       </div>
                       {w.resource && (
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -388,19 +388,19 @@ const RoadmapPage: React.FC = () => {
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                         <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{language === 'ml' ? 'നടത്തുന്ന ബോഡി' : 'Conducted By'}</span>
+                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.conductedBy')}</span>
                           <span className="text-zinc-300 font-semibold">{exam.conducting_body}</span>
                         </div>
                         <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{language === 'ml' ? 'ആവർത്തനം' : 'Frequency'}</span>
+                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.frequency')}</span>
                           <span className="text-zinc-300 font-semibold">{exam.frequency}</span>
                         </div>
                         <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{language === 'ml' ? 'അപേക്ഷിക്കേണ്ട സമയം' : 'Apply During'}</span>
+                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.applyDuring')}</span>
                           <span className="text-zinc-300 font-semibold">{exam.application_window}</span>
                         </div>
                         <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{language === 'ml' ? 'യോഗ്യത' : 'Eligibility'}</span>
+                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.eligibility')}</span>
                           <span className="text-zinc-300 font-semibold">{exam.eligibility}</span>
                         </div>
                       </div>
@@ -463,7 +463,7 @@ const RoadmapPage: React.FC = () => {
                           className="px-4 py-2 bg-white/[0.02] border-t border-white/5 flex items-center justify-between cursor-pointer hover:bg-white/[0.04] transition-all group/footer"
                         >
                           <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover/footer:text-cyan-400 transition-colors">
-                            {expandedIdx === i ? (language === 'ml' ? 'അഫിലിയേറ്റഡ് ലിസ്റ്റ് മറയ്ക്കുക' : 'Hide Affiliated List') : (language === 'ml' ? 'അഫിലിയേറ്റഡ് കോളേജുകൾ കാണുക' : 'View Affiliated Colleges')}
+                            {expandedIdx === i ? t('roadmap.hideAffiliated') : t('roadmap.viewAffiliated')}
                           </span>
                           {expansionLoading && expandedIdx === i ? (
                             <Loader2 size={12} className="animate-spin text-zinc-500" />
@@ -482,7 +482,7 @@ const RoadmapPage: React.FC = () => {
                             {expansionLoading ? (
                               <div className="p-10 flex flex-col items-center justify-center gap-3">
                                 <School size={20} className="text-zinc-700 animate-bounce" />
-                                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{language === 'ml' ? 'അഫിലിയേറ്റഡ് നെറ്റ്‌വർക്ക് തിരയുന്നു...' : 'Searching affiliated network...'}</span>
+                                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{t('roadmap.searchingAffiliated')}</span>
                               </div>
                             ) : affiliatedColleges.length > 0 ? (
                               <div className="p-2 grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -501,7 +501,7 @@ const RoadmapPage: React.FC = () => {
                               </div>
                             ) : (
                               <div className="p-6 text-center text-xs text-zinc-600 italic">
-                                {language === 'ml' ? 'പ്രത്യേക അഫിലിയേറ്റഡ് ലിസ്റ്റ് കണ്ടെത്തിയില്ല. ദയവായി യൂണിവേഴ്സിറ്റി വെബ്സൈറ്റ് പരിശോധിക്കുക.' : 'No specific affiliated list found. Please check the university website.'}
+                                {t('roadmap.noAffiliatedFound')}
                               </div>
                             )}
                           </motion.div>
@@ -557,8 +557,8 @@ const RoadmapPage: React.FC = () => {
         {/* No career selected */}
         {!selectedCareer && !loading && (
           <div className="glass-card p-16 text-center">
-            <h2 className="text-2xl font-black text-zinc-400 mb-4">{language === 'ml' ? 'കരിയർ തിരഞ്ഞെടുത്തിട്ടില്ല' : 'No Career Selected'}</h2>
-            <p className="text-zinc-500 mb-6">{language === 'ml' ? 'ഫലങ്ങളിലേക്ക് തിരികെ പോയി ഒരു കരിയർ തിരഞ്ഞെടുക്കുക.' : 'Go back to results and generate a roadmap for a specific career.'}</p>
+            <h2 className="text-2xl font-black text-zinc-400 mb-4">{t('common.noCareerSelected')}</h2>
+            <p className="text-zinc-500 mb-6">{t('common.noCareerSelected')}</p>
             <button
               onClick={() => navigate('/results')}
               className="glow-btn py-3 px-8 rounded-2xl font-bold"

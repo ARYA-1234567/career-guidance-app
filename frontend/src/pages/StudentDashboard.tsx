@@ -130,7 +130,7 @@ const StudentDashboard: React.FC = () => {
                      <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-1 h-full bg-secondary-neon" />
                         <p className="text-sm font-medium text-zinc-300 leading-relaxed italic relative z-10 pl-4 border-l border-white/5">
-                            "{profile.analysis || "Profile extraction successful. Your core traits indicate high aptitude for structured problem-solving."}"
+                            "{profile.analysis || t('dashboard.profileDefault')}"
                         </p>
                      </div>
 
@@ -159,8 +159,8 @@ const StudentDashboard: React.FC = () => {
                     >
                       <Brain size={20} />
                       {user?.selected_career 
-                        ? (language === 'ml' ? `${user.selected_career} തുടരുക` : `Resume ${user.selected_career} Trajectory`)
-                        : (language === 'ml' ? 'കരിയർ കണ്ടെത്തുക' : 'View Career Trajectories')}
+                        ? `${t('dashboard.resumeTraj')} ${user.selected_career} ${t('parent.trajectory')}`
+                        : t('dashboard.viewTraj')}
                       <ArrowRight size={18} />
                     </button>
 
@@ -196,7 +196,7 @@ const StudentDashboard: React.FC = () => {
                         </div>
                         <div>
                             <h4 className="font-black text-white uppercase tracking-tight text-sm mb-1">{t('dashboard.timeEst')}</h4>
-                            <p className="text-xs text-zinc-500 font-medium">10-15 minutes processing</p>
+                            <p className="text-xs text-zinc-500 font-medium">{t('dashboard.timeEstDesc')}</p>
                         </div>
                     </div>
                     <div className="glass-card p-8 border-white/5 flex items-start gap-5">
@@ -205,7 +205,7 @@ const StudentDashboard: React.FC = () => {
                         </div>
                         <div>
                             <h4 className="font-black text-white uppercase tracking-tight text-sm mb-1">{t('dashboard.precision')}</h4>
-                            <p className="text-xs text-zinc-500 font-medium">8-Agent sequential pipeline</p>
+                            <p className="text-xs text-zinc-500 font-medium">{t('dashboard.precisionDesc')}</p>
                         </div>
                     </div>
                 </div>

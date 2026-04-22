@@ -4,6 +4,8 @@ import { MessageSquare, X, Send, Trash2, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 interface Message {
   role: 'user' | 'assistant';
   content: string;
@@ -24,6 +26,7 @@ const WELCOME_MESSAGES: Record<string, Record<string, string>> = {
   'en' : {
     'roadmap': "Hi! 🗺️ I can help you with the roadmap for {career}. Ask me about learning steps, timeline, resources, or anything else!",
     'universities': "Hi! 🎓 Looking for colleges for {career}? Ask me about universities, entrance exams, fees, or Kerala colleges!",
+    'schools': "Hi! 🎓 Looking for colleges for {career}? Ask me about universities, entrance exams, fees, or Kerala colleges!",
     'requirements': "Hi! 📋 Want to know what it takes to become a {career}? Ask about skills, degrees, or certifications!",
     'myths': "Hi! 💡 Let's bust some myths about {career}! Ask me anything you've heard that doesn't seem right.",
     'market': "Hi! 📊 Curious about the job market for {career}? Ask about salaries, demand, or Gulf opportunities!",
@@ -32,6 +35,7 @@ const WELCOME_MESSAGES: Record<string, Record<string, string>> = {
   'ml': {
     'roadmap': "ഹലോ! 🗺️ {career} കരിയറിനായുള്ള റോഡ്മാപ്പിനെക്കുറിച്ച് ഞാൻ നിങ്ങളെ സഹായിക്കാം. പഠന ഘട്ടങ്ങൾ, സമയക്രമം, വിഭവങ്ങൾ അല്ലെങ്കിൽ മറ്റെന്തിനെക്കുറിച്ചും ചോദിക്കൂ!",
     'universities': "ഹലോ! 🎓 {career} പഠിക്കാൻ നല്ല കോളേജുകൾ തിരയുകയാണോ? സർവ്വകലാശാലകൾ, പ്രവേശന പരീക്ഷകൾ, ഫീസ് അല്ലെങ്കിൽ കേരളത്തിലെ കോളേജുകളെക്കുറിച്ച് ചോദിക്കൂ!",
+    'schools': "ഹലോ! 🎓 {career} പഠിക്കാൻ നല്ല കോളേജുകൾ തിരയുകയാണോ? സർവ്വകലാശാലകൾ, പ്രവേശന പരീക്ഷകൾ, ഫീസ് അല്ലെങ്കിൽ കേരളത്തിലെ കോളേജുകളെക്കുറിച്ച് ചോദിക്കൂ!",
     'requirements': "ഹലോ! 📋 ഒരു {career} ആകാൻ എന്തൊക്കെ വേണമെന്ന് അറിയണോ? കഴിവുകൾ, ബിരുദങ്ങൾ അല്ലെങ്കിൽ സർട്ടിഫിക്കേഷനുകളെക്കുറിച്ച് ചോദിക്കൂ!",
     'myths': "ഹലോ! 💡 {career} സംബന്ധിച്ച അബദ്ധധാരണകൾ നമുക്ക് തിരുത്താം! നിങ്ങൾ കേട്ടിട്ടുള്ള എന്തും സംശയിക്കാതെ ചോദിക്കൂ.",
     'market': "ഹലോ! 📊 {career} ജോബ് മാർക്കറ്റിനെക്കുറിച്ച് അറിയാൻ ആഗ്രഹമുണ്ടോ? ശമ്പളം, ഡിമാൻഡ് അല്ലെങ്കിൽ ഗൾഫ് അവസരങ്ങളെക്കുറിച്ച് ചോദിക്കൂ!",
@@ -43,6 +47,7 @@ const SECTION_LABELS: Record<string, Record<string, string>> = {
   'en': {
     'roadmap': "💬 Ask about Roadmap",
     'universities': "💬 Ask about Schools",
+    'schools': "💬 Ask about Schools",
     'requirements': "💬 Ask about Requirements",
     'myths': "💬 Ask about Myths",
     'market': "💬 Ask about Job Market",
@@ -51,10 +56,26 @@ const SECTION_LABELS: Record<string, Record<string, string>> = {
   'ml': {
     'roadmap': "💬 റോഡ്മാപ്പിനെക്കുറിച്ച് ചോദിക്കൂ",
     'universities': "💬 സ്കൂളുകളെക്കുറിച്ച് ചോദിക്കൂ",
+    'schools': "💬 സ്കൂളുകളെക്കുറിച്ച് ചോദിക്കൂ",
     'requirements': "💬 ആവശ്യകതകളെക്കുറിച്ച് ചോദിക്കൂ",
     'myths': "💬 അബദ്ധങ്ങളെക്കുറിച്ച് ചോദിക്കൂ",
     'market': "💬 ജോബ് മാർക്കറ്റിനെക്കുറിച്ച് ചോദിക്കൂ",
     'default': "💬 കരിയർ ബോട്ടിനോട് ചോദിക്കൂ"
+  }
+};
+
+const SUGGESTED_ACTIONS: Record<string, Record<string, string[]>> = {
+  'en': {
+    'schools': ["Show Kerala Colleges", "Entrance Exams", "Fee Structures", "Kerala PSC"],
+    'universities': ["Show Kerala Colleges", "Entrance Exams", "Fee Structures", "Kerala PSC"],
+    'roadmap': ["Skill Timeline", "Learning Resources", "Job Milestones", "Kerala Opportunities"],
+    'default': ["Career Outlook", "Top Employers", "Salary Range", "More Colleges in Kerala"]
+  },
+  'ml': {
+    'schools': ["കേരളത്തിലെ കോളേജുകൾ", "പ്രവേശന പരീക്ഷകൾ", "ഫീസ് വിവരങ്ങൾ", "കേരള PSC"],
+    'universities': ["കേരളത്തിലെ കോളേജുകൾ", "പ്രവേശന പരീക്ഷകൾ", "ഫീസ് വിവരങ്ങൾ", "കേരള PSC"],
+    'roadmap': ["പഠന ഘട്ടങ്ങൾ", "വിഭവങ്ങൾ", "തൊഴിൽ അവസരങ്ങൾ", "കേരളത്തിലെ അവസരങ്ങൾ"],
+    'default': ["കരിയർ സാധ്യതകൾ", "പ്രധാന തൊഴിൽദാതാക്കൾ", "ശമ്പളം", "കേരളത്തിലെ കൂടുതൽ കോളേജുകൾ"]
   }
 };
 
@@ -68,7 +89,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
   onClose,
   accessId
 }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -110,30 +131,34 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
     }
   }, [messages, loading]);
 
-  const handleSend = async () => {
-    if (!input.trim() || loading) return;
+  const handleSend = async (customInput?: string) => {
+    const textToSend = customInput || input;
+    if (!textToSend.trim() || loading) return;
 
-    const userMsg: Message = { role: 'user', content: input };
+    const userMsg: Message = { role: 'user', content: textToSend };
     setMessages(prev => [...prev, userMsg]);
-    setInput("");
+    if (!customInput) setInput("");
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/career-chatbot', {
+      const response = await axios.post(`${API_BASE}/api/career-chatbot`, {
         messages: [...messages, userMsg],
         career_title: careerTitle,
         active_section: activeSection || "General",
         user_profile: userProfile || {},
         match_score: matchScore,
-        user_category: accessId ? "Parent" : (userProfile?.category || "Student"),
+        user_category: accessId ? "Parent" : "Student",
         language: language,
-        access_id: accessId
+        access_id: accessId || ""
       });
 
       setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
     } catch (error) {
       console.error("Chatbot Error:", error);
-      setMessages(prev => [...prev, { role: 'assistant', content: language === 'ml' ? "ക്ഷമിക്കണം, എന്റെ സിസ്റ്റത്തിൽ ഒരു പ്രശ്നമുണ്ട്. ദയവായി അല്പം കഴിഞ്ഞ് ശ്രമിക്കൂ." : "I encountered a glitch in my neural link. Please try again soon." }]);
+      const errorMsg = language === 'ml' 
+        ? "ക്ഷമിക്കണം, എനിക്ക് കണക്ഷൻ ലഭിക്കുന്നില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കൂ." 
+        : "I'm having trouble connecting to my neural core. Please try again in a moment.";
+      setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
     } finally {
       setLoading(false);
     }
@@ -196,7 +221,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                 <button 
                   onClick={clearChat}
                   className="p-2 rounded-lg hover:bg-white/5 text-zinc-500 hover:text-red-400 transition-colors"
-                  title={language === 'ml' ? "ചാറ്റ് ഒഴിവാക്കുക" : "Clear Chat"}
+                  title={t('common.retry')}
                 >
                   <Trash2 size={16} />
                 </button>
@@ -229,6 +254,22 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                   </div>
                 </div>
               ))}
+              
+              {/* Suggested Actions */}
+              {!loading && messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
+                <div className="flex flex-wrap gap-2 px-2 pb-2">
+                  {(SUGGESTED_ACTIONS[language]?.[activeSection] || SUGGESTED_ACTIONS[language]?.['default']).map((action, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleSend(action)}
+                      className="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-bold hover:bg-green-500/20 transition-all"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {loading && (
                 <div className="flex justify-start">
                   <div className="bg-[#1a1a1a] border border-white/5 p-4 rounded-2xl rounded-tl-none flex items-center gap-2">
@@ -249,7 +290,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder={language === 'ml' ? "എന്തും ചോദിക്കൂ..." : "Ask me anything..."}
+                  placeholder={t('assessment.placeholder')}
                   className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-3 pr-14 text-sm text-white focus:outline-none focus:border-green-500/50 transition-all placeholder:text-zinc-600"
                 />
                 <button 
@@ -265,7 +306,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                 </button>
               </div>
               <p className="mt-3 text-[10px] text-zinc-600 text-center uppercase tracking-widest font-black">
-                Powered by Groq Llama-3 Intelligence
+                {t('assessment.poweredBy')}
               </p>
             </div>
           </motion.div>

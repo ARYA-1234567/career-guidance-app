@@ -43,7 +43,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:8000/api/translate', { 
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const response = await axios.post(`${API_BASE}/api/translate`, { 
         text,
         target_language: 'ml-IN'
       });

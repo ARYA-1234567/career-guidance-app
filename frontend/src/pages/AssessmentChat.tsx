@@ -162,7 +162,7 @@ const AssessmentChat: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, { role: 'ai', content: "Connection interrupted. Please type again." }]);
+      setMessages(prev => [...prev, { role: 'ai', content: t('assessment.connectionError') }]);
     } finally {
       setLoading(false);
     }
@@ -251,10 +251,10 @@ const AssessmentChat: React.FC = () => {
 
         <div className="grid grid-cols-4 gap-2 px-2">
           {[
-            { id: 'background', label: 'Identity' },
-            { id: 'discovery', label: 'Interests' },
-            { id: 'values', label: 'Skills' },
-            { id: 'skills', label: 'Finalizing' }
+            { id: 'background', label: t('assessment.milestoneIdentity') },
+            { id: 'discovery', label: t('assessment.milestoneInterests') },
+            { id: 'values', label: t('assessment.milestoneSkills') },
+            { id: 'skills', label: t('assessment.milestoneFinalizing') }
           ].map((item, idx) => {
             const milestoneCount = messages.length;
             const active = idx * 6 <= milestoneCount;
@@ -262,7 +262,7 @@ const AssessmentChat: React.FC = () => {
               <div key={item.id} className="space-y-2">
                 <div className={`h-1.5 rounded-full transition-all duration-700 ${active ? 'bg-secondary-neon shadow-[0_0_15px_#10b981]' : 'bg-white/5'}`} />
                 <span className={`text-[10px] font-black uppercase tracking-widest block text-center ${active ? 'text-secondary-neon' : 'text-text-muted'}`}>
-                  {language === 'ml' ? (item.id === 'background' ? 'വിഭാഗം' : item.id === 'discovery' ? 'താല്പര്യം' : item.id === 'values' ? 'കഴിവുകൾ' : 'പൂർത്തിയായി') : item.label}
+                  {item.label}
                 </span>
               </div>
             );
@@ -331,9 +331,7 @@ const AssessmentChat: React.FC = () => {
                 <h3 className="text-5xl font-black hero-title tracking-tight text-white">{t('assessment.complete')}</h3>
                 <div className="h-1 w-24 bg-secondary-neon mx-auto rounded-full"></div>
                 <p className="text-zinc-400 text-xl max-w-xl mx-auto leading-relaxed font-medium">
-                  {language === 'ml' 
-                    ? 'വിശകലനം വിജയകരമായി പൂർത്തിയായി. നിങ്ങളുടെ കരിയർ പാത തയ്യാറാണ്.' 
-                    : 'Neural profiling is successful. Your comprehensive career roadmap has been synthesized.'}
+                  {t('assessment.completeDesc')}
                 </p>
               </div>
               <button 
@@ -389,7 +387,7 @@ const AssessmentChat: React.FC = () => {
                 })
               ) : (
                 <div className="text-white/30 text-sm italic py-4 px-4 w-full text-center font-medium">
-                  Type your custom answer below...
+                  {t('common.typeCustom')}
                 </div>
               )}
             </motion.div>
@@ -399,7 +397,7 @@ const AssessmentChat: React.FC = () => {
             <input
               type="text"
               className="w-full bg-white/[0.03] border border-white/10 rounded-3xl py-6 px-10 focus:outline-none focus:border-primary-neon focus:bg-white/[0.05] transition-all pr-24 text-white text-xl shadow-3xl backdrop-blur-3xl tracking-tight"
-              placeholder={sessionEnd ? (language === 'ml' ? "അസസ്‌മെന്റ് പൂർത്തിയായി" : "Assessment Locked") : t('assessment.placeholder')}
+              placeholder={sessionEnd ? t('common.assessmentLocked') : t('assessment.placeholder')}
               value={input}
               disabled={loading || sessionEnd}
               onChange={(e) => setInput(e.target.value)}

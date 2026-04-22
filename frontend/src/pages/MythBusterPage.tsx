@@ -41,8 +41,8 @@ const MythBusterPage: React.FC = () => {
                 <Search className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-accent-rose" size={32} />
             </div>
             <div className="text-center">
-                <h2 className="text-xl font-bold text-white mb-2 tracking-tight">{language === 'ml' ? 'അബദ്ധധാരണകൾ തിരുത്തുന്നു' : 'Debunking Misconceptions'}</h2>
-                <p className="text-zinc-500 text-sm italic">{language === 'ml' ? 'ഡാറ്റാ അധിഷ്ഠിത കരിയർ വസ്തുതകൾ വീണ്ടെടുക്കുന്നു...' : 'Retrieving data-backed career facts...'}</p>
+                <h2 className="text-xl font-bold text-white mb-2 tracking-tight">{t('mythBuster.loading')}</h2>
+                <p className="text-zinc-500 text-sm italic">{t('mythBuster.loadingDesc')}</p>
             </div>
         </div>
     );
@@ -59,12 +59,12 @@ const MythBusterPage: React.FC = () => {
             >
                  <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-3 px-6 py-2 rounded-full glass-card border-white/5 mb-8">
                    <Sparkles size={16} className="text-accent-rose animate-pulse" />
-                   <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{language === 'ml' ? 'ഡാറ്റാ അധിഷ്ഠിത പരിശോധന' : 'Data-Backed Reality Check'}</span>
+                   <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{t('mythBuster.realityCheck')}</span>
                  </motion.div>
                 
                  <h1 className="text-5xl md:text-7xl font-black hero-title mb-6">{t('results.mythBuster')}</h1>
                 <p className="max-w-2xl mx-auto text-text-dim text-xl font-medium tracking-tight">
-                    {language === 'ml' ? 'ഉയർന്ന വളർച്ചയുള്ള വ്യവസായങ്ങളിൽ വിദ്യാർത്ഥികളുടെ കഴിവുകളെ പരിമിതപ്പെടുത്തുന്ന ഘടനാപരമായ തെറ്റിദ്ധാരണകളെ വെല്ലുവിളിക്കുന്നു.' : 'Challenging the structural misconceptions that limit student potential in high-growth industries.'}
+                    {t('mythBuster.subtitle')}
                 </p>
 
                 <div className="mt-20 space-y-12 max-w-4xl mx-auto">
@@ -79,14 +79,14 @@ const MythBusterPage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
                                 <div className="space-y-6">
                                  <span className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase flex items-center gap-2">
-                                      <XCircle size={16} className="text-red-500" /> {language === 'ml' ? 'അബദ്ധധാരണ' : 'The Myth'}
+                                      <XCircle size={16} className="text-red-500" /> {t('mythBuster.myth')}
                                  </span>
                                  <h3 className="text-2xl font-bold text-white leading-tight underline decoration-red-500/30 decoration-4 underline-offset-8 italic opacity-80">{myth.myth}</h3>
                                 </div>
 
                                 <div className="space-y-6">
                                  <span className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase flex items-center gap-2">
-                                      <CheckCircle2 size={16} className="text-emerald-500" /> {language === 'ml' ? 'യാഥാർത്ഥ്യം' : 'The Reality'}
+                                      <CheckCircle2 size={16} className="text-emerald-500" /> {t('mythBuster.reality')}
                                  </span>
                                  <h3 className="text-2xl font-black text-emerald-400 leading-tight underline decoration-emerald-500/30 decoration-4 underline-offset-8">{myth.reality || myth.fact}</h3>
                                 </div>
@@ -94,7 +94,7 @@ const MythBusterPage: React.FC = () => {
 
                             <div className="mt-12 pt-8 border-t border-white/5 space-y-6 relative z-10">
                                  <span className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase flex items-center gap-2">
-                                      <TrendingUp size={16} className="text-secondary-neon" /> {language === 'ml' ? 'സ്ഥിതിവിവരക്കണക്കുകൾ' : 'Statistical Proof'}
+                                      <TrendingUp size={16} className="text-secondary-neon" /> {t('mythBuster.proof')}
                                  </span>
                                  <p className="text-zinc-300 leading-relaxed font-bold tracking-tight text-lg">
                                      {myth.data_proof}
@@ -107,7 +107,7 @@ const MythBusterPage: React.FC = () => {
                               <div className="absolute inset-0 bg-secondary-neon/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                               <div className="px-6 py-2 rounded-2xl bg-secondary-neon/5 border border-secondary-neon/10 backdrop-blur-md relative">
                                   <span className="text-[9px] items-center font-black tracking-[0.2em] text-zinc-600 uppercase flex gap-2 mb-3 relative z-10">
-                                      <MapPin size={14} className="text-secondary-neon" /> {language === 'ml' ? 'നിർണ്ണായക പശ്ചാത്തലം' : 'Critical Context'}
+                                      <MapPin size={14} className="text-secondary-neon" /> {t('mythBuster.keralaContext')}
                                   </span>
                                   <p className="text-[10px] font-bold text-secondary-neon/80 max-w-[200px] leading-snug relative z-10">
                                       {myth.kerala_context}
@@ -121,13 +121,13 @@ const MythBusterPage: React.FC = () => {
 
                 <div className="mt-20">
                   <button onClick={() => navigate('/auth')} className="glow-btn px-12 py-5 text-xl">
-                      {language === 'ml' ? 'നിങ്ങളുടെ ഡാറ്റ പരിശോധിച്ച യാത്ര ആരംഭിക്കുക' : 'Start Your Data-Verified Journey'}
+                      {t('mythBuster.startJourney')}
                   </button>
                 </div>
 
                 <footer className="mt-20 flex items-center justify-center gap-8 text-zinc-600">
                     <button onClick={() => navigate('/')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:text-white transition-all">
-                        <ArrowLeft size={16} /> {language === 'ml' ? 'പിന്നിലേക്ക്' : 'Primary Port'}
+                        <ArrowLeft size={16} /> {t('mythBuster.primaryPort')}
                     </button>
                 </footer>
             </motion.main>

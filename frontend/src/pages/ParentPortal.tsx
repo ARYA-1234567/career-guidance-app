@@ -23,7 +23,7 @@ const ParentPortal: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     
     // States
     const [loading, setLoading] = useState(true);
@@ -60,11 +60,11 @@ const ParentPortal: React.FC = () => {
                 setIsPinRequired(false);
             } else if (res.data.status === 'pin_required') {
                 setIsPinRequired(true);
-                if (enteredPin) setError("Incorrect Password. Please check the WhatsApp message.");
+                if (enteredPin) setError(t('parent.incorrectPin'));
             }
         } catch (err: any) {
             console.error("Parent portal fetch failed:", err);
-            setError(err.response?.data?.detail || "Invalid Parent ID or access restricted.");
+            setError(err.response?.data?.detail || t('parent.invalidId'));
         } finally {
             setLoading(false);
         }
@@ -86,7 +86,7 @@ const ParentPortal: React.FC = () => {
             <div className="min-h-screen bg-core flex flex-col items-center justify-center space-y-8 px-6 text-center">
                 <div className="mesh-canvas" />
                 <div className="w-16 h-16 border-4 border-white/5 border-t-primary-neon rounded-full animate-spin" />
-                <h2 className="text-xl font-black hero-title animate-pulse">Establishing Secure Access...</h2>
+                <h2 className="text-xl font-black hero-title animate-pulse">{t('parent.secureAccess')}</h2>
             </div>
         );
     }
@@ -98,7 +98,7 @@ const ParentPortal: React.FC = () => {
                 <header className="fixed top-8 left-1/2 -translate-x-1/2 z-[100]">
                     <div className="px-6 py-2 rounded-full bg-primary-neon/10 border border-primary-neon/30 backdrop-blur-3xl flex items-center gap-3">
                         <ShieldCheck size={14} className="text-primary-neon" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-neon">Security Verification</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary-neon">{t('parent.pinPrompt')}</span>
                     </div>
                 </header>
 
@@ -106,8 +106,8 @@ const ParentPortal: React.FC = () => {
                     <div className="w-20 h-20 rounded-3xl bg-primary-neon/10 flex items-center justify-center mx-auto mb-8 text-primary-neon border border-primary-neon/20 shadow-2xl shadow-primary-neon/20">
                         <ShieldCheck size={40} />
                     </div>
-                    <h2 className="text-3xl font-black text-white mb-4 uppercase tracking-tight">Enter Password</h2>
-                    <p className="text-zinc-500 mb-10 font-bold leading-relaxed">Please enter the 4-digit security password shared with you via WhatsApp.</p>
+                    <h2 className="text-3xl font-black text-white mb-4 uppercase tracking-tight">{t('parent.pinPromptTitle')}</h2>
+                    <p className="text-zinc-500 mb-10 font-bold leading-relaxed">{t('parent.pinDesc')}</p>
                     
                     <form onSubmit={handlePinSubmit} className="space-y-6">
                         <input 
@@ -129,7 +129,7 @@ const ParentPortal: React.FC = () => {
                             className="glow-btn w-full py-5 uppercase text-xs tracking-widest font-black flex items-center justify-center gap-3"
                         >
                             {loading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : (
-                                <>Verify & Access <ArrowRight size={16} /></>
+                                <>{t('parent.verifyAccess')} <ArrowRight size={16} /></>
                             )}
                         </button>
                     </form>
@@ -144,13 +144,13 @@ const ParentPortal: React.FC = () => {
                 <div className="mesh-canvas" />
                 <div className="glass-card p-12 lg:p-20 border-accent-rose/20 max-w-xl w-full">
                     <XCircle size={64} className="text-accent-rose mx-auto mb-10 shadow-2xl" />
-                    <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">Access Denied</h2>
-                    <p className="text-zinc-500 mb-12 font-bold leading-relaxed">{error || "No active profile matches this ID."}</p>
+                    <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">{t('parent.accessDenied')}</h2>
+                    <p className="text-zinc-500 mb-12 font-bold leading-relaxed">{error || t('parent.noProfileMatches')}</p>
                     <button 
                       onClick={() => navigate('/')} 
                       className="glow-btn w-full py-5 uppercase text-xs tracking-widest font-black"
                     >
-                      Return to Gateway
+                      {t('parent.returnGateway')}
                     </button>
                 </div>
             </div>
@@ -222,7 +222,7 @@ const ParentPortal: React.FC = () => {
             setLocalSimResult(response.data);
         } catch (err) {
             console.error("Sandbox failure:", err);
-            alert("Simulation system offline. Please try again.");
+            alert(t('common.error'));
         } finally {
             setIsSimulating(false);
         }
@@ -268,11 +268,11 @@ const ParentPortal: React.FC = () => {
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary-neon/10 border border-primary-neon/20">
                             <ShieldCheck size={14} className="text-primary-neon" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-primary-neon">Student Strategy Review</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-primary-neon">{t('parent.studentStrategy')}</span>
                         </div>
                         <h1 className="text-6xl md:text-8xl font-black hero-title leading-none tracking-tighter">
                             {student_summary.name}<span className="text-white/10">'s</span> <br />
-                            <span className="neon-text">Trajectory</span>
+                            <span className="neon-text">{t('parent.trajectory')}</span>
                         </h1>
                     </div>
                     <div className="flex items-center gap-6">
@@ -294,8 +294,8 @@ const ParentPortal: React.FC = () => {
                                     <Flask size={18} className={isSandboxMode ? 'text-primary-neon' : 'text-zinc-500'} />
                                 </div>
                                 <div>
-                                    <h4 className="text-sm font-black text-white uppercase tracking-tight">Parent Discovery Sandbox</h4>
-                                    <p className="text-[10px] font-bold text-zinc-500 uppercase">Test alternative paths without affecting student data</p>
+                                    <h4 className="text-sm font-black text-white uppercase tracking-tight">{t('parent.sandboxTitle')}</h4>
+                                    <p className="text-[10px] font-bold text-zinc-500 uppercase">{t('parent.sandboxDesc')}</p>
                                 </div>
                             </div>
                             <button 
@@ -306,7 +306,7 @@ const ParentPortal: React.FC = () => {
                                     : 'bg-primary-neon/10 border-primary-neon/30 text-primary-neon hover:bg-primary-neon/20'
                                 }`}
                             >
-                                {isSandboxMode ? 'Close Sandbox' : 'Enter Sandbox'}
+                                {isSandboxMode ? t('parent.closeSandbox') : t('parent.enterSandbox')}
                             </button>
                         </div>
 
@@ -317,22 +317,22 @@ const ParentPortal: React.FC = () => {
                                     {isSandboxMode && (
                                         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-10 border-primary-neon/20 bg-primary-neon/[0.02] space-y-8">
                                             <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary-neon mb-6 border-b border-primary-neon/10 pb-6">
-                                                <Sliders size={16} /> Sandbox Controls
+                                                <Sliders size={16} /> {t('parent.sandboxControls')}
                                             </h3>
                                             
                                             <div className="space-y-6">
                                                 <div>
-                                                    <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">Base Path (Locked)</label>
+                                                    <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">{t('parent.basePath')}</label>
                                                     <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-400">
                                                         {selected_career}
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                    <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">Alternative Path (Compare)</label>
+                                                    <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">{t('parent.altPath')}</label>
                                                     <input 
                                                         type="text" 
-                                                        placeholder="e.g. Data Scientist, UX Designer..."
+                                                        placeholder={t('parent.altPlaceholder')}
                                                         value={sandboxCareerB}
                                                         onChange={(e) => setSandboxCareerB(e.target.value)}
                                                         className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs font-bold text-white focus:outline-none focus:border-primary-neon/50 placeholder:text-zinc-700"
@@ -341,7 +341,7 @@ const ParentPortal: React.FC = () => {
 
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div>
-                                                        <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">Growth Scenario</label>
+                                                        <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">{t('parent.growthScenario')}</label>
                                                         <select 
                                                             value={sandboxScenario}
                                                             onChange={(e) => setSandboxScenario(e.target.value)}
@@ -354,7 +354,7 @@ const ParentPortal: React.FC = () => {
                                                         </select>
                                                     </div>
                                                     <div>
-                                                        <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">Target Hub</label>
+                                                        <label className="text-[8px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">{t('parent.targetHub')}</label>
                                                         <select 
                                                             value={sandboxLocation}
                                                             onChange={(e) => setSandboxLocation(e.target.value)}
@@ -373,7 +373,7 @@ const ParentPortal: React.FC = () => {
                                                     disabled={isSimulating}
                                                     className="w-full py-4 rounded-xl bg-primary-neon text-white font-black uppercase tracking-widest text-[10px] hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all disabled:opacity-50"
                                                 >
-                                                    {isSimulating ? 'Neural Processing...' : 'Run Simulation'}
+                                                    {isSimulating ? t('parent.neuralProc') : t('parent.runSim')}
                                                 </button>
                                             </div>
                                         </motion.div>
@@ -423,7 +423,7 @@ const ParentPortal: React.FC = () => {
                                             </p>
                                             <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                                                 <div className="flex-1">
-                                                    <p className="text-[8px] font-black text-zinc-600 uppercase mb-1">Neural Confidence</p>
+                                                    <p className="text-[8px] font-black text-zinc-600 uppercase mb-1">{t('parent.neuralConfidence')}</p>
                                                     <div className="h-1 bg-white/5 rounded-full">
                                                         <div className="h-full bg-primary-neon" style={{ width: `${activeSimResult?.confidence || 87}%` }} />
                                                     </div>
@@ -445,8 +445,8 @@ const ParentPortal: React.FC = () => {
                                         )}
                                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
                                             <div>
-                                                <h3 className="text-2xl font-black tracking-tight text-white mb-2">Parallel Reality Projection</h3>
-                                                <p className="text-[10px] font-black uppercase text-zinc-500 tracking-widest leading-none">Salary Growth Simulation (LPA)</p>
+                                                <h3 className="text-2xl font-black tracking-tight text-white mb-2">{t('parent.parallelProjection')}</h3>
+                                                <p className="text-[10px] font-black uppercase text-zinc-500 tracking-widest leading-none">{t('parent.salaryGrowth')}</p>
                                             </div>
                                             <div className="flex items-center gap-6 bg-white/[0.03] p-4 rounded-2xl border border-white/5">
                                                 <div className="flex items-center gap-2">
@@ -484,19 +484,19 @@ const ParentPortal: React.FC = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/5">
                                             <div className="space-y-2">
                                                 <p className="flex items-center gap-2 text-[9px] font-black uppercase text-zinc-600 tracking-tighter">
-                                                    <GlobalIcon size={12} className="text-secondary-neon" /> Global Match
+                                                    <GlobalIcon size={12} className="text-secondary-neon" /> {t('parent.globalMatch')}
                                                 </p>
                                                 <p className="text-xs font-bold text-white line-clamp-1">{activeSimResult?.gulf_opportunities?.salary || "TBD Projection"}</p>
                                             </div>
                                             <div className="space-y-2">
                                                 <p className="flex items-center gap-2 text-[9px] font-black uppercase text-zinc-600 tracking-tighter">
-                                                    <PSCIcon size={12} className="text-amber-500" /> PSC Eligibility
+                                                    <PSCIcon size={12} className="text-amber-500" /> {t('parent.pscElig')}
                                                 </p>
                                                 <p className="text-xs font-bold text-white line-clamp-1">{activeSimResult?.psc_opportunities?.post_name || "Calculated Entry"}</p>
                                             </div>
                                             <div className="space-y-2">
                                                 <p className="flex items-center gap-2 text-[9px] font-black uppercase text-zinc-600 tracking-tighter">
-                                                    <HubsIcon size={12} className="text-primary-neon" /> Local Hubs
+                                                    <HubsIcon size={12} className="text-primary-neon" /> {t('parent.localHubs')}
                                                 </p>
                                                 <p className="text-xs font-bold text-white line-clamp-1">{(activeSimResult?.kerala_opportunities?.hubs || ["Kochi", "TVM"]).join(", ")}</p>
                                             </div>
@@ -510,9 +510,9 @@ const ParentPortal: React.FC = () => {
                                     <Zap size={32} className="text-zinc-500" />
                                 </div>
                                 <div className="text-center">
-                                    <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">Process Interrupted</h2>
+                                    <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{t('parent.processInterrupted')}</h2>
                                     <p className="text-sm font-bold text-zinc-600 max-w-sm mx-auto leading-relaxed">
-                                        The student has not initiated the Career Simulation protocol yet. Data visualization will synchronize once the session is completed.
+                                        {t('parent.simNotStarted')}
                                     </p>
                                 </div>
                             </div>
@@ -620,7 +620,7 @@ const ParentPortal: React.FC = () => {
                         <div className="glass-card p-12 border-white/5 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] group-hover:bg-amber-500/20 transition-all duration-700" />
                             <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
-                                <Brain size={16} className="text-amber-400" /> 03. Deductive Decision Logic
+                                <Brain size={16} className="text-amber-400" /> {t('parent.deductiveLogic')}
                             </h3>
                             <div className="relative z-10">
                                 <div className="absolute -top-4 -left-2 text-6xl text-amber-500/20 font-serif leading-none">"</div>
@@ -632,8 +632,8 @@ const ParentPortal: React.FC = () => {
                                         <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                                     </div>
                                     <div>
-                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">AI Logic Engine</p>
-                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">Analysis Complete</p>
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">{t('parent.logicEngine')}</p>
+                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">{t('parent.analysisComplete')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -695,9 +695,9 @@ const ParentPortal: React.FC = () => {
                                             <Target size={30} />
                                         </div>
                                         <div>
-                                            <h4 className="text-2xl font-black text-white mb-2">Focused Trajectory Locked</h4>
+                                            <h4 className="text-2xl font-black text-white mb-2">{t('parent.trajectoryLocked')}</h4>
                                             <p className="text-sm font-bold text-zinc-500 max-w-sm mx-auto leading-relaxed">
-                                                Recommendations have been bypassed in favor of a directly selected strategic pathway for <span className="text-cyan-400 font-black">{selected_career || 'the student'}</span>. 
+                                                {t('parent.trajectoryLockedDesc')} 
                                             </p>
                                         </div>
                                         <button 
@@ -708,7 +708,7 @@ const ParentPortal: React.FC = () => {
                                             }}
                                             className="mt-4 px-8 py-4 rounded-xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]"
                                         >
-                                            View Trajectory
+                                            {t('parent.viewTrajectory')}
                                         </button>
                                     </div>
                                 )}
@@ -725,18 +725,18 @@ const ParentPortal: React.FC = () => {
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary-neon/5 blur-[100px] -mr-32 -mt-32" />
                                 
                                 <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-white/5 pb-8">
-                                    <MapPin size={20} className="text-primary-neon" /> 04. Selected Strategy: <span className="text-white ml-2">{selected_career}</span>
+                                    <MapPin size={20} className="text-primary-neon" /> {t('parent.selectedStrategy')}: <span className="text-white ml-2">{selected_career}</span>
                                 </h3>
 
                                 {/* Strategy Tabs */}
                                 <div className="flex flex-wrap gap-4 mb-12 pb-6 border-b border-white/5">
                                     {[
-                                        { id: 'roadmap', label: 'Roadmap', icon: Calendar },
-                                        { id: 'schools', label: 'Schools', icon: GraduationCap },
-                                        { id: 'exams', label: 'Exams', icon: Target },
-                                        { id: 'grants', label: 'Scholarships', icon: Award },
-                                        { id: 'myths', label: 'Fact Check', icon: FlaskConical },
-                                        { id: 'market', label: 'Market', icon: TrendingUp }
+                                        { id: 'roadmap', label: t('parent.roadmap'), icon: Calendar },
+                                        { id: 'schools', label: t('parent.schools'), icon: GraduationCap },
+                                        { id: 'exams', label: t('parent.exams'), icon: Target },
+                                        { id: 'grants', label: t('parent.grants'), icon: Award },
+                                        { id: 'myths', label: t('parent.myths'), icon: FlaskConical },
+                                        { id: 'market', label: t('parent.market'), icon: TrendingUp }
                                     ].map(tab => (
                                         <button
                                             key={tab.id}
@@ -783,7 +783,7 @@ const ParentPortal: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.phases || roadmap.phases.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Strategy loading or unavailable...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.strategyLoading')}</div>
                                             )}
                                         </div>
                                     )}
@@ -802,7 +802,7 @@ const ParentPortal: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.colleges || roadmap.colleges.length === 0) && (
-                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No specific schools mapped yet.</div>
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noSchools')}</div>
                                             )}
                                         </div>
                                     )}
@@ -817,18 +817,18 @@ const ParentPortal: React.FC = () => {
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 text-[10px] items-center">
                                                         <div className="space-y-1">
-                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">Conducted By</p>
+                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">{t('roadmap.conductedBy')}</p>
                                                             <p className="text-zinc-400 font-bold uppercase">{exam.conducting_body}</p>
                                                         </div>
                                                         <div className="space-y-1">
-                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">Window</p>
+                                                            <p className="font-black text-zinc-600 uppercase tracking-tighter border-b border-white/5 pb-1">{t('roadmap.examWindow')}</p>
                                                             <p className="text-zinc-400 font-bold uppercase">{exam.application_window}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             ))}
                                             {(!roadmap.entrance_exams || roadmap.entrance_exams.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">No exams currently prioritized.</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noExams')}</div>
                                             )}
                                         </div>
                                     )}
@@ -847,7 +847,7 @@ const ParentPortal: React.FC = () => {
                                                 </div>
                                             )) : (
                                                 <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">
-                                                    Searching for eligible grants...
+                                                    {t('parent.searchingGrants')}
                                                 </div>
                                             )}
                                         </div>
@@ -857,12 +857,12 @@ const ParentPortal: React.FC = () => {
                                         <div className="space-y-6">
                                             {market ? (
                                                 <div className="p-8 rounded-[2rem] bg-zinc-900 border border-white/5 space-y-6">
-                                                   <h5 className="font-black text-white text-lg tracking-tight border-b border-white/5 pb-4">Market Outlook</h5>
-                                                   <p className="text-sm font-bold text-zinc-400 italic mb-6">{market.market_summary || market.future_outlook || "Analyzing current job market trends..."}</p>
+                                                   <h5 className="font-black text-white text-lg tracking-tight border-b border-white/5 pb-4">{t('parent.marketOutlook')}</h5>
+                                                   <p className="text-sm font-bold text-zinc-400 italic mb-6">{market.market_summary || market.future_outlook || t('parent.loadingMarket')}</p>
                                                    
                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
-                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Top Employers (2025)</h6>
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">{t('parent.topEmployers')}</h6>
                                                           <ul className="space-y-3">
                                                               {((market.top_employers || []).slice(0, 4)).map((emp: any, i: number) => (
                                                                   <li key={i} className="flex flex-col gap-1 border-b border-white/5 pb-2 last:border-0 last:pb-0">
@@ -871,12 +871,12 @@ const ParentPortal: React.FC = () => {
                                                                   </li>
                                                               ))}
                                                               {(!market.top_employers || market.top_employers.length === 0) && (
-                                                                  <span className="text-xs text-zinc-500 italic">No exact employer data available</span>
+                                                                  <span className="text-xs text-zinc-500 italic">{t('parent.noEmployers')}</span>
                                                               )}
                                                           </ul>
                                                       </div>
                                                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
-                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">Salary Estimates</h6>
+                                                          <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">{t('parent.salaryEstimates')}</h6>
                                                           <div className="space-y-4">
                                                               {market.salaries ? Object.keys(market.salaries).map((key, i) => (
                                                                   <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
@@ -884,14 +884,14 @@ const ParentPortal: React.FC = () => {
                                                                       <span className="text-[10px] font-black text-primary-neon tracking-wider">{market.salaries[key]}</span>
                                                                   </div>
                                                               )) : (
-                                                                 <div className="text-zinc-500 uppercase font-black text-[10px]">Data loading...</div>
+                                                                 <div className="text-zinc-500 uppercase font-black text-[10px]">{t('common.loading')}</div>
                                                               )}
                                                           </div>
                                                       </div>
                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading market intelligence...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMarket')}</div>
                                             )}
                                         </div>
                                     )}
@@ -905,7 +905,7 @@ const ParentPortal: React.FC = () => {
                                                             <XCircle size={18} />
                                                         </div>
                                                         <div>
-                                                            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">The Myth</span>
+                                                            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{t('mythBuster.myth')}</span>
                                                             <p className="text-base text-zinc-400 font-bold italic">"{m.myth}"</p>
                                                         </div>
                                                     </div>
@@ -914,13 +914,13 @@ const ParentPortal: React.FC = () => {
                                                             <CheckCircle2 size={18} />
                                                         </div>
                                                         <div>
-                                                            <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">The Reality</span>
+                                                            <span className="text-[9px] font-black text-emerald-500/60 uppercase tracking-widest">{t('mythBuster.reality')}</span>
                                                             <p className="text-base text-emerald-400 font-black">{m.reality || m.fact}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             )) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">Loading fact-check data...</div>
+                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMyths')}</div>
                                             )}
                                         </div>
                                     )}
@@ -936,16 +936,14 @@ const ParentPortal: React.FC = () => {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(99,102,241,0.1),transparent)] group-hover:opacity-100 transition-opacity" />
                     <div className="relative z-10 text-center space-y-10">
                         <p className="text-2xl md:text-3xl text-white font-black leading-tight tracking-tight">
-                            “This report reflects the student’s interests and abilities. <br className="hidden lg:block"/> 
-                            Recommendations are generated based on their responses. <br className="hidden lg:block" />
-                            Your role is to <span className="neon-text">support and guide</span> them.”
+                            {t('parent.finalMessage')}
                         </p>
                         <div className="flex justify-center pt-4">
                             <button 
                                 onClick={() => navigate('/')}
                                 className="px-12 py-5 rounded-[2rem] bg-white/5 border border-white/10 text-zinc-400 font-black uppercase tracking-[0.3em] text-[10px] hover:bg-white/10 hover:text-white transition-all shadow-xl hover:shadow-primary-neon/10"
                             >
-                                Exit Parent Mode
+                                {t('parent.exitParentMode')}
                             </button>
                         </div>
                     </div>

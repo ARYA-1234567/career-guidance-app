@@ -503,17 +503,17 @@ async def match_career_paths(request: Request):
 
 
 @app.get("/api/market-intelligence/{career}")
-async def fetch_market_data(career: str, db: Session = Depends(get_db)):
+async def fetch_market_data(career: str, db: Session = Depends(get_db), language: str = "en"):
     # 1. Cache Check
     cache = db.query(CareerModuleCache).filter(
         CareerModuleCache.career_name == career,
         CareerModuleCache.module_type == "market",
-        CareerModuleCache.language == "en"
+        CareerModuleCache.language == language
     ).first()
     if cache: return cache.content
 
     # 2. Threadpool call
-    market_raw = await run_in_threadpool(get_market_intelligence, career)
+    market_raw = await run_in_threadpool(get_market_intelligence, career, language=language)
     market_json = safe_parse_json(market_raw)
     
     # 3. Cache Save
@@ -521,7 +521,7 @@ async def fetch_market_data(career: str, db: Session = Depends(get_db)):
         id=str(uuid.uuid4()),
         career_name=career,
         module_type="market",
-        language="en",
+        language=language,
         content=market_json
     )
     db.add(new_cache)
@@ -877,7 +877,7 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
             if not rm_cache: tasks.append(("roadmap", run_in_threadpool(generate_roadmap, career, p_data, language=language)))
             if not myth_cache: tasks.append(("myths", run_in_threadpool(get_myth_buster_data, career, language=language)))
             if not sch_cache: tasks.append(("scholarships", run_in_threadpool(get_scholarship_data, career, language=language)))
-            if not market_cache: tasks.append(("market", run_in_threadpool(get_market_intelligence, career)))
+            if not market_cache: tasks.append(("market", run_in_threadpool(get_market_intelligence, career, language=language)))
 
             if tasks:
                 # Run generations in parallel
@@ -1341,11 +1341,18 @@ async def career_chatbot(
         if current_user:
             target_user_id = current_user.id
         elif payload.access_id:
-            # Parent access via ID
-            parent_user = db.query(User).filter(User.parent_access_id == payload.access_id).first()
-            if parent_user:
-                target_user_id = parent_user.id
-                user_category = "Parent"
+            # Parent access via ID - Make robust with casing and whitespace handling
+            try:
+                p_id_clean = str(payload.access_id).strip().upper()
+                # Use func.upper() for case-insensitive DB lookup consistency
+                parent_user = db.query(User).filter(func.upper(User.parent_access_id) == p_id_clean).first()
+                if parent_user:
+                    target_user_id = parent_user.id
+                    user_category = "Parent"
+                else:
+                    logger.warning(f"Chatbot Auth: Parent ID {p_id_clean} not found in database.")
+            except Exception as e:
+                logger.error(f"Chatbot Auth Error: {str(e)}")
 
         if not target_user_id:
              raise HTTPException(status_code=401, detail="Authentication required or invalid Access ID")
