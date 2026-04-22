@@ -4,11 +4,15 @@ import { motion } from 'framer-motion';
 import {
     Users, Target, ShieldCheck, XCircle, Brain, GraduationCap, Zap, ArrowRight,
     MapPin, Award, FlaskConical, Building2, CheckCircle2, Calendar,
-    ChevronRight, LineChart as LucideLineChart, TrendingUp, Globe, Crown, Sparkles, Languages,
-    Info, Activity, Scale, Calculator, Heart, Stethoscope, Hospital, Network, Gavel, 
-    Palette, Image, Cpu, Briefcase, PieChart, Sliders, PlayCircle, RefreshCcw, 
-    Terminal, Settings, LayoutGrid
+    ChevronRight, TrendingUp, Globe, Sparkles,
+    Activity, Scale, Calculator, Heart, Hospital, Network, Gavel, 
+    Palette, Image, Cpu, Sliders, 
+    FlaskConical as Flask
 } from 'lucide-react';
+import { 
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
+    ResponsiveContainer, ReferenceLine
+} from 'recharts';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -33,8 +37,8 @@ const ParentPortal: React.FC = () => {
     const [sandboxCareerB, setSandboxCareerB] = useState("");
     const [sandboxScenario, setSandboxScenario] = useState("Standard Path");
     const [sandboxLocation, setSandboxLocation] = useState("Kerala");
-    const [sandboxWorkType, setSandboxWorkType] = useState("Job");
-    const [sandboxYears, setSandboxYears] = useState(3);
+    const [sandboxWorkType] = useState("Job");
+    const [sandboxYears] = useState(3);
     const [localSimResult, setLocalSimResult] = useState<any>(null);
     const [isSimulating, setIsSimulating] = useState(false);
 
@@ -155,8 +159,6 @@ const ParentPortal: React.FC = () => {
         student_summary,
         selected_career,
         roadmap,
-        schools,
-        exams,
         myths,
         market,
         personality,
@@ -169,7 +171,7 @@ const ParentPortal: React.FC = () => {
     const getCareerThemedIcons = (name: string) => {
         const c = (name || "").toLowerCase();
         if (c.includes('tax') || c.includes('account') || c.includes('audit') || c.includes('financ')) 
-            return { global: LucideLineChart, psc: Scale, hubs: Calculator };
+            return { global: TrendingUp, psc: Scale, hubs: Calculator };
         if (c.includes('doctor') || c.includes('medicin') || c.includes('health') || c.includes('nurs')) 
             return { global: Activity, psc: Heart, hubs: Hospital };
         if (c.includes('engineer') || c.includes('tech') || c.includes('ai') || c.includes('code') || c.includes('soft')) 
@@ -731,7 +733,7 @@ const ParentPortal: React.FC = () => {
                                         { id: 'exams', label: 'Exams', icon: Target },
                                         { id: 'grants', label: 'Scholarships', icon: Award },
                                         { id: 'myths', label: 'Fact Check', icon: FlaskConical },
-                                        { id: 'market', label: 'Market', icon: LineChart }
+                                        { id: 'market', label: 'Market', icon: TrendingUp }
                                     ].map(tab => (
                                         <button
                                             key={tab.id}

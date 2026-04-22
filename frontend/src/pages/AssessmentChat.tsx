@@ -39,7 +39,6 @@ const AssessmentChat: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState(false);
   const [currentOptions, setCurrentOptions] = useState<string[]>([]);
 
   const parseUniversalAIResponse = (response: string): ParsedAIResponse => {
@@ -195,16 +194,14 @@ const AssessmentChat: React.FC = () => {
     const navState = { history: messages };
     if (isAuthenticated) {
       setSaving(true);
-      setSaveError(false);
       try {
           await axios.post(`${API_BASE}/api/profiles/save`, 
               { history: messages },
               { headers: { Authorization: `Bearer ${token}` }}
           );
           localStorage.removeItem(storageKey); // Clear on success
-      } catch (err) {
-          console.error("Failed to save profile:", err);
-          setSaveError(true);
+      } catch (error) {
+          console.error("Save failure:", error);
       } finally {
           setSaving(false);
       }
