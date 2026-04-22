@@ -16,6 +16,7 @@ import {
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
 import CareerChatbot from '../components/CareerChatbot';
+import FloatingTest from '../components/FloatingTest';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -957,6 +958,7 @@ const ParentPortal: React.FC = () => {
         
         {/* AI Career Advisor Chatbot - Moved to top level with robust defaults */}
         {console.log("Chatbot Debug:", { selected_career, activeTab, isChatOpen, id })}
+        <FloatingTest />
         <CareerChatbot 
             careerTitle={selected_career || "Career Advisor"}
             activeSection={activeTab}
