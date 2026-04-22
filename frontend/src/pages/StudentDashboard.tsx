@@ -40,7 +40,6 @@ const StudentDashboard: React.FC = () => {
     };
     
 
-
     fetchProfile();
   }, [token]);
 
@@ -254,11 +253,9 @@ const StudentDashboard: React.FC = () => {
                 {t('dashboard.note')}
               </p>
             </div>
-
-           </div>
-         </div>
-
+          </div>
         </div>
+
       </div>
 
       {/* AI Career Advisor Chatbot */}
