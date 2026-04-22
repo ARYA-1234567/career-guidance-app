@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
 
 import { motion } from 'framer-motion';
-import ActivityTimeline from '../components/ActivityTimeline';
 import CareerChatbot from '../components/CareerChatbot';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -21,9 +20,7 @@ const StudentDashboard: React.FC = () => {
   const [copied, setCopied] = useState(false);
   
   const [profile, setProfile] = useState<any>(null);
-  const [activities, setActivities] = useState<any[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(true);
-  const [loadingActivity, setLoadingActivity] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
@@ -42,22 +39,9 @@ const StudentDashboard: React.FC = () => {
       }
     };
     
-    const fetchActivity = async () => {
-        if (!token) return;
-        try {
-            const res = await axios.get(`${API_BASE}/api/user/activity`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setActivities(res.data);
-        } catch (err) {
-            console.error("Failed to fetch activity journey");
-        } finally {
-            setLoadingActivity(false);
-        }
-    };
+
 
     fetchProfile();
-    fetchActivity();
   }, [token]);
 
   const calculateProgress = () => {
@@ -65,9 +49,7 @@ const StudentDashboard: React.FC = () => {
       if (profile) progress += 25; // Assessment Complete
       if (user?.selected_career) progress += 25; // Career Selected
       if (user?.simulation_state) progress += 25; // Simulation Explored
-      // Roadmap progress (mocked for now, or based on activities)
-      const taskCompletions = activities.filter(a => a.type === 'task_completed').length;
-      progress += Math.min(25, taskCompletions * 5);
+      // Roadmap task completion could be tracked here in the future
       return progress;
   };
 
@@ -273,20 +255,8 @@ const StudentDashboard: React.FC = () => {
               </p>
             </div>
 
-            <div className="glass-card p-8 border-white/5">
-                <div className="flex items-center gap-3 mb-8">
-                    <Clock size={20} className="text-zinc-500" />
-                    <h3 className="text-sm font-black text-white uppercase tracking-widest">{t('dashboard.journeyTitle')}</h3>
-                </div>
-                {loadingActivity ? (
-                    <div className="space-y-4 animate-pulse">
-                        {[1,2,3].map(i => <div key={i} className="h-12 bg-white/5 rounded-xl w-full" />)}
-                    </div>
-                ) : (
-                    <ActivityTimeline activities={activities} />
-                )}
-            </div>
-          </div>
+           </div>
+         </div>
 
         </div>
       </div>
