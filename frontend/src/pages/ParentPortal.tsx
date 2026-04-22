@@ -956,6 +956,7 @@ const ParentPortal: React.FC = () => {
         </div>
         
         {/* AI Career Advisor Chatbot - Moved to top level with robust defaults */}
+        {console.log("Chatbot Debug:", { selected_career, activeTab, isChatOpen, id })}
         <CareerChatbot 
             careerTitle={selected_career || "Career Advisor"}
             activeSection={activeTab}
