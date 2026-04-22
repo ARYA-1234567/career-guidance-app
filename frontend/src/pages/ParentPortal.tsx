@@ -244,6 +244,7 @@ const ParentPortal: React.FC = () => {
     })) : [];
 
     return (
+        <>
         <div className="min-h-screen bg-core text-white font-sans relative overflow-x-hidden pt-32 pb-20 px-6">
             {/* Background Elements */}
             <div className="mesh-canvas" />
@@ -952,22 +953,22 @@ const ParentPortal: React.FC = () => {
 
             </div>
 
-            {/* AI Career Advisor Chatbot */}
-            {selected_career && (
-                <CareerChatbot 
-                    careerTitle={selected_career}
-                    activeSection={activeTab}
-                    userProfile={personality}
-                    matchScore={data?.student_match_score || 85}
-                    isOpen={isChatOpen}
-                    onOpen={() => setIsChatOpen(true)}
-                    onClose={() => setIsChatOpen(false)}
-                    accessId={id}
-                />
-            )}
         </div>
-    );
-};
+        
+        {/* AI Career Advisor Chatbot - Moved to top level with robust defaults */}
+        <CareerChatbot 
+            careerTitle={selected_career || "Career Advisor"}
+            activeSection={activeTab}
+            userProfile={personality || {}}
+            matchScore={data?.student_match_score || 85}
+            isOpen={isChatOpen}
+            onOpen={() => setIsChatOpen(true)}
+            onClose={() => setIsChatOpen(false)}
+            accessId={id}
+        />
+    </>
+);
+}
 
 export default ParentPortal;
 
