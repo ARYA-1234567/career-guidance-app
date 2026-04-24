@@ -297,30 +297,30 @@ const RoadmapPage: React.FC = () => {
               </div>
             ) : (
               /* Weekly Plan */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {(roadmap.weekly_plan || []).map((w, k) => (
                   <motion.div
                     key={k}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: k * 0.04 }}
-                    className="glass-card hover:border-emerald-500/20 transition-all"
+                    className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/10 hover:border-emerald-500/30 transition-all group/week"
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-xs font-bold text-zinc-500 uppercase flex items-center gap-2">
-                        <Calendar size={14} className="text-emerald-500" /> {t('roadmap.week')} {w.week}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="text-sm font-black text-zinc-500 uppercase flex items-center gap-3 tracking-[0.2em]">
+                        <Calendar size={18} className="text-emerald-500" /> {t('roadmap.week')} {w.week}
                       </div>
                       {w.resource && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="text-[10px] font-black px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-widest">
                           {w.resource}
                         </span>
                       )}
                     </div>
-                    <h4 className="font-bold text-white mb-3">{w.topic}</h4>
-                    <ul className="space-y-1.5">
+                    <h4 className="text-xl font-black text-white mb-6 leading-tight group-hover/week:text-emerald-400 transition-colors">{w.topic}</h4>
+                    <ul className="space-y-3">
                       {w.tasks?.map((wt, l) => (
-                        <li key={l} className="text-xs text-zinc-400 flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 mt-1.5 shrink-0" />
+                        <li key={l} className="text-sm text-zinc-400 flex items-start gap-4 leading-relaxed">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500/50 mt-1.5 shrink-0" />
                           {wt}
                         </li>
                       ))}

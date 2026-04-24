@@ -1350,15 +1350,19 @@ async def career_chatbot(
         if not target_user_id:
              raise HTTPException(status_code=401, detail="Authentication required or invalid Access ID")
 
-        # Fetch Student Profile to get agent_memory
-        profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first()
+        # Fetch Student Profile to get agent_memory (with graceful fallback)
+        profile = None
+        if target_user_id:
+            profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first()
+        
         agent_mem = profile.agent_memory if profile else None
 
+        # Call the AI agent - ensure it works even if profile is missing
         response = get_career_bot_response(
             messages=payload.messages,
             career_title=payload.career_title,
             active_section=payload.active_section,
-            user_profile=payload.user_profile,
+            user_profile=payload.user_profile or (profile.metadata if profile else {}),
             match_score=payload.match_score,
             user_category=user_category,
             language=payload.language,

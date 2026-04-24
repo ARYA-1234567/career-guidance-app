@@ -68,13 +68,19 @@ const SUGGESTED_ACTIONS: Record<string, Record<string, string[]>> = {
   'en': {
     'schools': ["Show Kerala Colleges", "Entrance Exams", "Fee Structures", "Kerala PSC"],
     'universities': ["Show Kerala Colleges", "Entrance Exams", "Fee Structures", "Kerala PSC"],
+    'exams': ["Exam Windows", "Application Steps", "Eligibility Criteria", "Study Resources"],
     'roadmap': ["Skill Timeline", "Learning Resources", "Job Milestones", "Kerala Opportunities"],
+    'myths': ["Explain Reality", "Statistical Proof", "Kerala Context", "Global Facts"],
+    'market': ["Gulf Demand", "Salary Growth", "Top Employers", "Remote Options"],
     'default': ["Career Outlook", "Top Employers", "Salary Range", "More Colleges in Kerala"]
   },
   'ml': {
     'schools': ["കേരളത്തിലെ കോളേജുകൾ", "പ്രവേശന പരീക്ഷകൾ", "ഫീസ് വിവരങ്ങൾ", "കേരള PSC"],
     'universities': ["കേരളത്തിലെ കോളേജുകൾ", "പ്രവേശന പരീക്ഷകൾ", "ഫീസ് വിവരങ്ങൾ", "കേരള PSC"],
+    'exams': ["പരീക്ഷാ തീയതികൾ", "അപേക്ഷിക്കേണ്ട വിധം", "യോഗ്യതാ മാനദണ്ഡങ്ങൾ", "പഠന സഹായികൾ"],
     'roadmap': ["പഠന ഘട്ടങ്ങൾ", "വിഭവങ്ങൾ", "തൊഴിൽ അവസരങ്ങൾ", "കേരളത്തിലെ അവസരങ്ങൾ"],
+    'myths': ["യാഥാർത്ഥ്യം വിശദീകരിക്കുക", "സ്ഥിതിവിവരക്കണക്കുകൾ", "കേരളത്തിലെ സാഹചര്യം", "ആഗോള വസ്തുതകൾ"],
+    'market': ["ഗൾഫിലെ ഡിമാൻഡ്", "ശമ്പള വർദ്ധനവ്", "പ്രധാന തൊഴിൽദാതാക്കൾ", "റിമോട്ട് ജോലികൾ"],
     'default': ["കരിയർ സാധ്യതകൾ", "പ്രധാന തൊഴിൽദാതാക്കൾ", "ശമ്പളം", "കേരളത്തിലെ കൂടുതൽ കോളേജുകൾ"]
   }
 };
