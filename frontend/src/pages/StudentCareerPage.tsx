@@ -145,61 +145,46 @@ const StudentCareerPage: React.FC = () => {
                      </motion.div>
                 ) : !isTrajectoryView ? (
                 <motion.div 
-                    initial={{ opacity: 0, y: 20 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    exit={{ opacity: 0, y: -20 }} 
-                    transition={{ duration: 0.5, ease: 'easeOut' }} 
-                    className="flex flex-col items-center justify-center min-h-[60vh] max-w-5xl mx-auto"
+                    initial={{ opacity: 0, scale: 0.98 }} 
+                    animate={{ opacity: 1, scale: 1 }} 
+                    exit={{ opacity: 0, scale: 0.95 }} 
+                    transition={{ duration: 0.6, ease: 'easeOut' }} 
+                    className="flex flex-col items-center justify-center min-h-[65vh] w-full"
                 >
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-center">
-                        {/* LEFT: Success Status */}
-                        <div className="lg:col-span-7">
-                            <div className="glass-card p-12 border-primary-neon/10 bg-primary-neon/[0.02] relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-neon to-transparent opacity-30" />
-                                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-neon/5 blur-[80px] rounded-full group-hover:scale-125 transition-transform duration-1000" />
-                                
-                                <div className="flex items-center gap-8 relative z-10">
-                                    <div className="w-20 h-20 rounded-[2rem] bg-primary-neon/10 flex items-center justify-center border border-primary-neon/20 shadow-[0_0_30px_rgba(99,102,241,0.2)]">
-                                        <Target size={40} className="text-primary-neon" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-4xl font-black text-white mb-2 leading-none tracking-tight">Trajectory Complete</h3>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex gap-1">
-                                                {[1,2,3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary-neon animate-pulse" style={{ animationDelay: `${i*0.2}s` }} />)}
-                                            </div>
-                                            <p className="text-zinc-500 font-bold uppercase text-xs tracking-[0.3em]">{t('dashboard.neuralSync')} 100%</p>
-                                        </div>
-                                    </div>
-                                </div>
+                    {/* ENLARGED FOCAL POINT: Recommendations Locked Card */}
+                    <div className="max-w-3xl w-full">
+                        <div className="glass-card p-20 border-white/10 relative overflow-hidden text-center flex flex-col items-center shadow-[0_0_80px_rgba(16,185,129,0.05)] group">
+                            <div className="absolute top-0 right-0 w-96 h-96 bg-secondary-neon/10 blur-[120px] rounded-full opacity-50" />
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-neon/5 blur-[100px] rounded-full opacity-30" />
+                            
+                            <div className="w-24 h-24 rounded-full bg-secondary-neon/10 border border-secondary-neon/20 flex items-center justify-center text-secondary-neon mb-12 shadow-[0_0_50px_rgba(16,185,129,0.3)] relative z-10">
+                                <ShieldCheck size={48} />
                             </div>
-                        </div>
-
-                        {/* RIGHT: Recommendations Focal Point */}
-                        <div className="lg:col-span-5">
-                            <div className="glass-card p-10 border-white/5 relative overflow-hidden text-center flex flex-col items-center">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary-neon/10 blur-[50px]" />
-                                
-                                <div className="w-16 h-16 rounded-full bg-secondary-neon/10 border border-secondary-neon/20 flex items-center justify-center text-secondary-neon mb-8 shadow-[0_0_40px_rgba(16,185,129,0.2)]">
-                                    <ShieldCheck size={28} />
-                                </div>
-                                
-                                <h4 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter leading-tight">Strategic Path<br/><span className="text-secondary-neon">Locked</span></h4>
-                                <p className="text-xs font-bold text-zinc-500 mb-10 leading-relaxed max-w-[200px]">
-                                    {t('parent.trajectoryLockedDesc')}
-                                </p>
-                                
-                                <button 
-                                    onClick={() => {
-                                        window.location.hash = 'trajectory'; 
-                                        const event = new HashChangeEvent("hashchange");
-                                        window.dispatchEvent(event);
-                                    }}
-                                    className="w-full py-5 rounded-2xl bg-zinc-100 text-zinc-900 border border-white font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
-                                >
-                                    {t('parent.viewTrajectory')}
-                                </button>
+                            
+                            <h4 className="text-5xl font-black text-white mb-8 uppercase tracking-tighter leading-none relative z-10">
+                                Strategic Path<br/><span className="text-secondary-neon">Locked</span>
+                            </h4>
+                            
+                            <div className="flex items-center gap-4 mb-12 relative z-10">
+                                <div className="h-px w-12 bg-white/10" />
+                                <p className="text-sm font-black uppercase tracking-[0.4em] text-zinc-500">{t('dashboard.neuralSync')} 100%</p>
+                                <div className="h-px w-12 bg-white/10" />
                             </div>
+                            
+                            <p className="text-base font-bold text-zinc-400 mb-16 leading-relaxed max-w-lg relative z-10">
+                                {t('parent.trajectoryLockedDesc')}
+                            </p>
+                            
+                            <button 
+                                onClick={() => {
+                                    window.location.hash = 'trajectory'; 
+                                    const event = new HashChangeEvent("hashchange");
+                                    window.dispatchEvent(event);
+                                }}
+                                className="w-full max-w-md py-6 rounded-3xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-[0_0_50px_rgba(255,255,255,0.4)] relative z-10"
+                            >
+                                {t('parent.viewTrajectory')}
+                            </button>
                         </div>
                     </div>
                 </motion.div>
