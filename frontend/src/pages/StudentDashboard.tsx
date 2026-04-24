@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Sparkles, Shield, Copy, Check, LogOut, GraduationCap, 
+  Sparkles, Shield, LogOut, GraduationCap, 
   ArrowRight, Brain, Clock, Target, Info, Loader2, Zap, Layout
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -17,7 +17,6 @@ const StudentDashboard: React.FC = () => {
   const { user, token, logout } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
   
   const [profile, setProfile] = useState<any>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -54,13 +53,7 @@ const StudentDashboard: React.FC = () => {
 
   const neuralProgress = calculateProgress();
 
-  const copyParentId = () => {
-    if (user?.parent_id) {
-      navigator.clipboard.writeText(user.parent_id);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-core relative pt-32 pb-20 px-6 overflow-hidden">
@@ -278,46 +271,15 @@ const StudentDashboard: React.FC = () => {
               </motion.div>
             )}
 
-            <div className="glass-card p-8 border-white/5 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-secondary-neon shadow-[0_0_10px_#10b981]" />
-                <div className="flex items-center gap-3 mb-8">
-                    <Shield size={20} className="text-secondary-neon" />
-                    <h3 className="text-sm font-black text-white uppercase tracking-widest">{t('landing.parentTitle')}</h3>
-                </div>
-
-                <p className="text-xs text-zinc-500 font-medium mb-8 leading-relaxed">
-                  {t('landing.parentDesc')}
-                </p>
-
-                <div className="p-6 rounded-2xl bg-secondary-neon/5 border border-secondary-neon/10 mb-6 flex flex-col items-center gap-4 group">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary-neon/60">{t('dashboard.parentIdLabel')}</span>
-                    <span className="text-3xl font-black text-secondary-neon tracking-[0.2em]">{user?.parent_id || '---'}</span>
-                </div>
-
-                <button 
-                    onClick={copyParentId}
-                    className="w-full py-4 rounded-xl border border-white/5 flex items-center justify-center gap-3 text-xs font-black uppercase tracking-widest transition-all hover:bg-white/5 bg-white/[0.02] text-zinc-400 hover:text-white"
-                >
-                    {copied ? (
-                        <>
-                            <Check size={16} className="text-secondary-neon" />
-                            {t('dashboard.copied')}
-                        </>
-                    ) : (
-                        <>
-                            <Copy size={16} className="" />
-                            {t('dashboard.copyId')}
-                        </>
-                    )}
-                </button>
-            </div>
-
+          <div className="lg:col-span-4 space-y-8">
+            {/* Parent Access Box removed per user request */}
             <div className="bg-primary-neon/5 p-6 rounded-2xl border border-primary-neon/10 flex gap-4">
               <Info size={20} className="text-primary-neon shrink-0" />
               <p className="text-[10px] text-zinc-400 font-bold leading-relaxed italic uppercase tracking-wider">
                 {t('dashboard.note')}
               </p>
             </div>
+          </div>
           </div>
         </div>
 
