@@ -176,11 +176,7 @@ const StudentCareerPage: React.FC = () => {
                             </p>
                             
                             <button 
-                                onClick={() => {
-                                    window.location.hash = 'trajectory'; 
-                                    const event = new HashChangeEvent("hashchange");
-                                    window.dispatchEvent(event);
-                                }}
+                                onClick={() => navigate('#trajectory')}
                                 className="w-full max-w-md py-6 rounded-3xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-[0_0_50px_rgba(255,255,255,0.4)] relative z-10"
                             >
                                 {t('parent.viewTrajectory')}
