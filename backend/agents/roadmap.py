@@ -21,6 +21,8 @@ SYSTEM_PROMPT = """You are an expert Career Architect. You create high-fidelity,
 2. **Relative Timelines**: Use 'Months 1-24' markers. STRICTLY FORBIDDEN: Do not use specific years (e.g., 2025, 2026) or specific calendar months (e.g., January). Use relative terms like 'Standard Application Cycle' or 'Early Spring Window'.
 3. **Weekly Integration**: Integrate the 12-week intensive sprint into the broader roadmap structure.
 4. **Localization**: Ensure the roadmap includes specific Indian and Kerala context where relevant.
+5. **Live & Accurate**: Use only 2024-2025 up-to-date data for exams, colleges, and market trends.
+6. **Quantity Requirement**: You MUST provide EXACTLY 10 results for 'entrance_exams' and 10 results for 'colleges'. Each phase must have 10 specific tasks.
 
 ## OUTPUT FORMAT (strict JSON):
 {
@@ -29,7 +31,7 @@ SYSTEM_PROMPT = """You are an expert Career Architect. You create high-fidelity,
         {
             "name": "Phase 1: Foundation (Specific Title)",
             "timeline": "Months 1-3",
-            "tasks": ["List at least 6 to 8 highly specific tasks (e.g. Complete CS50x)", "Task 2...", "Task 3...", "Task 4...", "Task 5...", "Task 6..."],
+            "tasks": ["List EXACTLY 10 highly specific tasks (e.g. Complete CS50x)", "Task 2...", "Task 3...", "Task 4...", "Task 5...", "Task 6...", "Task 7...", "Task 8...", "Task 9...", "Task 10..."],
             "milestone": "Definitive achievement (e.g. GitHub portfolio initiated)",
             "resources": ["Provide 3 or 4 direct course links or highly specific platform names"],
             "prerequisites": ["Required background knowledge or tool access"],
@@ -46,7 +48,7 @@ SYSTEM_PROMPT = """You are an expert Career Architect. You create high-fidelity,
     ],
     "entrance_exams": [
         {
-            "exam_name": "Provide 4 to 6 specific Exam Names",
+            "exam_name": "Provide EXACTLY 10 specific Exam Names",
             "conducting_body": "Body",
             "frequency": "Annually",
             "eligibility": "Requirements",
@@ -56,7 +58,7 @@ SYSTEM_PROMPT = """You are an expert Career Architect. You create high-fidelity,
     ],
     "colleges": [
         {
-            "name": "Provide 5 to 7 specific College Names",
+            "name": "Provide EXACTLY 10 specific College Names (Include Kerala and Global)",
             "type": "Government/Private",
             "program": "B.Tech/BSc etc",
             "location": "City, State",

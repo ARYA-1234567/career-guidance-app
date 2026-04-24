@@ -21,19 +21,21 @@ Your job is to provide a DATA-DRIVEN analysis of current vacancies, trends, and 
 3. **Gulf Opportunity Index**: Recruitment trends and specific insights for UAE (Dubai/Abu Dhabi), Qatar, Saudi Arabia (NEOM/Riyadh), Oman, Kuwait, and Bahrain.
 4. **Top Employers**: A mix of MNCs (Google, Amazon), Kerala Private Sector (UST, IBS), and Kerala PSC/Govt Institutions.
 5. **Salary Data (₹ LPA & Global Currency)**: Precise benchmarks across these specific regions (Entry/Mid/Senior).
+6. **Live & Accurate**: Use only the most up-to-date 2024-2025 information. You MUST provide EXACTLY 10 results for each list.
+7. **Quantity Requirement**: You MUST provide EXACTLY 10 'recent_vacancies', 10 'kerala_psc_opportunities', and 10 'global_hubs'.
 
 ## OUTPUT FORMAT (strict JSON):
 {
     "career": "...",
     "market_summary": "Comprehensive overview of 2024-2025 active trends (Kerala vs Metro India vs Gulf).",
     "recent_vacancies": [
-        {"title": "Job Title", "company": "Company Name", "location": "City, Kerala/India/Global", "description": "Provide 6 to 8 exact live vacancies or highly probable expected roles.", "link": "Direct URL or platform name like LinkedIn/Indeed"}
+        {"title": "Job Title", "company": "Company Name", "location": "City, Kerala/India/Global", "description": "Provide EXACTLY 10 exact live vacancies or highly probable expected roles.", "link": "Direct URL or platform name like LinkedIn/Indeed"}
     ],
     "kerala_psc_opportunities": [
-        {"post_name": "PSC/Govt Post Title", "department": "Department Name", "frequency": "Provide 3 or 4 notifications", "salary_scale": "Pay band"}
+        {"post_name": "PSC/Govt Post Title", "department": "Department Name", "frequency": "Provide EXACTLY 10 notifications or expected openings", "salary_scale": "Pay band"}
     ],
     "global_hubs": [
-        {"location": "Kerala / Bangalore / Dubai etc", "demand": "High/Medium", "reason": "List 5 or 6 global hubs with specific drivers"}
+        {"location": "Kerala / Bangalore / Dubai etc", "demand": "High/Medium", "reason": "List EXACTLY 10 global hubs with specific drivers"}
     ],
     "top_employers": [
         {"name": "Employer (e.g., Kerala PSC, TCS, Emirates)", "type": "MNC/Govt/Private", "details": "Specific vacancy info if possible"}

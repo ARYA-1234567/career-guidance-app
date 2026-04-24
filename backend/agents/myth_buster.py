@@ -15,10 +15,11 @@ SYSTEM_PROMPT = """You are the 'Global Career Myth Buster Agent' (International 
 Your goal is to challenge common career misconceptions for a specific career path using real-world data and international market insights (2025-2026).
 
 ## MISSION:
-1. **Global Reach**: Identify 5-7 specific myths that exist internationally (e.g. US, Europe, Asia) regarding this career.
+1. **Global Reach**: Identify EXACTLY 10 specific myths that exist internationally (e.g. US, Europe, Asia) regarding this career.
 2. **Reality Check**: Provide a 'Reality Check' (Fact) for each myth with specific, data-backed evidence.
 3. **Regional Sensitivity**: Explain how these global myths specifically manifest or differ in the Kerala and Indian professional landscape.
-4. **Data Points**: Include specific stats like global salary benchmarks or hiring rates to debunk the myth.
+4. **Data Points**: Include specific stats like global salary benchmarks or hiring rates (2024-2025) to debunk the myth.
+5. **Live & Accurate**: Use only the most up-to-date 2024-2025 information. You MUST provide EXACTLY 10 myth cards.
 
 ## OUTPUT FORMAT (strict JSON):
 {
@@ -57,8 +58,8 @@ def get_myth_buster_data(career: str, language: Optional[str] = "en") -> str:
     user_prompt = (
         f"CAREER: {career}\n\n"
         f"=== SEARCH RESULTS ===\n{search_results}\n\n"
-        "Analyze these results and generate 3 data-backed myth-busting cards. "
-        "Focus on current salary realities and industry shifts. Return ONLY valid JSON."
+        "Analyze these results and generate EXACTLY 10 data-backed myth-busting cards. "
+        "Focus on current 2024-2025 salary realities and industry shifts. Return ONLY valid JSON."
     )
     
     if language == 'ml':

@@ -331,7 +331,7 @@ const StudentCareerPage: React.FC = () => {
                                                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20">
                                                           <h6 className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mb-4">{t('parent.topEmployers')}</h6>
                                                           <ul className="space-y-3">
-                                                              {((market.top_employers || []).slice(0, 4)).map((emp: any, i: number) => (
+                                                              {(market.top_employers || []).map((emp: any, i: number) => (
                                                                   <li key={i} className="flex flex-col gap-1 border-b border-white/5 pb-2 last:border-0 last:pb-0">
                                                                       <span className="text-sm font-black text-white">{emp.name || emp.employer || emp}</span>
                                                                       {emp.type && <span className="text-[10px] text-zinc-500 font-bold uppercase">{emp.type}</span>}
