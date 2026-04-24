@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
     Target, XCircle, GraduationCap, Zap, 
     MapPin, Award, FlaskConical, Building2, CheckCircle2, Calendar,
-    ChevronRight, LineChart
+    ChevronRight, LineChart, ShieldCheck
 } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -106,7 +106,6 @@ const StudentCareerPage: React.FC = () => {
     }
 
     const { 
-        recommendations, 
         selected_career,
         roadmap,
         scholarships,
@@ -145,100 +144,65 @@ const StudentCareerPage: React.FC = () => {
                         </button>
                      </motion.div>
                 ) : !isTrajectoryView ? (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    
-                    <div className="lg:col-span-8 space-y-8">
-                        {/* The Cognitive Profile and Logic sections have been moved to the Profile Icon (Dashboard) per user request */}
-                        <div className="glass-card p-12 border-primary-neon/10 bg-primary-neon/[0.02] relative overflow-hidden">
-                            <div className="flex items-center gap-6">
-                                <div className="w-16 h-16 rounded-3xl bg-primary-neon/10 flex items-center justify-center border border-primary-neon/20 shadow-2xl">
-                                    <Target size={32} className="text-primary-neon" />
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    exit={{ opacity: 0, y: -20 }} 
+                    transition={{ duration: 0.5, ease: 'easeOut' }} 
+                    className="flex flex-col items-center justify-center min-h-[60vh] max-w-5xl mx-auto"
+                >
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-center">
+                        {/* LEFT: Success Status */}
+                        <div className="lg:col-span-7">
+                            <div className="glass-card p-12 border-primary-neon/10 bg-primary-neon/[0.02] relative overflow-hidden group">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-neon to-transparent opacity-30" />
+                                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-neon/5 blur-[80px] rounded-full group-hover:scale-125 transition-transform duration-1000" />
+                                
+                                <div className="flex items-center gap-8 relative z-10">
+                                    <div className="w-20 h-20 rounded-[2rem] bg-primary-neon/10 flex items-center justify-center border border-primary-neon/20 shadow-[0_0_30px_rgba(99,102,241,0.2)]">
+                                        <Target size={40} className="text-primary-neon" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-4xl font-black text-white mb-2 leading-none tracking-tight">Trajectory Complete</h3>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex gap-1">
+                                                {[1,2,3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary-neon animate-pulse" style={{ animationDelay: `${i*0.2}s` }} />)}
+                                            </div>
+                                            <p className="text-zinc-500 font-bold uppercase text-xs tracking-[0.3em]">{t('dashboard.neuralSync')} 100%</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-2xl font-black text-white">{t('parent.trajectory')} {t('parent.analysisComplete')}</h3>
-                                    <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">{t('dashboard.neuralSync')} 100%</p>
+                            </div>
+                        </div>
+
+                        {/* RIGHT: Recommendations Focal Point */}
+                        <div className="lg:col-span-5">
+                            <div className="glass-card p-10 border-white/5 relative overflow-hidden text-center flex flex-col items-center">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary-neon/10 blur-[50px]" />
+                                
+                                <div className="w-16 h-16 rounded-full bg-secondary-neon/10 border border-secondary-neon/20 flex items-center justify-center text-secondary-neon mb-8 shadow-[0_0_40px_rgba(16,185,129,0.2)]">
+                                    <ShieldCheck size={28} />
                                 </div>
+                                
+                                <h4 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter leading-tight">Strategic Path<br/><span className="text-secondary-neon">Locked</span></h4>
+                                <p className="text-xs font-bold text-zinc-500 mb-10 leading-relaxed max-w-[200px]">
+                                    {t('parent.trajectoryLockedDesc')}
+                                </p>
+                                
+                                <button 
+                                    onClick={() => {
+                                        window.location.hash = 'trajectory'; 
+                                        const event = new HashChangeEvent("hashchange");
+                                        window.dispatchEvent(event);
+                                    }}
+                                    className="w-full py-5 rounded-2xl bg-zinc-100 text-zinc-900 border border-white font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+                                >
+                                    {t('parent.viewTrajectory')}
+                                </button>
                             </div>
                         </div>
                     </div>
-
-                    {/* RIGHT COLUMN: Recommendations */}
-                    <div className="lg:col-span-4 space-y-8">
-                        {/* Section 2: Career Recommendations */}
-                        <div className="glass-card p-12 border-secondary-neon/20 relative overflow-hidden group shadow-[0_0_50px_rgba(6,182,212,0.03)] bg-gradient-to-br from-secondary-neon/[0.02] to-transparent">
-                            <div className="absolute top-0 right-0 w-96 h-96 bg-secondary-neon/10 blur-[120px] rounded-full mix-blend-screen opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
-                            
-                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-12 border-b border-secondary-neon/10 pb-8 relative z-10">
-                                <Target size={20} className="text-secondary-neon" /> {t('parent.precisionRec')}
-                            </h3>
-
-                            <div className="space-y-8 relative z-10">
-                                {recommendations && recommendations.length > 0 ? (
-                                    recommendations.map((rec: any, i: number) => (
-                                        <motion.div 
-                                            key={i}
-                                            whileHover={{ x: 10 }}
-                                            className="p-10 rounded-[2.5rem] bg-black/40 backdrop-blur-md border border-white/5 hover:border-secondary-neon/50 shadow-2xl transition-all group/item overflow-hidden relative"
-                                        >
-                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary-neon/0 group-hover/item:bg-secondary-neon transition-colors duration-500" />
-                                            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
-                                                <div className="space-y-6 flex-1">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary-neon to-cyan-600 text-white flex items-center justify-center text-sm font-black shadow-[0_0_20px_rgba(6,182,212,0.4)] border border-white/10">{i+1}</div>
-                                                        <h4 className="text-3xl font-black text-white leading-tight drop-shadow-md">{rec.career}</h4>
-                                                    </div>
-                                                    
-                                                    <div className="bg-white/[0.02] p-8 rounded-3xl border border-white/5 shadow-inner">
-                                                      <p className="text-[10px] font-black uppercase text-secondary-neon/70 block mb-3 tracking-widest flex items-center gap-2"><Target size={12} /> {t('parent.logicEngine')}</p>
-                                                      <p className="text-base text-zinc-300 font-bold leading-relaxed">{rec.why_suits}</p>
-                                                    </div>
-                                                    
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-6 px-4">
-                                                        <div className="space-y-5">
-                                                            <p className="text-[9px] uppercase font-black text-zinc-500 tracking-widest px-1">Required Competencies</p>
-                                                            <div className="flex flex-wrap gap-2">
-                                                                {rec.skills_required.map((skill: string, idx: number) => (
-                                                                    <span key={idx} className="px-4 py-1.5 rounded-xl bg-secondary-neon/10 text-secondary-neon text-[10px] font-black uppercase border border-secondary-neon/20 shadow-sm">{skill}</span>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                        <div className="space-y-4">
-                                                            <p className="text-[9px] uppercase font-black text-zinc-500 tracking-widest px-1">Future Outlook (2030)</p>
-                                                            <p className="text-xs font-bold text-zinc-400 leading-relaxed bg-white/[0.02] border border-white/5 p-5 rounded-2xl border-l-2 border-l-secondary-neon shadow-inner">{rec.future_scope}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    ))
-                                ) : (
-                                    <div className="p-12 rounded-[2.5rem] bg-gradient-to-br from-white/[0.03] to-white/[0.01] border border-white/10 flex flex-col items-center justify-center text-center space-y-6 shadow-2xl border-t-cyan-500/30">
-                                        <div className="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex flex-col items-center justify-center text-cyan-400 mb-4 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
-                                            <Target size={30} />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-2xl font-black text-white mb-2">{t('parent.trajectoryLocked')}</h4>
-                                            <p className="text-sm font-bold text-zinc-500 max-w-sm mx-auto leading-relaxed">
-                                                {t('parent.trajectoryLockedDesc')}
-                                            </p>
-                                        </div>
-                                        <button 
-                                            onClick={() => {
-                                                window.location.hash = 'trajectory'; 
-                                                const event = new HashChangeEvent("hashchange");
-                                                window.dispatchEvent(event);
-                                            }}
-                                            className="mt-4 px-8 py-4 rounded-xl bg-zinc-100 text-zinc-900 border border-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]"
-                                        >
-                                            {t('parent.viewTrajectory')}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        </div>
-                    </motion.div>
+                </motion.div>
                 ) : (
                     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="lg:col-span-12 w-full space-y-8">
                         {/* NEW SECTION: Selected Career Strategy */}
