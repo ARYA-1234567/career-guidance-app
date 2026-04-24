@@ -8,7 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const ParentDashboard: React.FC = () => {
   const { user, logout } = useAuth();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

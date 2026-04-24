@@ -14,7 +14,7 @@ import CareerChatbot from '../components/CareerChatbot';
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const StudentCareerPage: React.FC = () => {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const { token } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();

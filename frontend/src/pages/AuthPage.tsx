@@ -54,7 +54,8 @@ const AuthPage: React.FC = () => {
         } else if (Array.isArray(detail)) {
           setError(detail[0]?.msg || "Validation error occurred.");
         } else {
-        setError(t('auth.authFailed'));
+          setError(t('auth.authFailed'));
+        }
       } else if (err.request) {
         // Request was made but no response received (Networking issue)
         setError(t('auth.networkError'));

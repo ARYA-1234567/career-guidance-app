@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 
 const ModeSelection: React.FC = () => {
-    const { language } = useLanguage();
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const { selectedCareer } = useAuth();
 

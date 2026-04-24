@@ -19,7 +19,6 @@ export const DICTIONARY = {
       discovery: "Discovery",
       profile: "Profile",
       twin: "AI Twin",
-      simulation: "Simulation",
       roadmap: "Roadmap",
       signout: "Sign Out",
       switchLanguage: "Switch to Malayalam",
@@ -129,28 +128,9 @@ export const DICTIONARY = {
       realtimeSynthesis: "Real-time Synthesis // Active",
       pathActivated: "Career Path Activated!"
     },
-    roadmap: {
-      title: "Your Infinite Growth Strategy",
-      subtitle: "Step-by-step guidance from entry level to mastery, calculated against multi-agent market simulations.",
-      masterPlan: "24-Month Master Plan",
-      weeklyLearning: "Weekly Learning (12 Weeks)",
-      exams: "Entrance Exams & Applications",
-      examsDesc: "Exams you must crack to gain admission into relevant programs.",
-      colleges: "Colleges & Universities",
-      collegesDesc: "Institutions offering relevant programs. Government colleges listed first.",
-      certs: "Key Certifications",
-      institutions: "Kerala Institutions & Platforms",
-      conductedBy: "Conducted By",
-      examWindow: "Application Window"
-    },
-    mythBuster: {
-      myth: "The Myth",
-      reality: "The Reality"
-    },
-    assessment: {
-      placeholder: "Type your query here...",
-      poweredBy: "Powered by Groq Llama-3 Intelligence"
-    },
+
+
+
     twin: {
       title: "Syncing with your Future Self",
       subtitle: "Accessing parallel career timelines...",
@@ -161,15 +141,7 @@ export const DICTIONARY = {
       photoId: "Photo ID",
       dayInLife: "A Day in Your Life"
     },
-    simulation: {
-      title: "Neural Simulator v2.0",
-      subtitle: "What-If Analysis",
-      compare: "Compare Against",
-      scenario: "Future Scenario",
-      insight: "Scenario Insight",
-      growth: "Parallel Reality Growth",
-      verdict: "AI Strategic Verdict"
-    },
+
     parent: {
       title: "Secure Parent Gateway",
       subtitle: "Monitoring child's career evolution and neural profile.",
@@ -180,7 +152,6 @@ export const DICTIONARY = {
       values: "Value Alignment",
       analysis: "Expert Analysis",
       disconnect: "Disconnect Secure Session",
-      noProfile: "No profile found for this student id.",
       noProfile: "No profile found for this student id.",
       loading: "Establishing neural link...",
       secureAccess: "Establishing Secure Access...",
@@ -427,10 +398,7 @@ export const DICTIONARY = {
       whileSupporting: " while supporting their ",
       naturalCuriosity: "natural curiosity"
     },
-    dashboard: {
-      coreTraits: "Core Interests",
-      keySkills: "Assessed Strengths"
-    },
+
     parentLogin: {
       guardianPortal: "Guardian Portal",
       secureAccess: "Secure Read-Only Access",
@@ -461,7 +429,6 @@ export const DICTIONARY = {
       discovery: "കരിയർ കണ്ടെത്തൽ",
       profile: "പ്രൊഫൈൽ",
       twin: "AI ട്വിൻ",
-      simulation: "സിമുലേഷൻ",
       roadmap: "റോഡ്മാപ്പ്",
       signout: "പുറത്തുകടക്കുക",
       switchLanguage: "ഇംഗ്ലീഷിലേക്ക് മാറാം",
@@ -473,14 +440,8 @@ export const DICTIONARY = {
       conductedBy: "നടത്തുന്നത്",
       examWindow: "അപേക്ഷാ സമയം"
     },
-    mythBuster: {
-      myth: "അബദ്ധധാരണ",
-      reality: "യാഥാർത്ഥ്യം"
-    },
-    assessment: {
-      placeholder: "നിങ്ങളുടെ ചോദ്യം ഇവിടെ ടൈപ്പ് ചെയ്യുക...",
-      poweredBy: "Groq Llama-3 ഇന്റലിജൻസ് ഉപയോഗിച്ച് പ്രവർത്തിക്കുന്നു"
-    },
+
+
     auth: {
       loginTab: "ലോഗിൻ",
       signupTab: "സൈനപ്പ്",
@@ -581,18 +542,7 @@ export const DICTIONARY = {
       realtimeSynthesis: "തത്സമയ വിശകലനം // സജീവം",
       pathActivated: "കരിയർ പാത്ത് സജീവമാക്കി!"
     },
-    roadmap: {
-      title: "നിങ്ങളുടെ വളർച്ചാ പദ്ധതി",
-      subtitle: "മാസ്റ്ററിയിലേക്കുള്ള ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശങ്ങൾ.",
-      masterPlan: "24 മാസത്തെ പദ്ധതി",
-      weeklyLearning: "വാരിക പഠന പദ്ധതി (12 ആഴ്ച)",
-      exams: "പ്രവേശന പരീക്ഷകൾ",
-      examsDesc: "പ്രസക്തമായ പ്രോഗ്രാമുകളിലേക്ക് പ്രവേശനം നേടുന്നതിന് നിങ്ങൾ വിജയിക്കേണ്ട പരീക്ഷകൾ.",
-      colleges: "കോളേജുകളും സർവ്വകലാശാലകളും",
-      collegesDesc: "പ്രസക്തമായ കോഴ്സുകൾ നൽകുന്ന സ്ഥാപനങ്ങൾ. സർക്കാർ കോളേജുകൾ ആദ്യം.",
-      certs: "പ്രധാന സർട്ടിഫിക്കറ്റുകൾ",
-      institutions: "കേരളത്തിലെ സ്ഥാപനങ്ങൾ"
-    },
+
     twin: {
       title: "ഭാവിയിലെ നിങ്ങളുമായി സംവദിക്കുന്നു",
       subtitle: "കരിയർ ടൈംലൈനുകൾ പരിശോധക്കുന്നു...",
@@ -603,15 +553,7 @@ export const DICTIONARY = {
       photoId: "ഫോട്ടോ ഐഡി",
       dayInLife: "ഒരു ദിവസത്തെ ജീവിതം"
     },
-    simulation: {
-      title: "ന്യൂറൽ സിമുലേറ്റർ v2.0",
-      subtitle: "വാട്ട്-ഇഫ് (What-If) വിശകലനം",
-      compare: "മറ്റൊരു കരിയറുമായി താരതമ്യം ചെയ്യാം",
-      scenario: "ഭാവിയിലെ സാഹചര്യം",
-      insight: "സാഹചര്യ വിശകലനം",
-      growth: "കരിയർ വളർച്ചാ താരതമ്യം",
-      verdict: "AI തന്ത്രപരമായ നിഗമനം"
-    },
+
     parent: {
       title: "രക്ഷാകർതൃ പ്രവേശം",
       subtitle: "കുട്ടിയുടെ കരിയർ വളർച്ചയും ന്യൂറൽ പ്രൊഫൈലും വിലയിരുത്തുക.",
@@ -687,30 +629,7 @@ export const DICTIONARY = {
       analysisComplete: "വിശകലനം പൂർത്തിയായി",
       trajectory: "കരിയർ പാത"
     },
-    dashboard: {
-      accountType: "വിദ്യാർത്ഥി അക്കൗണ്ട്",
-      neuralSync: "ന്യൂറൽ സിങ്ക്",
-      syncing: "വിവരങ്ങൾ ശേഖരിക്കുന്നു...",
-      profileTitle: "നിങ്ങളുടെ",
-      profileSpan: "പ്രൊഫൈൽ",
-      recordLabel: "വ്യക്തിത്വ വിശകലനം",
-      coreTraits: "പ്രധാന സവിശേഷതകൾ",
-      keySkills: "കഴിവുകൾ",
-      resumeTraj: "തുടരുക",
-      viewTraj: "കരിയർ പാതകൾ കാണാം",
-      readyHeader: "ഭാവി തിരഞ്ഞെടുക്കാൻ തയ്യാറാണോ?",
-      initiateBtn: "കരിയർ കണ്ടെത്തൽ തുടങ്ങാം",
-      timeEst: "സമയം",
-      timeEstDesc: "10-15 മിനിറ്റ് പ്രോസസിംഗ്",
-      precision: "കൃത്യത",
-      precisionDesc: "8-ഏജന്റ് സീക്വൻഷ്യൽ പൈപ്പ്‌ലൈൻ",
-      profileDefault: "പ്രൊഫൈൽ വിശകലനം പൂർത്തിയായി. നിങ്ങളുടെ കഴിവുകൾ മികച്ച രീതിയിൽ പ്രകടിപ്പിക്കാൻ അനുയോജ്യമായ കരിയറുകൾ ഞങ്ങൾ കണ്ടെത്തിയിട്ടുണ്ട്.",
-      parentIdLabel: "പേരന്റ് ആക്സസ് ഐഡി",
-      copyId: "ഐഡി കോപ്പി ചെയ്യാം",
-      copied: "കോപ്പി ചെയ്തു",
-      journeyTitle: "യാത്രയുടെ വിവരങ്ങൾ",
-      note: "ശ്രദ്ധിക്കുക: രക്ഷിതാക്കൾക്ക് നിങ്ങളുടെ അവസാന കരിയർ പാത മാത്രമേ കാണാൻ കഴിയൂ. അവർക്ക് നിങ്ങളുടെ ഉത്തരങ്ങളിൽ മാറ്റം വരുത്താൻ കഴിയില്ല."
-    },
+
     activity: {
       login: "പ്രവേശിച്ചു",
       account_created: "അക്കൗണ്ട് നിർമ്മിച്ചു",

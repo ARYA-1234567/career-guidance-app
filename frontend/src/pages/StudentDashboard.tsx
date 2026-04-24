@@ -15,7 +15,7 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const StudentDashboard: React.FC = () => {
   const { user, token, logout } = useAuth();
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   

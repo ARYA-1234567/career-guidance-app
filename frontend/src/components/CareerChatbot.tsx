@@ -294,7 +294,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                   className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-3 pr-14 text-sm text-white focus:outline-none focus:border-green-500/50 transition-all placeholder:text-zinc-600"
                 />
                 <button 
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={!input.trim() || loading}
                   className={`absolute right-2 p-2 rounded-lg transition-all ${
                     input.trim() && !loading 
