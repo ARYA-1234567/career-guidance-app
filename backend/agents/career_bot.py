@@ -93,22 +93,22 @@ LANGUAGE: {language == 'ml' and 'RESPOND ONLY IN MALAYALAM SCRIPT.' or 'RESPOND 
             last_query = messages[-1]["content"].lower() if messages else ""
             roadmap = user_profile.get("roadmap") or agent_memory.get("roadmap") or {}
             
-            if any(k in last_query for k in ["roadmap", "step", "skill", "learn", "study", "timeline"]):
+            if any(k in last_query for k in ["roadmap", "step", "skill", "learn", "study", "timeline", "milestone"]):
                 phases = roadmap.get("phases", []) if isinstance(roadmap, dict) else []
                 if phases:
                     top = phases[0]
                     tasks = top.get('tasks', [])
                     tasks_str = ", ".join(tasks[:3]) if isinstance(tasks, list) else "specialized training"
-                    return f"As an expert in {career_title}, I've mapped out your immediate priority: {top.get('name')}. You should focus on {tasks_str}. This aligns perfectly with your {traits[0]} traits!"
+                    return f"Based on your high-fidelity roadmap for {career_title}, your immediate priority is: {top.get('name')}. This involves {tasks_str}. Check the 'Strategic Pathway' icon for all 10 steps!"
             
-            if any(k in last_query for k in ["college", "school", "university", "admission", "kerala"]):
+            if any(k in last_query for k in ["college", "school", "university", "admission", "kerala", "entrance"]):
                 colleges = roadmap.get("colleges", []) if isinstance(roadmap, dict) else []
                 if colleges:
                     col = colleges[0]
                     return f"For your {career_title} path, I highly recommend {col.get('name')}. It is a top institution known for its 2024-2025 placement excellence. I have 9 more matching colleges waiting in your Academic tab!"
 
-            if any(k in last_query for k in ["salary", "market", "demand", "job"]):
-                return f"The market for {career_title} is booming in 2024, especially for someone with your {traits[0]} strengths. Expect entry-level roles to grow by 15% this year. Check the Market Intelligence tab for the full data!"
+            if any(k in last_query for k in ["salary", "market", "demand", "job", "outlook"]):
+                return f"The market for {career_title} is booming in 2024, especially for someone with your {traits[0]} strengths. Expect entry-level roles to grow by 15% this year. Check the Market Intelligence tab for the full data on 10 top employers!"
         except: pass
 
         error_msg = f"I'm recalibrating my neural core for {career_title}. While I do that, feel free to explore the 10 matching results I've prepared for you in the icons above!"
