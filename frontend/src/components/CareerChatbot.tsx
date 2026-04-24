@@ -193,7 +193,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
             onOpen();
             setUnreadCount(0);
           }}
-          className={`flex items-center gap-3 px-6 py-4 rounded-full bg-[#1a1a1a] border border-green-500/30 text-white shadow-[0_0_20px_rgba(34,197,94,0.15)] hover:shadow-[0_0_30px_rgba(34,197,94,0.25)] transition-all group scale-100 hover:scale-105 active:scale-95 ${isOpen ? 'hidden' : ''}`}
+          className="flex items-center gap-3 px-6 py-4 rounded-full bg-[#1a1a1a] border border-green-500/30 text-white shadow-[0_0_20px_rgba(34,197,94,0.15)] hover:shadow-[0_0_30px_rgba(34,197,94,0.25)] transition-all group scale-100 hover:scale-105 active:scale-95"
         >
           <div className="relative">
             <MessageSquare size={20} className="text-green-500 group-hover:animate-pulse" />
