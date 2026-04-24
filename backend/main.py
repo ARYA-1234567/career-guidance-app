@@ -821,11 +821,32 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
         try: p_data = json.loads(p_data)
         except: p_data = {}
     
+    # --- RECOVERY: Generate matches on the fly if missing from stored profile ---
+    if not p_data.get("matches"):
+        try:
+            from agents.career_matcher import match_careers
+            from utils.groq_client import safe_parse_json
+            raw_m = match_careers(p_data)
+            parsed_m = safe_parse_json(raw_m)
+            p_data["matches"] = parsed_m.get("matches", parsed_m.get("careers", [])) if isinstance(parsed_m, dict) else parsed_m
+            profile.personality = p_data
+            db.commit()
+        except Exception as e:
+            print(f"FAILED on-the-fly match recovery: {e}")
+    
     roadmap_data = {}
     scholarships = []
     myths = []
     market_data = {}
     
+    if not user.selected_career:
+        # --- NEURAL LINK RESTORATION: Auto-select top match if selection lost ---
+        matches = p_data.get("matches", [])
+        if matches:
+            user.selected_career = matches[0].get("career")
+            db.commit()
+            print(f"DEBUG: [LINK RESTORED] Auto-selected {user.selected_career} for user {user.id}")
+
     if user.selected_career:
         try:
             career = user.selected_career
@@ -985,10 +1006,31 @@ async def save_profile(request: Request, current_user: User = Depends(get_curren
     history = data.get("history", [])
     
     # Use existing analyzer to extract personality
-    personality_json = analyze_personality(history)
+    personality_data = json.loads(analyze_personality(history))
     
     # NEW: Extract Agentic Memory (Psychological insights)
     agent_mem_json = extract_profile_from_messages(history)
+    
+    # --- NEURAL LINK: Generate and Merge Career Matches immediately ---
+    try:
+        from agents.career_matcher import match_careers
+        from utils.groq_client import safe_parse_json
+        raw_matches = match_careers(personality_data)
+        matches_parsed = safe_parse_json(raw_matches)
+        
+        # Normalize matches format
+        matches_list = []
+        if isinstance(matches_parsed, list): matches_list = matches_parsed
+        elif isinstance(matches_parsed, dict): 
+            matches_list = matches_parsed.get("matches", matches_parsed.get("careers", []))
+        
+        # Merge into personality data
+        personality_data["matches"] = matches_list
+    except Exception as e:
+        print(f"FAILED to generate matches during profile save: {e}")
+        personality_data["matches"] = []
+    
+    personality_json = personality_data
     
     # Check if profile already exists for user
     existing_profile = db.query(StudentProfile).filter(StudentProfile.user_id == current_user.id).first()
