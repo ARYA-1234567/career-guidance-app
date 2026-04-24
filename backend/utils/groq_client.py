@@ -116,14 +116,13 @@ def get_groq_chat_response(messages: List[Dict[str, str]], is_json: bool = False
 
     client = Groq(api_key=api_key)
     
-    # Production models - ordered by speed+quality balance
+    # TURBO-CHARGE: Prioritize speed for Vercel/Render timeouts
     models = [
-        "llama-3.1-8b-instant",      # Fast for assessment
-        "llama-3.3-70b-versatile",   # Primary Reasoning
+        "llama-3.1-8b-instant",      # Fast for assessment/chat
+        "llama-3.2-3b-preview",      # Extremely fast backup
         "gemma2-9b-it",
-        "llama-3.2-3b-preview",
         "mixtral-8x7b-32768",
-        "llama3-70b-8192",
+        "llama-3.3-70b-versatile",   # Higher intelligence, but slower
     ]
     
     import time
@@ -131,12 +130,13 @@ def get_groq_chat_response(messages: List[Dict[str, str]], is_json: bool = False
     
     for model_name in models:
         try:
+            # SPEED-FIRST COMPLETER
             response = client.chat.completions.create(
                 model=model_name,
                 messages=messages,
-                temperature=0.4,
-                max_tokens=1500,  # Reduced to avoid token limits
-                timeout=45.0      # Increased timeout
+                temperature=0.7,
+                max_tokens=600,   # Keep it concise for speed
+                timeout=8.0       # Strict timeout to fail-over fast
             )
             raw_text = response.choices[0].message.content.strip()
             
