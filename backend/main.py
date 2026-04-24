@@ -1400,10 +1400,17 @@ async def career_chatbot(
                     user_category = "Parent"
             except: pass
 
-        # Fetch Student Profile to get agent_memory (NEVER FAIL AUTH FOR CHATBOT)
+        # Fetch Student Profile & Roadmap (MASTER DATA SYNC)
         profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first() if target_user_id else None
+        roadmap_obj = db.query(UserRoadmap).filter(UserRoadmap.user_id == target_user_id).first() if target_user_id else None
         
-        agent_mem = profile.agent_memory if profile else None
+        # Consolidate Neural Memory
+        agent_mem = profile.agent_memory if profile else {}
+        if roadmap_obj:
+            agent_mem["roadmap"] = roadmap_obj.roadmap_json
+        elif profile and profile.agent_memory and "roadmap" in profile.agent_memory:
+            # Fallback to profile memory if roadmap object is missing
+            agent_mem["roadmap"] = profile.agent_memory["roadmap"]
 
         # Personalize with the best available data
         user_p = payload.user_profile if payload.user_profile else (profile.personality if profile else {})
