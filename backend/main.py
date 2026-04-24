@@ -122,7 +122,12 @@ async def forensic_log_requests(request: Request, call_next):
 # CORS Setup - Stable production-ready configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=[
+        "http://localhost:5173",
+        "https://career-guidance-app-beige.vercel.app",
+        "https://career-guidance-app-three-beta.vercel.app",
+        "https://career-guidance-app-git-main-arya-1234567s-projects.vercel.app"
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
