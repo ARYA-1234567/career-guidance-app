@@ -858,19 +858,12 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
                 db.commit()
             # --------------------------------------------------------
             
-            # 1. Gather all cache results
-            rm_cache = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == career, CareerModuleCache.module_type == "roadmap").first()
-            myth_cache = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == career, CareerModuleCache.module_type == "myths").first()
-            sch_cache = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == career, CareerModuleCache.module_type == "scholarships").first()
-            market_cache = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == career, CareerModuleCache.module_type == "market").first()
-
-            tasks = []
-            
-            # Only add tasks for items NOT in cache
-            if not rm_cache: tasks.append(("roadmap", run_in_threadpool(generate_roadmap, career, p_data, language=language)))
-            if not myth_cache: tasks.append(("myths", run_in_threadpool(get_myth_buster_data, career, language=language)))
-            if not sch_cache: tasks.append(("scholarships", run_in_threadpool(get_scholarship_data, career, language=language)))
-            if not market_cache: tasks.append(("market", run_in_threadpool(get_market_intelligence, career, language=language)))
+            # --- FORCE SYNC: Bypassing cache to ensure 10-result expansion ---
+            tasks.append(("roadmap", run_in_threadpool(generate_roadmap, career, p_data, language=language)))
+            tasks.append(("myths", run_in_threadpool(get_myth_buster_data, career, language=language)))
+            tasks.append(("scholarships", run_in_threadpool(get_scholarship_data, career, language=language)))
+            tasks.append(("market", run_in_threadpool(get_market_intelligence, career, language=language)))
+            # ----------------------------------------------------------------
 
             if tasks:
                 # Run generations in parallel
@@ -880,36 +873,36 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
                 # Processed results mapping
                 gen_results = dict(zip(names, results))
                 
-                # Update DB and return data
-                if "roadmap" in gen_results:
-                    roadmap_data = safe_parse_json(gen_results["roadmap"])
-                    db.add(CareerModuleCache(id=str(uuid.uuid4()), career_name=career, module_type="roadmap", content=roadmap_data))
-                
-                if "myths" in gen_results:
-                    myths_json = safe_parse_json(gen_results["myths"])
-                    myths = myths_json.get("myths", []) if isinstance(myths_json, dict) else myths_json
-                    db.add(CareerModuleCache(id=str(uuid.uuid4()), career_name=career, module_type="myths", content=myths_json))
-                
-                if "scholarships" in gen_results:
-                    s_res = gen_results["scholarships"]
-                    sch_json = s_res if isinstance(s_res, dict) else safe_parse_json(s_res)
-                    scholarships = sch_json.get("scholarships", []) if isinstance(sch_json, dict) else sch_json
-                    db.add(CareerModuleCache(id=str(uuid.uuid4()), career_name=career, module_type="scholarships", content=sch_json))
-                
-                if "market" in gen_results:
-                    market_data = safe_parse_json(gen_results["market"])
-                    db.add(CareerModuleCache(id=str(uuid.uuid4()), career_name=career, module_type="market", content=market_data))
+                # --- UPDATE DB: Overwrite old cache with expanded 10-result data ---
+                for m_type, m_content_raw in gen_results.items():
+                    # Clear old cache for this career and module
+                    db.query(CareerModuleCache).filter(
+                        CareerModuleCache.career_name == career, 
+                        CareerModuleCache.module_type == m_type
+                    ).delete()
+                    
+                    parsed_content = safe_parse_json(m_content_raw)
+                    
+                    # Map result to local variables for immediate return
+                    if m_type == "roadmap": roadmap_data = parsed_content
+                    elif m_type == "myths": myths = parsed_content.get("myths", []) if isinstance(parsed_content, dict) else parsed_content
+                    elif m_type == "scholarships": scholarships = parsed_content.get("scholarships", []) if isinstance(parsed_content, dict) else parsed_content
+                    elif m_type == "market": market_data = parsed_content
+                    
+                    # Add new high-fidelity cache
+                    db.add(CareerModuleCache(
+                        id=str(uuid.uuid4()), 
+                        career_name=career, 
+                        module_type=m_type, 
+                        content=parsed_content,
+                        language=language
+                    ))
                 
                 db.commit()
 
-            # Final assignment from Cache (for items that were already there)
-            if rm_cache: roadmap_data = rm_cache.content
-            if myth_cache: myths = myth_cache.content.get("myths", []) if isinstance(myth_cache.content, dict) else myth_cache.content
-            if sch_cache: scholarships = sch_cache.content.get("scholarships", []) if isinstance(sch_cache.content, dict) else sch_cache.content
-            if market_cache: market_data = market_cache.content
-
         except Exception as e:
             print(f"DEBUG: Critical Parent Strategy Load Error - {str(e)}")
+            db.rollback()
 
     # Map exact required fields for Parent Dashboard
     return {
