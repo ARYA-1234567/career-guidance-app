@@ -250,7 +250,9 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.phases || roadmap.phases.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.strategyLoading')}</div>
+                                                <div className="py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.strategyLoading')}...
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -269,7 +271,9 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.colleges || roadmap.colleges.length === 0) && (
-                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noSchools')}</div>
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.noSchools')}...
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -295,7 +299,9 @@ const StudentCareerPage: React.FC = () => {
                                                 </div>
                                             ))}
                                             {(!roadmap.entrance_exams || roadmap.entrance_exams.length === 0) && (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.noExams')}</div>
+                                                <div className="py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.noExams')}...
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -313,8 +319,8 @@ const StudentCareerPage: React.FC = () => {
                                                     </div>
                                                 </div>
                                             )) : (
-                                                <div className="col-span-full py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">
-                                                    {t('parent.searchingGrants')}
+                                                <div className="col-span-full py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.searchingGrants')}...
                                                 </div>
                                             )}
                                         </div>
@@ -358,7 +364,9 @@ const StudentCareerPage: React.FC = () => {
                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMarket')}</div>
+                                                <div className="py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.loadingMarket')}...
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -387,7 +395,9 @@ const StudentCareerPage: React.FC = () => {
                                                     </div>
                                                 </div>
                                             )) : (
-                                                <div className="py-20 text-center text-zinc-600 font-bold uppercase tracking-widest text-xs">{t('parent.loadingMyths')}</div>
+                                                <div className="py-20 text-center text-zinc-600 font-black uppercase tracking-[0.2em] text-[10px] animate-pulse">
+                                                    <span className="text-primary-neon mr-2">●</span> {t('parent.loadingMyths')}...
+                                                </div>
                                             )}
                                         </div>
                                     )}

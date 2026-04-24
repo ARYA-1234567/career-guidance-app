@@ -866,15 +866,18 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
             # ----------------------------------------------------------------
 
             if tasks:
-                # Run generations in parallel
+                # Run generations in parallel with exception resilience
                 names = [t[0] for t in tasks]
-                results = await asyncio.gather(*[t[1] for t in tasks])
-                
-                # Processed results mapping
-                gen_results = dict(zip(names, results))
+                results = await asyncio.gather(*[t[1] for t in tasks], return_exceptions=True)
                 
                 # --- UPDATE DB: Overwrite old cache with expanded 10-result data ---
-                for m_type, m_content_raw in gen_results.items():
+                for idx, m_content_raw in enumerate(results):
+                    m_type = names[idx]
+                    
+                    if isinstance(m_content_raw, Exception):
+                        print(f"DEBUG: Module {m_type} generation failed: {str(m_content_raw)}")
+                        continue
+
                     # Clear old cache for this career and module
                     db.query(CareerModuleCache).filter(
                         CareerModuleCache.career_name == career, 
@@ -903,6 +906,21 @@ async def parent_lookup(parent_id: str, db: Session = Depends(get_db), language:
         except Exception as e:
             print(f"DEBUG: Critical Parent Strategy Load Error - {str(e)}")
             db.rollback()
+
+    # --- EMERGENCY FALLBACK: Pull from cache if fresh sync failed ---
+    if not roadmap_data:
+        fallback_rm = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == user.selected_career, CareerModuleCache.module_type == "roadmap").first()
+        if fallback_rm: roadmap_data = fallback_rm.content
+    if not scholarships:
+        fallback_sch = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == user.selected_career, CareerModuleCache.module_type == "scholarships").first()
+        if fallback_sch: scholarships = fallback_sch.content.get("scholarships", []) if isinstance(fallback_sch.content, dict) else fallback_sch.content
+    if not myths:
+        fallback_myths = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == user.selected_career, CareerModuleCache.module_type == "myths").first()
+        if fallback_myths: myths = fallback_myths.content.get("myths", []) if isinstance(fallback_myths.content, dict) else fallback_myths.content
+    if not market_data:
+        fallback_market = db.query(CareerModuleCache).filter(CareerModuleCache.career_name == user.selected_career, CareerModuleCache.module_type == "market").first()
+        if fallback_market: market_data = fallback_market.content
+    # ----------------------------------------------------------------
 
     # Map exact required fields for Parent Dashboard
     return {
