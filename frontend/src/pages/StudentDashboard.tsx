@@ -213,6 +213,71 @@ const StudentDashboard: React.FC = () => {
           </div>
 
           <div className="lg:col-span-4 space-y-8">
+            {/* NEW: Cognitive Profile & Logic Section (Migrated from Career Node) */}
+            {profile && (
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                {/* Cognitive Profile Card */}
+                <div className="glass-card p-8 border-white/5 relative group overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-neon to-transparent opacity-50" />
+                  <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-6 border-b border-white/5 pb-4">
+                    <Brain size={16} className="text-primary-neon" /> {t('parent.cognitiveProfile')}
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1">Level</p>
+                        <p className="text-xs font-black text-white">{profile.education_level || 'N/A'}</p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-1">Stream</p>
+                        <p className="text-xs font-black text-white">{profile.stream || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <div className="flex-1 p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-center">
+                        <span className="text-[8px] font-black uppercase text-indigo-400 tracking-widest block mb-1">MBTI</span>
+                        <span className="text-lg font-black text-indigo-400">{profile.mbti_type || 'INTJ'}</span>
+                      </div>
+                      <div className="flex-1 p-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-center">
+                        <span className="text-[8px] font-black uppercase text-teal-400 tracking-widest block mb-1">Holland</span>
+                        <span className="text-lg font-black text-teal-400">{profile.holland_code || 'RIA'}</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">Core Values</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(profile.values || []).slice(0,3).map((val: string, i: number) => (
+                          <span key={i} className="px-2 py-1 rounded-md bg-zinc-900 text-[8px] font-black uppercase text-zinc-400 border border-white/5">{val}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Deductive Logic Card */}
+                <div className="glass-card p-8 border-white/5 relative overflow-hidden group bg-amber-500/[0.02]">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 blur-[40px]" />
+                  <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-6 border-b border-white/5 pb-4">
+                    <Shield size={16} className="text-amber-400" /> {t('parent.deductiveLogic')}
+                  </h3>
+                  <div className="relative z-10">
+                    <p className="text-xs font-bold leading-relaxed text-zinc-400 italic">
+                      "{profile.logic_explanation || profile.analysis || 'Analysis pending neural sync...'}"
+                    </p>
+                    <div className="mt-6 flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      </div>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">{t('parent.logicEngine')}</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             <div className="glass-card p-8 border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-secondary-neon shadow-[0_0_10px_#10b981]" />
                 <div className="flex items-center gap-3 mb-8">

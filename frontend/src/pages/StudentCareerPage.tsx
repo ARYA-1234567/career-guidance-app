@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-    Target, ShieldCheck, XCircle, Brain, GraduationCap, Zap, 
+    Target, XCircle, GraduationCap, Zap, 
     MapPin, Award, FlaskConical, Building2, CheckCircle2, Calendar,
     ChevronRight, LineChart
 } from 'lucide-react';
@@ -106,9 +106,7 @@ const StudentCareerPage: React.FC = () => {
     }
 
     const { 
-        student_summary, 
         recommendations, 
-        logic_explanation, 
         selected_career,
         roadmap,
         scholarships,
@@ -149,120 +147,16 @@ const StudentCareerPage: React.FC = () => {
                 ) : !isTrajectoryView ? (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     
-                    {/* LEFT COLUMN: Student Summary & Logic */}
                     <div className="lg:col-span-8 space-y-8">
-                        {/* Section 1: Student Summary */}
-                        <div className="glass-card p-12 border-white/5 h-fit relative group overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-neon to-transparent opacity-50 transition-all duration-500 group-hover:h-2" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-primary-neon/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            
-                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
-                                <GraduationCap size={16} className="text-primary-neon" /> {t('parent.cognitiveProfile')}
-                            </h3>
-                            
-                            <div className="space-y-8 relative z-10">
-                                {/* Top Row Grid: Education & Stream */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20 transition-all relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-16 h-16 bg-secondary-neon/5 blur-[20px]" />
-                                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-2 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-neon rounded-full" /> Level</p>
-                                        <p className="text-lg font-black text-white leading-none">{student_summary.education_level}</p>
-                                    </div>
-                                    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-primary-neon/20 transition-all relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/5 blur-[20px]" />
-                                        <p className="text-[8px] uppercase font-black text-zinc-500 tracking-widest mb-2 flex items-center gap-2"><span className="w-1.5 h-1.5 bg-rose-500 rounded-full" /> Stream</p>
-                                        <p className="text-lg font-black text-white leading-none">{student_summary.stream}</p>
-                                    </div>
+                        {/* The Cognitive Profile and Logic sections have been moved to the Profile Icon (Dashboard) per user request */}
+                        <div className="glass-card p-12 border-primary-neon/10 bg-primary-neon/[0.02] relative overflow-hidden">
+                            <div className="flex items-center gap-6">
+                                <div className="w-16 h-16 rounded-3xl bg-primary-neon/10 flex items-center justify-center border border-primary-neon/20 shadow-2xl">
+                                    <Target size={32} className="text-primary-neon" />
                                 </div>
-                                
-                                {/* Inner Badges */}
-                                {personality && (personality.mbti_type || personality.holland_code) && (
-                                    <div className="flex gap-4">
-                                        {personality.mbti_type && (
-                                           <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20 flex flex-col justify-center items-center">
-                                                <span className="text-[8px] font-black uppercase text-indigo-400/70 tracking-widest mb-1">{t('studentCareer.mbtiProfile')}</span>
-                                                <span className="text-xl font-black text-indigo-400">{personality.mbti_type}</span>
-                                           </div>
-                                        )}
-                                        {personality.holland_code && (
-                                           <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-teal-500/10 to-transparent border border-teal-500/20 flex flex-col justify-center items-center">
-                                                <span className="text-[8px] font-black uppercase text-teal-400/70 tracking-widest mb-1">{t('studentCareer.hollandCode')}</span>
-                                                <span className="text-xl font-black text-teal-400">{personality.holland_code}</span>
-                                           </div>
-                                        )}
-                                    </div>
-                                )}
-
                                 <div>
-                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2"><Target size={12} className="text-zinc-500" /> {t('dashboard.coreTraits')}</p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {Array.isArray(student_summary?.interests) && student_summary.interests.map((int: any, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 rounded-lg bg-zinc-900 shadow-inner shadow-white/5 text-[9px] uppercase font-black tracking-wider text-zinc-400 border border-white/5 hover:border-primary-neon/30 hover:text-white transition-colors cursor-default">{int}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-4 flex items-center gap-2"><ShieldCheck size={12} className="text-zinc-500" /> {t('dashboard.keySkills')}</p>
-                                    <div className="flex flex-col gap-2">
-                                        {Array.isArray(student_summary?.skills) && student_summary.skills.map((str: any, i: number) => (
-                                            <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-white/[0.03] to-transparent border border-white/5 hover:border-primary-neon/20 transition-all">
-                                                <div className="w-6 h-6 rounded-lg bg-primary-neon/10 border border-primary-neon/20 flex items-center justify-center shrink-0 mt-0.5">
-                                                    <span className="text-[10px] font-black text-primary-neon">{i + 1}</span>
-                                                </div>
-                                                <span className="text-xs font-bold text-zinc-300 leading-snug">{str}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                
-                                {/* Inner Badges for Traits & Values */}
-                                {personality && (Array.isArray(personality.traits) || Array.isArray(personality.values)) && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5 mt-4">
-                                        {Array.isArray(personality.traits) && personality.traits.length > 0 && (
-                                            <div>
-                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">{t('studentCareer.keyTraits')}</p>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {personality.traits.slice(0,4).map((trt: string, idx: number) => (
-                                                        <span key={idx} className="px-3 py-1 rounded-md bg-indigo-500/10 text-indigo-300 text-[8px] font-black uppercase border border-indigo-500/20">{trt}</span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {Array.isArray(personality.values) && personality.values.length > 0 && (
-                                            <div>
-                                                <p className="text-[9px] uppercase font-black text-zinc-600 tracking-widest mb-3 flex items-center gap-2">{t('studentCareer.coreValues')}</p>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {personality.values.slice(0,4).map((val: string, idx: number) => (
-                                                        <span key={idx} className="px-3 py-1 rounded-md bg-teal-500/10 text-teal-300 text-[8px] font-black uppercase border border-teal-500/20">{val}</span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Section 3: Logic Section */}
-                        <div className="glass-card p-12 border-white/5 relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[50px] group-hover:bg-amber-500/20 transition-all duration-700" />
-                            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8 border-b border-white/5 pb-6 relative z-10">
-                                <Brain size={16} className="text-amber-400" /> {t('parent.deductiveLogic')}
-                            </h3>
-                            <div className="relative z-10">
-                                <div className="absolute -top-4 -left-2 text-6xl text-amber-500/20 font-serif leading-none">"</div>
-                                <p className="text-sm md:text-base font-bold leading-relaxed text-zinc-300 italic pl-6 pr-4">
-                                    {logic_explanation}
-                                </p>
-                                <div className="mt-8 flex items-center gap-3 pl-6">
-                                    <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
-                                        <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[9px] font-black uppercase tracking-widest text-amber-500">{t('parent.logicEngine')}</p>
-                                        <p className="text-[8px] font-bold text-zinc-500 uppercase">{t('parent.analysisComplete')}</p>
-                                    </div>
+                                    <h3 className="text-2xl font-black text-white">{t('parent.trajectory')} {t('parent.analysisComplete')}</h3>
+                                    <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">{t('dashboard.neuralSync')} 100%</p>
                                 </div>
                             </div>
                         </div>
