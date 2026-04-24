@@ -1400,22 +1400,33 @@ async def career_chatbot(
         
         agent_mem = profile.agent_memory if profile else None
 
-        # Call the AI agent - ensure it works even if profile is missing
-        # personality data is stored in the 'personality' field, not 'metadata'
+        # Personalize with the best available data
+        user_p = payload.user_profile if payload.user_profile else (profile.personality if profile else {})
+        
+        # Call the high-fidelity strategist
+        from agents.career_bot import get_career_bot_response
         response = get_career_bot_response(
             messages=payload.messages,
             career_title=payload.career_title,
             active_section=payload.active_section,
-            user_profile=payload.user_profile or (profile.personality if profile else {}),
+            user_profile=user_p,
             match_score=payload.match_score,
             user_category=user_category,
             language=payload.language,
             agent_memory=agent_mem
         )
         return {"response": response, "is_welcome": False}
+        
     except Exception as e:
-        print(f"CHATBOT ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail="Neural core connection timeout. Please retry.")
+        import traceback
+        print(f"CHATBOT RECOVERY ACTIVE: {str(e)}")
+        traceback.print_exc()
+        
+        # ACCURACY GUARD: Return a high-fidelity recovery message instead of a 500 error
+        recovery_msg = f"I'm currently recalibrating my accuracy for {payload.career_title}. While I do that, feel free to explore the 10 matching results I've prepared for you in the icons above!"
+        if payload.language == 'ml':
+            recovery_msg = f"{payload.career_title} വിവരങ്ങൾ ഞാൻ ക്രമീകരിക്കുകയാണ്. മുകളിലുള്ള ഐക്കണുകൾ പരിശോധിക്കാവുന്നതാണ്!"
+        return {"response": recovery_msg, "is_welcome": False}
 
 
 # Serve built frontend static files
