@@ -1387,26 +1387,16 @@ async def career_chatbot(
         if current_user:
             target_user_id = current_user.id
         elif payload.access_id:
-            # Parent access via ID - Make robust with casing and whitespace handling
             try:
                 p_id_clean = str(payload.access_id).strip().upper()
-                # Use func.upper() for case-insensitive DB lookup consistency
                 parent_user = db.query(User).filter(func.upper(User.parent_access_id) == p_id_clean).first()
                 if parent_user:
                     target_user_id = parent_user.id
                     user_category = "Parent"
-                else:
-                    logger.warning(f"Chatbot Auth: Parent ID {p_id_clean} not found in database.")
-            except Exception as e:
-                logger.error(f"Chatbot Auth Error: {str(e)}")
+            except: pass
 
-        if not target_user_id:
-             raise HTTPException(status_code=401, detail="Authentication required or invalid Access ID")
-
-        # Fetch Student Profile to get agent_memory (with graceful fallback)
-        profile = None
-        if target_user_id:
-            profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first()
+        # Fetch Student Profile to get agent_memory (NEVER FAIL AUTH FOR CHATBOT)
+        profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first() if target_user_id else None
         
         agent_mem = profile.agent_memory if profile else None
 

@@ -156,7 +156,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
         user_category: accessId ? "Parent" : "Student",
         language: language,
         access_id: accessId || ""
-      });
+      }, { withCredentials: true });
 
       setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
     } catch (error) {
