@@ -1404,12 +1404,14 @@ async def career_chatbot(
         profile = db.query(StudentProfile).filter(StudentProfile.user_id == target_user_id).first() if target_user_id else None
         roadmap_obj = db.query(UserRoadmap).filter(UserRoadmap.user_id == target_user_id).first() if target_user_id else None
         
-        # Consolidate Neural Memory
-        agent_mem = profile.agent_memory if profile else {}
-        if roadmap_obj:
+        # Consolidate Neural Memory (BULLETPROOF MERGER)
+        agent_mem = {}
+        if profile and isinstance(profile.agent_memory, dict):
+            agent_mem = profile.agent_memory.copy()
+            
+        if roadmap_obj and isinstance(roadmap_obj.roadmap_json, dict):
             agent_mem["roadmap"] = roadmap_obj.roadmap_json
-        elif profile and profile.agent_memory and "roadmap" in profile.agent_memory:
-            # Fallback to profile memory if roadmap object is missing
+        elif profile and isinstance(profile.agent_memory, dict) and "roadmap" in profile.agent_memory:
             agent_mem["roadmap"] = profile.agent_memory["roadmap"]
 
         # Personalize with the best available data
