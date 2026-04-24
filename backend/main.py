@@ -1358,11 +1358,12 @@ async def career_chatbot(
         agent_mem = profile.agent_memory if profile else None
 
         # Call the AI agent - ensure it works even if profile is missing
+        # personality data is stored in the 'personality' field, not 'metadata'
         response = get_career_bot_response(
             messages=payload.messages,
             career_title=payload.career_title,
             active_section=payload.active_section,
-            user_profile=payload.user_profile or (profile.metadata if profile else {}),
+            user_profile=payload.user_profile or (profile.personality if profile else {}),
             match_score=payload.match_score,
             user_category=user_category,
             language=payload.language,
@@ -1370,7 +1371,8 @@ async def career_chatbot(
         )
         return {"response": response, "is_welcome": False}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"CHATBOT ERROR: {str(e)}")
+        raise HTTPException(status_code=500, detail="Neural core connection timeout. Please retry.")
 
 
 # Serve built frontend static files
