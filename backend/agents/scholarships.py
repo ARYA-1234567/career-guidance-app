@@ -27,20 +27,16 @@ def get_scholarship_data(career_title: str, language: str = 'en') -> Dict[str, A
     """
     fallback_data = {
         "scholarships": [
-            {
-                "name": "E-Grantz (Kerala Gov)",
-                "provider": "Government of Kerala",
-                "amount": "Varies by specific course",
-                "eligibility": "For SC/ST/OBC and economically weaker section students pursuing professional degrees.",
-                "link": "https://egrantz.kerala.gov.in"
-            },
-            {
-                "name": "National Scholarship Portal (NSP)",
-                "provider": "Central Government of India",
-                "amount": "Up to ₹50,000 / year",
-                "eligibility": "Merit-cum-Means scholarship for professional and technical courses.",
-                "link": "https://scholarships.gov.in"
-            }
+            {"name": "E-Grantz (Kerala Gov)", "provider": "Government of Kerala", "amount": "Varies", "eligibility": "SC/ST/OBC/EWS students in Kerala", "deadline": "Ongoing", "link": "https://egrantz.kerala.gov.in"},
+            {"name": "DCE Scholarship (Kerala)", "provider": "Directorate of Collegiate Education", "amount": "₹10,000 - ₹15,000", "eligibility": "Meritorious students in Kerala", "deadline": "Oct-Nov", "link": "https://dcescholarship.kerala.gov.in"},
+            {"name": "National Scholarship Portal (NSP)", "provider": "Central Govt of India", "amount": "Up to ₹50,000", "eligibility": "Merit-cum-Means for minority/professional students", "deadline": "Oct-Dec", "link": "https://scholarships.gov.in"},
+            {"name": "INSPIRE Scholarship", "provider": "DST, Govt of India", "amount": "₹80,000/yr", "eligibility": "Top 1% in Class 12 (Science)", "deadline": "Sept-Oct", "link": "https://online-inspire.gov.in"},
+            {"name": "Central Sector Scheme (CSS)", "provider": "Ministry of Education", "amount": "₹12,000 - ₹20,000", "eligibility": "Top 20th percentile in Class 12", "deadline": "Oct-Nov", "link": "https://scholarships.gov.in"},
+            {"name": "Reliance Foundation Scholarship", "provider": "Reliance Foundation", "amount": "Up to ₹2,00,000", "eligibility": "Undergraduate students in India", "deadline": "Aug-Sept", "link": "https://scholarships.reliancefoundation.org"},
+            {"name": "HDFC Badhte Kadam Scholarship", "provider": "HDFC Bank", "amount": "₹30,000 - ₹1,00,000", "eligibility": "General/Professional students in India", "deadline": "Sept-Oct", "link": "https://www.buddy4study.com"},
+            {"name": "Tata Trust Scholarship", "provider": "Tata Trusts", "amount": "Varies", "eligibility": "Professional & Medical students", "deadline": "Sept-Nov", "link": "https://www.tatatrusts.org"},
+            {"name": "Chevening Scholarship", "provider": "UK Government", "amount": "Full Funding", "eligibility": "Postgraduate students (Global)", "deadline": "Aug-Nov", "link": "https://www.chevening.org"},
+            {"name": "Fullbright-Nehru Fellowship", "provider": "USIEF", "amount": "Full Funding", "eligibility": "Research/Masters (India to US)", "deadline": "May-July", "link": "https://www.usief.org.in"}
         ]
     }
 

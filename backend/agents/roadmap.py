@@ -177,6 +177,30 @@ def get_fallback_roadmap(career: str) -> dict:
             {"week": i+1, "topic": f"Week {i+1} Focus Area", "tasks": ["Study core concepts", "Practice exercises", "Review and revise"], "resource": "Online courses"}
             for i in range(12)
         ],
+        "colleges": [
+            {"name": "Indian Institute of Science (IISc)", "type": "Government", "program": "Integrated PhD/Masters", "location": "Bangalore", "ranking": "NIRF 1", "fees_estimate": "₹30,000/yr", "admission_mode": "GATE/JAM"},
+            {"name": "IIT Bombay", "type": "Government", "program": "B.Tech/M.Tech", "location": "Mumbai", "ranking": "NIRF 3", "fees_estimate": "₹2,00,00/yr", "admission_mode": "JEE Advanced"},
+            {"name": "IIT Delhi", "type": "Government", "program": "B.Tech/M.Tech", "location": "Delhi", "ranking": "NIRF 2", "fees_estimate": "₹2,00,00/yr", "admission_mode": "JEE Advanced"},
+            {"name": "IIT Madras", "type": "Government", "program": "B.Tech/M.Tech", "location": "Chennai", "ranking": "NIRF 1", "fees_estimate": "₹2,00,00/yr", "admission_mode": "JEE Advanced"},
+            {"name": "BITS Pilani", "type": "Private", "program": "B.E/M.E", "location": "Pilani/Goa", "ranking": "Top Private", "fees_estimate": "₹5,00,00/yr", "admission_mode": "BITSAT"},
+            {"name": "NIT Calicut", "type": "Government", "program": "B.Tech", "location": "Kerala", "ranking": "Top NIT", "fees_estimate": "₹1,50,00/yr", "admission_mode": "JEE Main"},
+            {"name": "CUSAT", "type": "Government", "program": "B.Tech/MSc", "location": "Kochi, Kerala", "ranking": "State Top", "fees_estimate": "₹60,000/yr", "admission_mode": "CAT/CUSAT"},
+            {"name": "TKM College of Engineering", "type": "Govt-Aided", "program": "B.Tech", "location": "Kollam, Kerala", "ranking": "State Rank", "fees_estimate": "₹40,000/yr", "admission_mode": "KEAM"},
+            {"name": "Government Engineering College", "type": "Government", "program": "B.Tech", "location": "Trivandrum", "ranking": "Top Govt Kerala", "fees_estimate": "₹10,000/yr", "admission_mode": "KEAM"},
+            {"name": "Amrita Vishwa Vidyapeetham", "type": "Private", "program": "B.Tech", "location": "Coimbatore/Amritapuri", "ranking": "NIRF Top 10", "fees_estimate": "₹3,00,00/yr", "admission_mode": "AEEE"}
+        ],
+        "entrance_exams": [
+            {"exam_name": "JEE Advanced", "conducting_body": "IITs", "frequency": "Annual", "eligibility": "Class 12 (Top 2.5L JEE Main)", "application_window": "April-May", "fees": "₹2,800"},
+            {"exam_name": "JEE Main", "conducting_body": "NTA", "frequency": "Bi-Annual", "eligibility": "Class 12", "application_window": "Dec & March", "fees": "₹1,000"},
+            {"exam_name": "GATE", "conducting_body": "IITs", "frequency": "Annual", "eligibility": "Graduation", "application_window": "Sept-Oct", "fees": "₹1,700"},
+            {"exam_name": "KEAM", "conducting_body": "CEE Kerala", "frequency": "Annual", "eligibility": "Class 12", "application_window": "Feb-March", "fees": "₹700"},
+            {"exam_name": "BITSAT", "conducting_body": "BITS Pilani", "frequency": "Annual", "eligibility": "Class 12 (75% PCM)", "application_window": "Jan-April", "fees": "₹3,400"},
+            {"exam_name": "VITEEE", "conducting_body": "VIT", "frequency": "Annual", "eligibility": "Class 12", "application_window": "Nov-March", "fees": "₹1,350"},
+            {"exam_name": "NEET UG", "conducting_body": "NTA", "frequency": "Annual", "eligibility": "Class 12 (PCB)", "application_window": "Feb-March", "fees": "₹1,700"},
+            {"exam_name": "CUET", "conducting_body": "NTA", "frequency": "Annual", "eligibility": "Class 12", "application_window": "Feb-April", "fees": "₹650"},
+            {"exam_name": "CAT (CUSAT)", "conducting_body": "CUSAT", "frequency": "Annual", "eligibility": "Class 12", "application_window": "Jan-Feb", "fees": "₹1,100"},
+            {"exam_name": "JAM", "conducting_body": "IITs", "frequency": "Annual", "eligibility": "Graduation", "application_window": "Sept-Oct", "fees": "₹1,800"}
+        ],
         "estimated_cost": "₹10,000 - ₹50,000",
         "key_certifications": ["Relevant industry certification"],
         "local_institutions": ["Check local universities", "Online platforms"]

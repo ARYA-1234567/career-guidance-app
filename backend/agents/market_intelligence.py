@@ -94,7 +94,42 @@ def get_market_intelligence(career: str, language: str = 'en') -> str:
     
     return json.dumps({
         "career": career,
-        "market_summary": "Stable global demand with growth in tech-driven sectors.",
-        "top_employers": [{"name": "Global Tech Leaders", "type": "MNC", "details": "Top tier hiring"}],
-        "salaries": {"entry_global": "$40k-$70k", "entry_india": "₹6-10 LPA"}
+        "market_summary": "Extremely high global demand (2024-2025) with significant growth in AI-integrated roles and remote work models.",
+        "top_employers": [
+            {"name": "Google / Microsoft", "type": "Global MNC", "details": "Innovation & R&D hubs"},
+            {"name": "TCS / Infosys", "type": "Indian IT Giant", "details": "Global delivery centers"},
+            {"name": "Technopark / Infopark", "type": "Kerala Tech", "details": "Thriving startup ecosystem"},
+            {"name": "MNCs in Dubai/UAE", "type": "Gulf Market", "details": "Tax-free growth opportunities"},
+            {"name": "Tesla / SpaceX", "type": "High-Tech", "details": "Next-gen engineering roles"},
+            {"name": "Amazon / Meta", "type": "Big Tech", "details": "Platform & scale specialists"},
+            {"name": "Accenture / Deloitte", "type": "Strategy", "details": "Global consulting projects"},
+            {"name": "Digital University Kerala", "type": "Academia", "details": "Advanced research positions"},
+            {"name": "Reliance / Adani", "type": "Indian Conglomerate", "details": "Infrastructure & Digital expansion"},
+            {"name": "European Tech Hubs", "type": "EU Market", "details": "Sustainable & Green tech focus"}
+        ],
+        "psc_notifications": [
+            {"post_name": "Assistant Professor (Technical)", "department": "Technical Education", "salary_scale": "UGC Scale", "details": "Upcoming 2024 Exam"},
+            {"post_name": "Scientific Officer", "department": "Police/KSPB", "salary_scale": "State Scale", "details": "Active Notification"},
+            {"post_name": "Assistant Engineer", "department": "PWD/KSEB", "salary_scale": "Class-I", "details": "Annual Cycle"},
+            {"post_name": "IT Officer", "department": "Kerala Bank", "salary_scale": "Banking Scale", "details": "Active"},
+            {"post_name": "Project Scientist", "department": "KSCSTE", "salary_scale": "Contract", "details": "Monthly Vacancies"},
+            {"post_name": "Junior Instructor", "department": "Industrial Training", "salary_scale": "Technical Scale", "details": "Ongoing"},
+            {"post_name": "System Administrator", "department": "IT Mission", "salary_scale": "State IT", "details": "Upcoming"},
+            {"post_name": "Data Analyst", "department": "Digital University", "salary_scale": "Special Scale", "details": "New Active"},
+            {"post_name": "Technical Assistant", "department": "C-DIT", "salary_scale": "Project Basis", "details": "Active Recruitment"},
+            {"post_name": "Research Assistant", "department": "Universities", "salary_scale": "Academic", "details": "Rolling Vacancies"}
+        ],
+        "global_hubs": [
+            {"region": "USA (Silicon Valley)", "outlook": "Dominant Innovation Hub", "demand": "Critical"},
+            {"region": "India (Bangalore)", "outlook": "Global Delivery Giant", "demand": "High"},
+            {"region": "Kerala (Kochi/TVM)", "outlook": "Emerging Startup Capital", "demand": "Increasing"},
+            {"region": "UAE (Dubai)", "outlook": "Digital Transformation Hub", "demand": "Very High"},
+            {"region": "Germany (Berlin)", "outlook": "EU Engineering Center", "demand": "Steady"},
+            {"region": "Singapore", "outlook": "SE Asian Tech Gateway", "demand": "High"},
+            {"region": "Canada (Toronto)", "outlook": "Fastest Growing AI Hub", "demand": "Critical"},
+            {"region": "UK (London)", "outlook": "Strategy & Fintech Center", "demand": "Steady"},
+            {"region": "Netherlands (Amsterdam)", "outlook": "Logistics & Tech Bridge", "demand": "High"},
+            {"region": "Australia (Sydney)", "outlook": "Specialized Talent Hub", "demand": "High"}
+        ],
+        "salaries": {"entry_global": "$60k-$90k", "entry_india": "₹8-12 LPA", "entry_kerala": "₹5-8 LPA"}
     })
