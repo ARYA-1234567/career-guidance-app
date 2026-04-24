@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Calendar, CheckCircle2, ArrowLeft, Loader2, BookOpen, Award, DollarSign, ChevronRight, GraduationCap, Building2, ChevronDown, School, Target, Clock } from 'lucide-react';
+import { Calendar, CheckCircle2, ArrowLeft, Loader2, DollarSign, ChevronRight, Clock } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -74,10 +74,7 @@ const RoadmapPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [roadmap, setRoadmap] = useState<RoadmapData | null>(null);
   
-  // State for affiliated colleges expansion
-  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
-  const [affiliatedColleges, setAffiliatedColleges] = useState<any[]>([]);
-  const [expansionLoading, setExpansionLoading] = useState(false);
+
   
   const [activeTab, setActiveTab] = useState<'long' | 'weekly'>('long');
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +83,6 @@ const RoadmapPage: React.FC = () => {
     setLoading(true);
     setError(null);
     setRoadmap(null);
-    setExpandedIdx(null);
     try {
       const { data } = await axios.post(`${API_BASE}/api/roadmaps/generate`, {
         career,
@@ -103,30 +99,7 @@ const RoadmapPage: React.FC = () => {
     }
   };
 
-  const toggleAffiliated = async (university: string, program: string, index: number) => {
-    if (expandedIdx === index) {
-      setExpandedIdx(null);
-      return;
-    }
 
-    setExpandedIdx(index);
-    setAffiliatedColleges([]);
-    setExpansionLoading(true);
-
-    try {
-      const response = await axios.post(`${API_BASE}/api/colleges/lookup`, {
-        university,
-        course: program,
-      });
-      const data = response.data.colleges;
-      
-      setAffiliatedColleges(data.colleges || data);
-    } catch (err) {
-      console.error("Failed to fetch affiliated colleges:", err);
-    } finally {
-      setExpansionLoading(false);
-    }
-  };
 
 
   useEffect(() => {
@@ -357,200 +330,7 @@ const RoadmapPage: React.FC = () => {
               </div>
             )}
 
-            {/* Entrance Exams */}
-            {roadmap.entrance_exams && roadmap.entrance_exams.length > 0 && (
-              <div className="mt-10 glass-card bg-red-500/[0.02] border-red-500/10">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-3xl bg-secondary-neon/10 flex items-center justify-center border border-secondary-neon/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                      <Target size={32} className="text-secondary-neon" />
-                    </div>
-                    <div>
-                      <h3 className="text-3xl font-black tracking-tight">{t('roadmap.exams')}</h3>
-                      <p className="text-zinc-500 font-medium">{t('roadmap.examsDesc')}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  {roadmap.entrance_exams.map((exam, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08 }}
-                      className="p-5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-red-500/20 transition-all"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <h4 className="font-black text-white text-lg">{exam.exam_name}</h4>
-                        <span className="text-xs font-bold px-3 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 shrink-0 ml-4">
-                          {exam.fees}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.conductedBy')}</span>
-                          <span className="text-zinc-300 font-semibold">{exam.conducting_body}</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.frequency')}</span>
-                          <span className="text-zinc-300 font-semibold">{exam.frequency}</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.applyDuring')}</span>
-                          <span className="text-zinc-300 font-semibold">{exam.application_window}</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold block mb-1">{t('roadmap.eligibility')}</span>
-                          <span className="text-zinc-300 font-semibold">{exam.eligibility}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            {/* Colleges & Universities */}
-            {roadmap.colleges && roadmap.colleges.length > 0 && (
-              <div className="mt-6 glass-card bg-cyan-500/[0.02] border-cyan-500/10">
-                <h3 className="text-cyan-400 flex items-center gap-3 mb-2 font-black text-xl">
-                  <GraduationCap size={22} /> {t('roadmap.colleges')}
-                </h3>
-                <p className="text-zinc-500 text-sm mb-6">{t('roadmap.collegesDesc')}</p>
-                <div className="space-y-3">
-                  {roadmap.colleges.map((college, i) => {
-                    const isGovt = college.type.toLowerCase().includes('government');
-                    const isAided = college.type.toLowerCase().includes('aided');
-                    const badgeColor = isGovt
-                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                      : isAided
-                      ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                      : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-                    return (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05 }}
-                        className={`p-4 rounded-xl border transition-all hover:bg-white/[0.02] ${
-                          isGovt ? 'border-emerald-500/10 bg-emerald-500/[0.01]' : 'border-white/5'
-                        }`}
-                      >
-                        <div className="flex items-start gap-4 p-4">
-                          <Building2 size={20} className={isGovt ? 'text-emerald-500 mt-0.5 shrink-0' : 'text-zinc-600 mt-0.5 shrink-0'} />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 flex-wrap mb-1">
-                              <h4 className="font-bold text-white">{college.name}</h4>
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}`}>
-                                {college.type}
-                              </span>
-                            </div>
-                            <p className="text-sm text-zinc-400">{college.program}</p>
-                            <div className="flex items-center gap-4 mt-1.5 pb-2">
-                              <span className="text-xs text-zinc-500 flex items-center gap-1">
-                                <MapPin size={12} /> {college.location}
-                              </span>
-                              {college.ranking_note && (
-                                <span className="text-xs text-zinc-600 italic">{college.ranking_note}</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Expandable Footer */}
-                        <div 
-                          onClick={() => toggleAffiliated(college.name, college.program, i)}
-                          className="px-4 py-2 bg-white/[0.02] border-t border-white/5 flex items-center justify-between cursor-pointer hover:bg-white/[0.04] transition-all group/footer"
-                        >
-                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover/footer:text-cyan-400 transition-colors">
-                            {expandedIdx === i ? t('roadmap.hideAffiliated') : t('roadmap.viewAffiliated')}
-                          </span>
-                          {expansionLoading && expandedIdx === i ? (
-                            <Loader2 size={12} className="animate-spin text-zinc-500" />
-                          ) : (
-                            <ChevronDown size={14} className={`text-zinc-600 transition-transform ${expandedIdx === i ? 'rotate-180' : ''}`} />
-                          )}
-                        </div>
-
-                        {/* Affiliated List Content */}
-                        {expandedIdx === i && (
-                          <motion.div 
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            className="bg-black/40 border-t border-white/5"
-                          >
-                            {expansionLoading ? (
-                              <div className="p-10 flex flex-col items-center justify-center gap-3">
-                                <School size={20} className="text-zinc-700 animate-bounce" />
-                                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{t('roadmap.searchingAffiliated')}</span>
-                              </div>
-                            ) : affiliatedColleges.length > 0 ? (
-                              <div className="p-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {affiliatedColleges.map((aff, ai) => (
-                                  <div key={ai} className="p-3 rounded-lg bg-white/[0.02] border border-white/5 flex items-start gap-3">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/30 mt-1.5 shrink-0" />
-                                    <div className="min-w-0">
-                                      <p className="text-xs font-bold text-zinc-200 leading-tight">{aff.name}</p>
-                                      <div className="flex items-center gap-2 mt-1">
-                                        <span className="text-[9px] font-bold bg-white/5 px-1.5 py-0.5 rounded text-zinc-500 border border-white/5">{aff.type}</span>
-                                        <span className="text-[9px] text-zinc-600 truncate">{aff.location}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="p-6 text-center text-xs text-zinc-600 italic">
-                                {t('roadmap.noAffiliatedFound')}
-                              </div>
-                            )}
-                          </motion.div>
-                        )}
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Key Certifications */}
-            {roadmap.key_certifications && roadmap.key_certifications.length > 0 && (
-              <div className="mt-6 glass-card bg-amber-500/[0.02] border-amber-500/10">
-                <h3 className="text-amber-400 flex items-center gap-3 mb-5 font-black">
-                  <Award size={20} /> {t('roadmap.certs')}
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {roadmap.key_certifications.map((cert, i) => (
-                    <div
-                      key={i}
-                      className="px-5 py-3 rounded-xl bg-white/[0.03] border border-amber-500/10 hover:border-amber-500/30 transition-all text-sm font-semibold text-zinc-300"
-                    >
-                      {cert}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Local Institutions */}
-            {roadmap.local_institutions && roadmap.local_institutions.length > 0 && (
-              <div className="mt-6 glass-card bg-indigo-500/[0.02] border-indigo-500/10">
-                <h3 className="text-indigo-400 flex items-center gap-3 mb-5 font-black">
-                  <BookOpen size={20} /> {t('roadmap.institutions')}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {roadmap.local_institutions.map((inst, m) => (
-                    <div
-                      key={m}
-                      className="px-5 py-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group flex items-center gap-3"
-                    >
-                      <MapPin size={16} className="text-zinc-600 group-hover:text-indigo-400 transition-colors shrink-0" />
-                      <span className="text-sm font-bold text-zinc-300">{inst}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </motion.div>
         )}
 
