@@ -55,16 +55,39 @@ def get_career_bot_response(
     """
     from utils.groq_client import get_groq_chat_response
     
+    # --- BULLETPROOF DATA SANITIZATION ---
+    try:
+        # Handle string inputs gracefully
+        if isinstance(user_profile, str):
+            try: user_profile = json.loads(user_profile)
+            except: user_profile = {}
+        
+        if isinstance(agent_memory, str):
+            try: agent_memory = json.loads(agent_memory)
+            except: agent_memory = {}
+            
+        # Ensure we are working with dicts
+        user_profile = user_profile if isinstance(user_profile, dict) else {}
+        agent_memory = agent_memory if isinstance(agent_memory, dict) else {}
+        
+    except Exception as e:
+        logger.error(f"Chatbot data sanitization failed: {e}")
+        user_profile = {}
+        agent_memory = {}
+
     section_key = active_section.upper() if active_section.upper() in SYSTEM_PROMPTS else "DEFAULT"
     base_prompt = SYSTEM_PROMPTS[section_key]
     
-    # Personalize the system context with user info
+    # Personalize the system context with user info (Robust extraction)
+    interests = user_profile.get('interests', [])
+    strengths = user_profile.get('strengths', [])
+    
     profile_summary = f"Student Category: {user_category}. Match Score for {career_title}: {match_score}%. "
-    profile_summary += f"Interests: {', '.join(user_profile.get('interests', []))}. "
-    profile_summary += f"Strengths: {', '.join(user_profile.get('strengths', []))}. "
+    profile_summary += f"Interests: {', '.join(interests) if isinstance(interests, list) else 'Broad'}. "
+    profile_summary += f"Strengths: {', '.join(strengths) if isinstance(strengths, list) else 'Diverse'}. "
     
     if agent_memory:
-        profile_summary += f"Long-term Memories/Insights: {json.dumps(agent_memory)}. Use these to personalize your approach."
+        profile_summary += f"Past Context: {json.dumps(agent_memory)[:500]}. "
     
     lang_instruction = "ALWAYS respond in English."
     if language == 'ml':
@@ -84,18 +107,10 @@ def get_career_bot_response(
     )
 
     # Build the full message list with the system prompt at the top
-    groq_messages = [
-        {"role": "system", "content": full_system_prompt}
-    ]
-    
-    # Add conversation history
-    for msg in messages:
-        # Avoid duplicated system prompts in history
+    groq_messages = [{"role": "system", "content": full_system_prompt}]
+    for msg in messages[-5:]: # Only last 5 for speed
         if msg.get("role") == "system": continue
-        groq_messages.append({
-            "role": msg["role"],
-            "content": msg["content"]
-        })
+        groq_messages.append({"role": msg["role"], "content": msg["content"]})
 
     try:
         # We set is_json=False because we want plain text for the chat interface
@@ -104,32 +119,36 @@ def get_career_bot_response(
         logger.error(f"CareerBot AI failed: {str(e)}. Attempting Hybrid Intelligence fallback...")
         
         # --- HYBRID INTELLIGENCE: Pull from Trajectory Memory if AI fails ---
-        last_user_query = messages[-1]["content"].lower() if messages else ""
-        
-        if agent_memory and isinstance(agent_memory, dict):
-            # Try to find relevant data in the roadmap
-            roadmap = agent_memory.get("roadmap", {})
-            if "roadmap" in agent_memory and not roadmap: # Handle nested structure
-                 roadmap = agent_memory.get("roadmap", {})
-
-            if "roadmap" in last_user_query or "steps" in last_user_query:
-                phases = roadmap.get("phases", [])
-                if phases:
+        try:
+            last_user_query = messages[-1]["content"].lower() if messages else ""
+            
+            # Check for roadmap data in any memory slot
+            roadmap = agent_memory.get("roadmap") or user_profile.get("roadmap") or {}
+            
+            if "roadmap" in last_user_query or "steps" in last_user_query or "timeline" in last_user_query or "skill" in last_user_query:
+                phases = roadmap.get("phases", []) if isinstance(roadmap, dict) else []
+                if phases and isinstance(phases, list):
                     top_phase = phases[0]
-                    return f"I'm currently syncing my neural core, but looking at your roadmap for {career_title}, your first step is: {top_phase.get('name', '')}. It involves tasks like {', '.join(top_phase.get('tasks', [])[:3])}. Check the 'Strategic Pathway' icon for all 10 steps!"
+                    tasks = top_phase.get('tasks', [])
+                    tasks_str = ", ".join(tasks[:3]) if isinstance(tasks, list) else "core training"
+                    return f"I'm currently syncing my neural core, but looking at your high-fidelity roadmap for {career_title}, your immediate focus should be: {top_phase.get('name', 'Foundation')}. This involves {tasks_str}. You can see all 10 steps in the 'Strategic Pathway' icon!"
             
             if "college" in last_user_query or "school" in last_user_query or "university" in last_user_query:
-                colleges = roadmap.get("colleges", [])
-                if colleges:
+                colleges = roadmap.get("colleges", []) if isinstance(roadmap, dict) else []
+                if colleges and isinstance(colleges, list):
                     top_col = colleges[0]
-                    return f"While my connection is recalibrating, I can see that {top_col.get('name', 'top institutions')} is a great matching choice for {career_title}. You can find 10 more matching colleges in the 'Academic Institutions' icon!"
+                    col_name = top_col.get('name', 'Top Institutions') if isinstance(top_col, dict) else "top colleges"
+                    return f"While my connection is recalibrating, I can see that {col_name} is a prime matching choice for your {career_title} path. There are 9 more matching institutions waiting for you in the 'Academic Institutions' icon!"
 
             if "resource" in last_user_query or "study" in last_user_query or "learn" in last_user_query:
-                phases = roadmap.get("phases", [])
-                if phases:
+                phases = roadmap.get("phases", []) if isinstance(roadmap, dict) else []
+                if phases and isinstance(phases, list):
                     resources = phases[0].get("resources", [])
-                    if resources:
-                        return f"You should start with these matching resources: {', '.join(resources[:3])}. I have 10 more phases of resources waiting for you in the 'Strategic Pathway' icon!"
+                    res_str = ", ".join(resources[:2]) if isinstance(resources, list) else "specialized courses"
+                    return f"You should start with these matching resources for {career_title}: {res_str}. I've prepared a full study plan for you in the 'Strategic Pathway' icon!"
+
+        except Exception as fallback_err:
+            logger.error(f"Hybrid fallback logic failed: {fallback_err}")
 
         # Final friendly fallback if memory lookup fails too
         error_msg = f"I'm currently recalibrating my accuracy for {career_title}. While I do that, feel free to explore the 10 matching results I've prepared for you in the icons above!"
