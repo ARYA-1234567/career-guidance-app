@@ -93,22 +93,25 @@ LANGUAGE: {language == 'ml' and 'RESPOND ONLY IN MALAYALAM SCRIPT.' or 'RESPOND 
             last_query = messages[-1]["content"].lower() if messages else ""
             roadmap = user_profile.get("roadmap") or agent_memory.get("roadmap") or {}
             
-            if any(k in last_query for k in ["roadmap", "step", "skill", "learn", "study", "timeline", "milestone"]):
+            # ROADMAP & MILESTONES
+            if any(k in last_query for k in ["roadmap", "step", "skill", "learn", "study", "timeline", "milestone", "path"]):
                 phases = roadmap.get("phases", []) if isinstance(roadmap, dict) else []
                 if phases:
                     top = phases[0]
                     tasks = top.get('tasks', [])
                     tasks_str = ", ".join(tasks[:3]) if isinstance(tasks, list) else "specialized training"
-                    return f"Based on your high-fidelity roadmap for {career_title}, your immediate priority is: {top.get('name')}. This involves {tasks_str}. Check the 'Strategic Pathway' icon for all 10 steps!"
+                    return f"Based on your high-fidelity roadmap for {career_title}, your immediate priority is: {top.get('name')}. This involves {tasks_str}. You have 10 strategic steps waiting in your 'Strategic Pathway' icon!"
             
-            if any(k in last_query for k in ["college", "school", "university", "admission", "kerala", "entrance"]):
+            # COLLEGES & SCHOOLS
+            if any(k in last_query for k in ["college", "school", "university", "admission", "entrance", "study in"]):
                 colleges = roadmap.get("colleges", []) if isinstance(roadmap, dict) else []
                 if colleges:
                     col = colleges[0]
-                    return f"For your {career_title} path, I highly recommend {col.get('name')}. It is a top institution known for its 2024-2025 placement excellence. I have 9 more matching colleges waiting in your Academic tab!"
+                    return f"For your {career_title} journey, I highly recommend {col.get('name')}. It is a top-tier institution with excellent 2024-2025 placement records. You have 9 more matching colleges in your 'Academic Institutions' tab!"
 
-            if any(k in last_query for k in ["salary", "market", "demand", "job", "outlook"]):
-                return f"The market for {career_title} is booming in 2024, especially for someone with your {traits[0]} strengths. Expect entry-level roles to grow by 15% this year. Check the Market Intelligence tab for the full data on 10 top employers!"
+            # MARKET & OPPORTUNITIES (KERALA & GLOBAL)
+            if any(k in last_query for k in ["job", "market", "salary", "demand", "outlook", "opportunity", "prospect", "kerala"]):
+                return f"The market outlook for {career_title} in 2024 is exceptionally strong, especially in Kerala and global hubs. Someone with your {traits[0]} traits can expect high demand for specialized roles. Check the 'Market Intelligence' tab for details on top employers!"
         except: pass
 
         error_msg = f"I'm recalibrating my neural core for {career_title}. While I do that, feel free to explore the 10 matching results I've prepared for you in the icons above!"
