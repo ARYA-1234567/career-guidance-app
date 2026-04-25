@@ -92,6 +92,7 @@ LANGUAGE: {language == 'ml' and 'RESPOND ONLY IN MALAYALAM SCRIPT.' or 'RESPOND 
         try:
             last_query = messages[-1]["content"].lower() if messages else ""
             roadmap = user_profile.get("roadmap") or agent_memory.get("roadmap") or {}
+            main_trait = traits[0] if traits else "Strategic"
             
             # ROADMAP & MILESTONES
             if any(k in last_query for k in ["roadmap", "step", "skill", "learn", "study", "timeline", "milestone", "path"]):
@@ -100,19 +101,21 @@ LANGUAGE: {language == 'ml' and 'RESPOND ONLY IN MALAYALAM SCRIPT.' or 'RESPOND 
                     top = phases[0]
                     tasks = top.get('tasks', [])
                     tasks_str = ", ".join(tasks[:3]) if isinstance(tasks, list) else "specialized training"
-                    return f"Based on your high-fidelity roadmap for {career_title}, your immediate priority is: {top.get('name')}. This involves {tasks_str}. You have 10 strategic steps waiting in your 'Strategic Pathway' icon!"
+                    return f"As a expert strategist, I've mapped out your immediate priority for {career_title}: {top.get('name')}. You should focus on {tasks_str}. Check your 'Strategic Pathway' icon for the full 10-step plan!"
             
             # COLLEGES & SCHOOLS
             if any(k in last_query for k in ["college", "school", "university", "admission", "entrance", "study in"]):
                 colleges = roadmap.get("colleges", []) if isinstance(roadmap, dict) else []
                 if colleges:
                     col = colleges[0]
-                    return f"For your {career_title} journey, I highly recommend {col.get('name')}. It is a top-tier institution with excellent 2024-2025 placement records. You have 9 more matching colleges in your 'Academic Institutions' tab!"
+                    return f"For your {career_title} journey in 2024, I highly recommend {col.get('name')}. It is a top-tier institution with excellent placement records. You have 9 more matching colleges in your 'Academic Institutions' tab!"
 
             # MARKET & OPPORTUNITIES (KERALA & GLOBAL)
             if any(k in last_query for k in ["job", "market", "salary", "demand", "outlook", "opportunity", "prospect", "kerala"]):
-                return f"The market outlook for {career_title} in 2024 is exceptionally strong, especially in Kerala and global hubs. Someone with your {traits[0]} traits can expect high demand for specialized roles. Check the 'Market Intelligence' tab for details on top employers!"
-        except: pass
+                return f"The market outlook for {career_title} in 2024 is exceptionally strong, especially in Kerala and global hubs. With your {main_trait} traits, you are a perfect match for leadership roles. Check the 'Market Intelligence' tab for details on 10 top employers!"
+        except Exception as fallback_err:
+            logger.error(f"Hybrid fallback internal error: {fallback_err}")
+            pass
 
         error_msg = f"I'm recalibrating my neural core for {career_title}. While I do that, feel free to explore the 10 matching results I've prepared for you in the icons above!"
         if language == 'ml':
