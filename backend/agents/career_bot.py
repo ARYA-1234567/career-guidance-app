@@ -104,6 +104,9 @@ LANGUAGE: {language == 'ml' and 'RESPOND ONLY IN MALAYALAM SCRIPT.' or 'RESPOND 
             # MARKET & OPPORTUNITIES (Laser Precision)
             if any(k in last_query for k in ["job", "market", "salary", "demand", "outlook", "opportunity", "prospect", "kerala", "career"]):
                 return f"The market outlook for {career_title} in 2024-2025 is exceptionally strong, especially in Kerala and global hubs. You can expect high demand and a salary growth of 15-20% for specialized roles. Check the 'Market Intelligence' tab for details on top employers!"
+
+            # GLOBAL CATCH-ALL (High-Fidelity Overview)
+            return f"As your dedicated strategist for {career_title}, I've prepared 60 matching data points for you in the icons above. Based on your unique profile, your immediate goal is mastering Phase 1: Foundational Knowledge. How else can I help you reach your goals today?"
         except:
             pass
 
