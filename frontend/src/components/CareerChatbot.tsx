@@ -147,7 +147,7 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
     setLoading(true);
 
     // --- SMART RETRY ENGINE: COLD-START RESILIENCE ---
-    const maxRetries = 2;
+    const maxRetries = 3;
     let attempt = 0;
     let success = false;
 
@@ -164,22 +164,24 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
           access_id: accessId || ""
         }, { 
           withCredentials: true,
-          timeout: 25000 // Extended window for Render Cold Start
+          timeout: 30000 // 30s window to handle cold starts
         });
 
-        setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
-        success = true;
+        if (response.data && response.data.response) {
+          setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
+          success = true;
+        }
       } catch (error: any) {
         attempt++;
         if (attempt > maxRetries) {
           console.error("Chatbot Critical Error:", error);
           const errorMsg = language === 'ml' 
             ? "ക്ഷമിക്കണം, എനിക്ക് കണക്ഷൻ ലഭിക്കുന്നില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കൂ." 
-            : "The guidance engine is waking up. Please try sending your message again in a few seconds!";
+            : "I'm having trouble connecting to my neural core. Please try again in a moment.";
           setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
         } else {
-          // Pause to allow backend spin-up before retry
-          await new Promise(resolve => setTimeout(resolve, 3000));
+          // Progressive delay for backend spin-up
+          await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
         }
       }
     }
@@ -324,7 +326,11 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
                     : 'text-zinc-700'
                   }`}
                 >
-                  {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                  {loading ? (
+                    <Loader2 size={20} className="animate-spin text-green-500" />
+                  ) : (
+                    <Send size={20} />
+                  )}
                 </button>
               </div>
               <p className="mt-3 text-[10px] text-zinc-600 text-center uppercase tracking-widest font-black">
