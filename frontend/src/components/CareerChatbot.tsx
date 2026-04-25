@@ -146,28 +146,44 @@ const CareerChatbot: React.FC<CareerChatbotProps> = ({
     if (!customInput) setInput("");
     setLoading(true);
 
-    try {
-      const response = await axios.post(`${API_BASE}/api/career-chatbot`, {
-        messages: [...messages, userMsg],
-        career_title: careerTitle,
-        active_section: activeSection || "General",
-        user_profile: userProfile || {},
-        match_score: matchScore,
-        user_category: accessId ? "Parent" : "Student",
-        language: language,
-        access_id: accessId || ""
-      }, { withCredentials: true });
+    // --- SMART RETRY ENGINE: COLD-START RESILIENCE ---
+    const maxRetries = 2;
+    let attempt = 0;
+    let success = false;
 
-      setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
-    } catch (error) {
-      console.error("Chatbot Error:", error);
-      const errorMsg = language === 'ml' 
-        ? "ക്ഷമിക്കണം, എനിക്ക് കണക്ഷൻ ലഭിക്കുന്നില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കൂ." 
-        : "I'm having trouble connecting to my neural core. Please try again in a moment.";
-      setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
-    } finally {
-      setLoading(false);
+    while (attempt <= maxRetries && !success) {
+      try {
+        const response = await axios.post(`${API_BASE}/api/career-chatbot`, {
+          messages: [...messages, userMsg],
+          career_title: careerTitle,
+          active_section: activeSection || "General",
+          user_profile: userProfile || {},
+          match_score: matchScore,
+          user_category: accessId ? "Parent" : "Student",
+          language: language,
+          access_id: accessId || ""
+        }, { 
+          withCredentials: true,
+          timeout: 25000 // Extended window for Render Cold Start
+        });
+
+        setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
+        success = true;
+      } catch (error: any) {
+        attempt++;
+        if (attempt > maxRetries) {
+          console.error("Chatbot Critical Error:", error);
+          const errorMsg = language === 'ml' 
+            ? "ക്ഷമിക്കണം, എനിക്ക് കണക്ഷൻ ലഭിക്കുന്നില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കൂ." 
+            : "The guidance engine is waking up. Please try sending your message again in a few seconds!";
+          setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
+        } else {
+          // Pause to allow backend spin-up before retry
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+      }
     }
+    setLoading(false);
   };
 
   const clearChat = () => {
