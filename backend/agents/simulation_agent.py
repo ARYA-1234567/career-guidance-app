@@ -57,9 +57,12 @@ def compare_scenarios(career_a: str, career_b: str, user_profile: Dict[str, Any]
         "recommendation": "A 3-4 sentence personalized strategy based on {user_profile.get('name')}'s goals.",
         "confidence": 87,
         "gulf_opportunities": {{"country": "UAE", "salary": "₹250,000/mo", "best_year": 3, "requirements": "3yrs experience"}},
-        "psc_opportunities": {{"post_name": "Asst Engineer", "exam": "KEAM/PSC", "salary_scale": "50000-110000"}},
-        "kerala_opportunities": {{"hubs": ["Technopark", "Infopark"], "avg_salary": "₹15 LPA", "top_companies": ["TCS", "Accenture", "Oracle"]}}
+        "psc_opportunities": {{"post_name": "Specific Post (e.g. Health Inspector)", "exam": "Specific Exam", "salary_scale": "Scale"}},
+        "kerala_opportunities": {{"hubs": ["Career Hub (e.g. Medical College)", "Hub 2"], "avg_salary": "₹XX LPA", "top_companies": ["Org 1", "Org 2"]}}
     }}
+    
+    IMPORTANT: Do NOT use generic placeholders like 'Asst Engineer' or 'Technopark' if they do not match the career. 
+    Example for Medical/Health: use 'Health Inspector' or 'District Medical Office' and hubs like 'Medical College'.
     
     Ensure SALARY is in Lakhs Per Annum (LPA) for India and appropriate local currency for international.
     CRITICAL: The 'yearly_data' array MUST contain exactly 5 entries for Years 1, 3, 5, 7, and 10.
