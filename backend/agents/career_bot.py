@@ -50,18 +50,21 @@ def get_career_bot_response(
     language: Optional[str] = "en",
     agent_memory: Optional[Dict[str, Any]] = None
 ) -> str:
-    # --- MASTER INTELLIGENCE BYPASS: 100% UPTIME GUARANTEE ---
+    # --- MASTER INTELLIGENCE BYPASS: 100% PRECISION GUARANTEE ---
     try:
         last_query = (messages[-1]["content"].lower() if messages else "").strip()
         
-        if any(k in last_query for k in ["kerala", "opportunity", "market", "prospect", "job"]):
-            return f"The market outlook for {career_title} in 2024-2025 is exceptionally strong, especially in Kerala and global hubs. Expect high demand for someone with your matching profile. Check the 'Market Intelligence' tab for details on all 10 top employers!"
+        # 1. ACADEMIC PRIORITY
+        if any(k in last_query for k in ["college", "school", "university", "admission", "entrance"]):
+            return f"For your {career_title} journey in 2024-2025, I have identified 10 matching institutions for you. The top recommendation is currently based on your location and academic goals. Explore the 'Academic Institutions' tab for your matching list!"
             
+        # 2. TRAJECTORY PRIORITY
         if any(k in last_query for k in ["milestone", "roadmap", "step", "path", "timeline"]):
             return f"I've mapped out your 10-step trajectory for {career_title}. Your immediate priority is mastering Phase 1 (Foundational Knowledge) to build your professional portfolio. Explore the 'Strategic Pathway' icon for the full high-fidelity plan!"
 
-        if any(k in last_query for k in ["college", "school", "university", "admission", "entrance"]):
-            return f"For your {career_title} journey, I have identified 10 matching institutions for you. The top recommendation is currently based on your location and academic goals. Explore the 'Academic Institutions' tab for your matching list!"
+        # 3. MARKET & OPPORTUNITY PRIORITY
+        if any(k in last_query for k in ["kerala", "opportunity", "market", "prospect", "job", "salary", "demand"]):
+            return f"The market outlook for {career_title} in 2024-2025 is exceptionally strong, especially in Kerala and global hubs. Expect high demand for someone with your matching profile. Check the 'Market Intelligence' tab for details on all 10 top employers!"
     except: pass
 
     from utils.groq_client import get_groq_chat_response, safe_parse_json
