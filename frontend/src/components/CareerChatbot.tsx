@@ -4,7 +4,7 @@ import { MessageSquare, X, Send, Trash2, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { useLanguage } from '../context/LanguageContext';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://career-guidance-app-backend-m09g.onrender.com';
 
 interface Message {
   role: 'user' | 'assistant';
